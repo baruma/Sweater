@@ -8,6 +8,6 @@
 import Foundation
 
 struct WeatherDescription {
-    let general: String
-    let detailed: String
+    var main: String?
+    var detailed: String?
 }

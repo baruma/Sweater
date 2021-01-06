@@ -8,14 +8,17 @@
 import UIKit
 
 class SweatWeatherDescriptionCell: UICollectionViewCell, FetchWeatherDescriptionListener {
-    func onDataReceived(weatherDescription: WeatherDescription) {
-        // set labels here.
+    var mainDescriptions  = [String]()
+    var detailedDescriptions = [String]()
+    
+    func onDataReceived(weatherDescription: WeatherDescriptionAggregate) {
+        generalDescriptionTextView.text = weatherDescription.descriptions.map{$0.main!}.joined(separator: " ")
+        detailDescriptionTextView.text = weatherDescription.descriptions.map{$0.detailed!}.joined(separator: " ")
     }
     
     static let reuseID = "SecondaryCell"
-
-    let generalDescriptionLabel = SweatSecondaryLabel()
-    let descriptionLabel = SweatSecondaryLabel()
+    let generalDescriptionTextView = SweaterTextView(fontSize: 15)
+    let detailDescriptionTextView = SweaterTextView(fontSize: 12)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -27,21 +30,23 @@ class SweatWeatherDescriptionCell: UICollectionViewCell, FetchWeatherDescription
     }
     
     private func configure() {
-        contentView.addSubview(generalDescriptionLabel)
-        contentView.addSubview(descriptionLabel)
+        contentView.addSubview(generalDescriptionTextView)
+        contentView.addSubview(detailDescriptionTextView)
         translatesAutoresizingMaskIntoConstraints = false
         layer.backgroundColor = CGColor.init(red: 255, green: 250, blue: 250, alpha: 1)
-        generalDescriptionLabel.backgroundColor = .blue
-        descriptionLabel.backgroundColor = .yellow
-       // mainDescriptorLabel.text = "SCREAMING BLUE"
+        generalDescriptionTextView.backgroundColor = .red
+        detailDescriptionTextView.backgroundColor = .red
 
         NSLayoutConstraint.activate([
-            generalDescriptionLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            generalDescriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            generalDescriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            generalDescriptionLabel.heightAnchor.constraint(equalToConstant: 40),
+            generalDescriptionTextView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            generalDescriptionTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            generalDescriptionTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            generalDescriptionTextView.heightAnchor.constraint(equalToConstant: 40),
             
-            descriptionLabel.topAnchor.constraint(equalTo: generalDescriptionLabel.bottomAnchor, constant: 10)
+            detailDescriptionTextView.topAnchor.constraint(equalTo: generalDescriptionTextView.bottomAnchor, constant: 10),
+            detailDescriptionTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            detailDescriptionTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            detailDescriptionTextView.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
 }

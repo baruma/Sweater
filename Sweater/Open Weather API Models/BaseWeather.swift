@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Corresponds to Current in OpenWeatherMap
+/// Corresponds with Current in OpenWeatherMap
 class BaseWeather: Decodable {
     /// dt means date and time received.
     let dt: Int

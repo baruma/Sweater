@@ -8,7 +8,6 @@
 import UIKit
 
 class SweatMainLabel: UILabel {
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
@@ -24,12 +23,14 @@ class SweatMainLabel: UILabel {
     
     private func configure() {
         translatesAutoresizingMaskIntoConstraints   = false
+        layer.cornerRadius                          = 10
         textColor                                   = .white
         numberOfLines                               = 0
         font                                        = UIFont.preferredFont(forTextStyle: .headline)
         adjustsFontForContentSizeCategory           = true
         adjustsFontSizeToFitWidth                   = true
         minimumScaleFactor                          = 0.75
+        layer.cornerRadius                          = 10
         lineBreakMode                               = .byWordWrapping
     }
 }

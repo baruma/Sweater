@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		7A8871B837974C2264503E64 /* Pods_Sweater.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3134BCE2024BC4D2FBDD50CA /* Pods_Sweater.framework */; };
+		960C68EF25A4CFAD004DBCB8 /* WeeklyWeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960C68EE25A4CFAD004DBCB8 /* WeeklyWeatherView.swift */; };
+		960C68F225A4CFC9004DBCB8 /* SweatWeeklyWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960C68F125A4CFC9004DBCB8 /* SweatWeeklyWeatherCell.swift */; };
+		960C68F525A53F60004DBCB8 /* WeeklyWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960C68F425A53F60004DBCB8 /* WeeklyWeather.swift */; };
 		961B472A257ED2A500608BB6 /* Current.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961B4729257ED2A500608BB6 /* Current.swift */; };
 		9628B6E8257EABCF00FD761A /* BaseWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9628B6E7257EABCF00FD761A /* BaseWeather.swift */; };
 		9628B6EB257EAC2600FD761A /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9628B6EA257EAC2600FD761A /* Weather.swift */; };
@@ -31,20 +34,26 @@
 		969026392580504C00AB22F1 /* Temperature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969026382580504C00AB22F1 /* Temperature.swift */; };
 		9690263C258050BD00AB22F1 /* WeatherDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9690263B258050BD00AB22F1 /* WeatherDescription.swift */; };
 		9690263F2580512500AB22F1 /* WeatherDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9690263E2580512500AB22F1 /* WeatherDetail.swift */; };
-		9690264F258173C300AB22F1 /* SweatTransparentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9690264E258173C300AB22F1 /* SweatTransparentView.swift */; };
 		969026552581A55300AB22F1 /* WeatherDescriptionAggregate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969026542581A55300AB22F1 /* WeatherDescriptionAggregate.swift */; };
 		9690265D2588185300AB22F1 /* SweatTemperatureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9690265C2588185300AB22F1 /* SweatTemperatureCell.swift */; };
 		969026612588186F00AB22F1 /* SweatWeatherDescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969026602588186F00AB22F1 /* SweatWeatherDescriptionCell.swift */; };
-		969026642588188D00AB22F1 /* SweatTertiaryInformationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969026632588188D00AB22F1 /* SweatTertiaryInformationCell.swift */; };
+		969026642588188D00AB22F1 /* SweatWeatherDetailInformationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969026632588188D00AB22F1 /* SweatWeatherDetailInformationCell.swift */; };
 		969026692588484900AB22F1 /* ErrorCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969026682588484900AB22F1 /* ErrorCodes.swift */; };
+		96A8776D259A83EC003F0B6B /* SweaterTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A8776C259A83EB003F0B6B /* SweaterTextView.swift */; };
 		96B828DF2589621D0014AF0B /* SweatSecondaryLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B828DE2589621D0014AF0B /* SweatSecondaryLabel.swift */; };
 		96B828E22589622F0014AF0B /* SweatDetailLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B828E12589622F0014AF0B /* SweatDetailLabel.swift */; };
+		96C12B0E25A3C5AD0028EB2B /* HourlyWeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C12B0D25A3C5AD0028EB2B /* HourlyWeatherView.swift */; };
+		96CB753125A0E3A300E77828 /* SweatHourlyWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CB753025A0E3A300E77828 /* SweatHourlyWeatherCell.swift */; };
+		96CB753825A1818300E77828 /* NestingHourlyWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CB753725A1818300E77828 /* NestingHourlyWeatherCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0C9F692B06EA9B06134158F6 /* Pods-Sweater.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sweater.debug.xcconfig"; path = "Target Support Files/Pods-Sweater/Pods-Sweater.debug.xcconfig"; sourceTree = "<group>"; };
 		3134BCE2024BC4D2FBDD50CA /* Pods_Sweater.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sweater.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A314F8ABD67BA8592BC08E7 /* Pods-Sweater.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sweater.release.xcconfig"; path = "Target Support Files/Pods-Sweater/Pods-Sweater.release.xcconfig"; sourceTree = "<group>"; };
+		960C68EE25A4CFAD004DBCB8 /* WeeklyWeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyWeatherView.swift; sourceTree = "<group>"; };
+		960C68F125A4CFC9004DBCB8 /* SweatWeeklyWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweatWeeklyWeatherCell.swift; sourceTree = "<group>"; };
+		960C68F425A53F60004DBCB8 /* WeeklyWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyWeather.swift; sourceTree = "<group>"; };
 		961B4729257ED2A500608BB6 /* Current.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Current.swift; sourceTree = "<group>"; };
 		9628B6E7257EABCF00FD761A /* BaseWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWeather.swift; sourceTree = "<group>"; };
 		9628B6EA257EAC2600FD761A /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
@@ -70,14 +79,17 @@
 		969026382580504C00AB22F1 /* Temperature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Temperature.swift; sourceTree = "<group>"; };
 		9690263B258050BD00AB22F1 /* WeatherDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDescription.swift; sourceTree = "<group>"; };
 		9690263E2580512500AB22F1 /* WeatherDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetail.swift; sourceTree = "<group>"; };
-		9690264E258173C300AB22F1 /* SweatTransparentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweatTransparentView.swift; sourceTree = "<group>"; };
 		969026542581A55300AB22F1 /* WeatherDescriptionAggregate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDescriptionAggregate.swift; sourceTree = "<group>"; };
 		9690265C2588185300AB22F1 /* SweatTemperatureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweatTemperatureCell.swift; sourceTree = "<group>"; };
 		969026602588186F00AB22F1 /* SweatWeatherDescriptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweatWeatherDescriptionCell.swift; sourceTree = "<group>"; };
-		969026632588188D00AB22F1 /* SweatTertiaryInformationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweatTertiaryInformationCell.swift; sourceTree = "<group>"; };
+		969026632588188D00AB22F1 /* SweatWeatherDetailInformationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweatWeatherDetailInformationCell.swift; sourceTree = "<group>"; };
 		969026682588484900AB22F1 /* ErrorCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorCodes.swift; sourceTree = "<group>"; };
+		96A8776C259A83EB003F0B6B /* SweaterTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweaterTextView.swift; sourceTree = "<group>"; };
 		96B828DE2589621D0014AF0B /* SweatSecondaryLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweatSecondaryLabel.swift; sourceTree = "<group>"; };
 		96B828E12589622F0014AF0B /* SweatDetailLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweatDetailLabel.swift; sourceTree = "<group>"; };
+		96C12B0D25A3C5AD0028EB2B /* HourlyWeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherView.swift; sourceTree = "<group>"; };
+		96CB753025A0E3A300E77828 /* SweatHourlyWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweatHourlyWeatherCell.swift; sourceTree = "<group>"; };
+		96CB753725A1818300E77828 /* NestingHourlyWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestingHourlyWeatherCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +165,7 @@
 				9690263E2580512500AB22F1 /* WeatherDetail.swift */,
 				969026542581A55300AB22F1 /* WeatherDescriptionAggregate.swift */,
 				9676D54F258AC395002383C0 /* HourlyWeather.swift */,
+				960C68F425A53F60004DBCB8 /* WeeklyWeather.swift */,
 			);
 			path = "Sweater Data Models";
 			sourceTree = "<group>";
@@ -170,7 +183,8 @@
 		969026482581700700AB22F1 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				9690264E258173C300AB22F1 /* SweatTransparentView.swift */,
+				96C12B0D25A3C5AD0028EB2B /* HourlyWeatherView.swift */,
+				960C68EE25A4CFAD004DBCB8 /* WeeklyWeatherView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -179,8 +193,10 @@
 			isa = PBXGroup;
 			children = (
 				9690265C2588185300AB22F1 /* SweatTemperatureCell.swift */,
+				969026632588188D00AB22F1 /* SweatWeatherDetailInformationCell.swift */,
 				969026602588186F00AB22F1 /* SweatWeatherDescriptionCell.swift */,
-				969026632588188D00AB22F1 /* SweatTertiaryInformationCell.swift */,
+				96CB753025A0E3A300E77828 /* SweatHourlyWeatherCell.swift */,
+				960C68F125A4CFC9004DBCB8 /* SweatWeeklyWeatherCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -191,6 +207,14 @@
 				969026682588484900AB22F1 /* ErrorCodes.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		96A8776B259A83B6003F0B6B /* TextViews */ = {
+			isa = PBXGroup;
+			children = (
+				96A8776C259A83EB003F0B6B /* SweaterTextView.swift */,
+			);
+			path = TextViews;
 			sourceTree = "<group>";
 		};
 		96B09A9B257AFB7700B2E053 /* WeatherDisplay */ = {
@@ -216,7 +240,9 @@
 		96B09A9D257AFBA100B2E053 /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
+				96A8776B259A83B6003F0B6B /* TextViews */,
 				96B828E4258964440014AF0B /* Buttons */,
+				96CB753625A1815900E77828 /* CollectionViews */,
 				9690265B2588182500AB22F1 /* Cells */,
 				969026482581700700AB22F1 /* Views */,
 				9690264725816FF800AB22F1 /* Labels */,
@@ -244,6 +270,14 @@
 			children = (
 			);
 			path = Buttons;
+			sourceTree = "<group>";
+		};
+		96CB753625A1815900E77828 /* CollectionViews */ = {
+			isa = PBXGroup;
+			children = (
+				96CB753725A1818300E77828 /* NestingHourlyWeatherCell.swift */,
+			);
+			path = CollectionViews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -361,29 +395,35 @@
 			files = (
 				9628B6EE257EAC4200FD761A /* Hourly.swift in Sources */,
 				9628B6F1257EAC5600FD761A /* Daily.swift in Sources */,
+				960C68F225A4CFC9004DBCB8 /* SweatWeeklyWeatherCell.swift in Sources */,
 				969026552581A55300AB22F1 /* WeatherDescriptionAggregate.swift in Sources */,
+				960C68F525A53F60004DBCB8 /* WeeklyWeather.swift in Sources */,
 				9628B6F8257ECC9900FD761A /* DailyTemperature.swift in Sources */,
+				96CB753825A1818300E77828 /* NestingHourlyWeatherCell.swift in Sources */,
 				9690263025804C6600AB22F1 /* WeatherMapper.swift in Sources */,
 				9628B6EB257EAC2600FD761A /* Weather.swift in Sources */,
 				969026692588484900AB22F1 /* ErrorCodes.swift in Sources */,
 				9690263C258050BD00AB22F1 /* WeatherDescription.swift in Sources */,
+				96CB753125A0E3A300E77828 /* SweatHourlyWeatherCell.swift in Sources */,
 				969026612588186F00AB22F1 /* SweatWeatherDescriptionCell.swift in Sources */,
 				9670D5842578149C00CC638B /* WeatherDisplayVC.swift in Sources */,
 				9676D549258AB064002383C0 /* Constants.swift in Sources */,
 				9676D54D258AB533002383C0 /* Constants.swift in Sources */,
 				964E55F2257C5FE600D6AF84 /* WeatherResponseRepository.swift in Sources */,
+				96C12B0E25A3C5AD0028EB2B /* HourlyWeatherView.swift in Sources */,
 				9690263425804DAD00AB22F1 /* SweatMainLabel.swift in Sources */,
 				9690263F2580512500AB22F1 /* WeatherDetail.swift in Sources */,
-				969026642588188D00AB22F1 /* SweatTertiaryInformationCell.swift in Sources */,
+				969026642588188D00AB22F1 /* SweatWeatherDetailInformationCell.swift in Sources */,
 				9670D5802578149C00CC638B /* AppDelegate.swift in Sources */,
 				96B828E22589622F0014AF0B /* SweatDetailLabel.swift in Sources */,
 				96661279257EDC39001BB7D3 /* OneCallResponse.swift in Sources */,
 				969026392580504C00AB22F1 /* Temperature.swift in Sources */,
 				96B828DF2589621D0014AF0B /* SweatSecondaryLabel.swift in Sources */,
+				96A8776D259A83EC003F0B6B /* SweaterTextView.swift in Sources */,
 				964E55EF257C52FB00D6AF84 /* WeatherDisplayController.swift in Sources */,
 				9670D5822578149C00CC638B /* SceneDelegate.swift in Sources */,
 				961B472A257ED2A500608BB6 /* Current.swift in Sources */,
-				9690264F258173C300AB22F1 /* SweatTransparentView.swift in Sources */,
+				960C68EF25A4CFAD004DBCB8 /* WeeklyWeatherView.swift in Sources */,
 				9676D550258AC395002383C0 /* HourlyWeather.swift in Sources */,
 				9628B6F5257EAC9100FD761A /* Alert.swift in Sources */,
 				9690265D2588185300AB22F1 /* SweatTemperatureCell.swift in Sources */,

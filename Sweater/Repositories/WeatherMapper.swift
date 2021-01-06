@@ -14,27 +14,26 @@ class WeatherMapper {
         return Temperature(main: current.temp, feelsLike: current.feelsLike, min: findMinimumTemperature(listOfHours: hourly), max: findMaximumTemperature(listOfHours: hourly))
     }
 
-//    func mapToWeatherDescriptionAggregate(current: Current) -> WeatherDescriptionAggregate {
-//        let descriptions = current.weather.map{ WeatherDescription(general: $0.main, detailed: $0.description) }
-//        return WeatherDescriptionAggregate(descriptions: descriptions)
-//    }
-
+    /// We created the WeatherDescriptionAggregate because a day could have multiple weather descriptions (ex. snow + rain + fog)
     func mapToWeatherDescriptionAggregate(current: Current) -> WeatherDescriptionAggregate {
         var descriptions = [WeatherDescription]()
         for weather in current.weather {
-            descriptions.append(WeatherDescription(general: weather.main, detailed: weather.description))
+            descriptions.append(WeatherDescription(main: weather.main, detailed: weather.description))
         }
         return WeatherDescriptionAggregate(descriptions: descriptions)
     }
     
-    func mapToWeatherDetail(current: Current) -> WeatherDetail {
-        return WeatherDetail(preessure: current.pressure, humidity: current.humidity, uvi: current.uvi, clouds: current.clouds, windSpeed: current.windSpeed)
+    func mapToWeatherDetail(current: Current, hourly: Hourly) -> WeatherDetail {
+        return WeatherDetail(pressure: current.pressure, humidity: current.humidity, precipitation: hourly.precipitation , uvi: current.uvi, clouds: current.clouds, windSpeed: current.windSpeed)
     }
     
-    func mapHourlyWeather(hourly: Hourly) -> HourlyWeather {
+    func mapToHourlyWeather(hourly: Hourly) -> HourlyWeather {
         return HourlyWeather(dt: hourly.dt, temp: hourly.temp, feelsLike: hourly.feelsLike, pressure: hourly.pressure, humidity: hourly.humidity, visibility: hourly.visibility, windSpeed: hourly.windSpeed, weather: hourly.weather)
     }
     
+    func mapToWeeklyWeather(daily: Daily) -> WeeklyWeather {
+        return WeeklyWeather(dt: daily.dt, temp: daily.temp, weather: daily.weather)
+    }
     
     /// The functions below find the min and max temperatures of the day. Should be placed in a different file away from the Mapper.
     

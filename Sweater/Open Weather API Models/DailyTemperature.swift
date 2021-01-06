@@ -7,8 +7,6 @@
 
 import Foundation
 
-/// Formerly Doubles instead of Floats
-
 struct DailyTemperature: Decodable {
     let day: Float
     let night: Float

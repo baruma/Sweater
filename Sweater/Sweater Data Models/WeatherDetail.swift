@@ -8,8 +8,9 @@
 import Foundation
 
 struct WeatherDetail {
-    let preessure: Int
+    let pressure: Int
     let humidity: Int
+    let precipitation: Float
     let uvi: Float
     let clouds: Int
     let windSpeed: Double

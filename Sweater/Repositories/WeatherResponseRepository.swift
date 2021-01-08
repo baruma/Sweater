@@ -52,7 +52,7 @@ class WeatherResponseRepository {
             AF.request(endpoint).responseString { response in
                 self.cache.writeResponseToCache(response: response.value!)
                 let oneCallResponse = self.convertJSONToResponse(response: response.value!)
-                listener.onDataReceived(weatherDetail: String(oneCallResponse.current.feelsLike))
+                listener.onDataReceived(weatherDetail: String(oneCallResponse.current.feelsLike))  // this method just wants a string so we dont' need the mapped result
             }
         }
         else {
@@ -67,7 +67,6 @@ class WeatherResponseRepository {
             AF.request(endpoint).responseString { response in
                 self.cache.writeResponseToCache(response: response.value!)
                 let oneCallResponse = self.convertJSONToResponse(response: response.value!)
-               // let mappedResults = self.mapper.mapToWeatherDetail(current: oneCallResponse.current, hourly: oneCallResponse.hourly.first!)
                 listener.onDataReceived(weatherDetail: String(oneCallResponse.current.humidity))
             }
         }
@@ -78,45 +77,89 @@ class WeatherResponseRepository {
     }
     
     func fetchCurrentPrecipitation(latitude: Float, longitude: Float, listener: FetchWeatherDetailListener) {
-        let endpoint = ("https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longitude)&units=imperial&exclude=&appid=\(Constants.APIKEY)")
-        AF.request(endpoint).responseDecodable(of: OneCallResponse.self) { response in
-            let weatherDetail = self.mapper.mapToWeatherDetail(current: response.value!.current, hourly: response.value!.hourly[0])
-            let precipitation = String(weatherDetail.precipitation)
-            listener.onDataReceived(weatherDetail: precipitation)
+        if cache.checkIsDataFresh() == false {
+            let endpoint = ("https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longitude)&units=imperial&exclude=&appid=\(Constants.APIKEY)")
+            AF.request(endpoint).responseString { response in
+                self.cache.writeResponseToCache(response: response.value!)
+                let oneCallResponse = self.convertJSONToResponse(response: response.value!)
+                listener.onDataReceived(weatherDetail: String(oneCallResponse.hourly.first!.precipitation))
+            }
+        }
+        else {
+            let oneCallResponse = self.cache.readResponseFromCache()
+            listener.onDataReceived(weatherDetail: String(oneCallResponse.hourly.first!.precipitation))
         }
     }
     
     func fetchWeatherDescriptions(latitude: Float, longitude: Float, listener: FetchWeatherDescriptionListener) {
-        let endpoint = ("https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longitude)&units=imperial&exclude=&appid=\(Constants.APIKEY)")
-        AF.request(endpoint).responseDecodable(of: OneCallResponse.self) { response in
-            let weatherDescriptionAggregate = self.mapper.mapToWeatherDescriptionAggregate(current: response.value!.current)
-            listener.onDataReceived(weatherDescription: weatherDescriptionAggregate)
+        if cache.checkIsDataFresh() == false {
+            let endpoint = ("https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longitude)&units=imperial&exclude=&appid=\(Constants.APIKEY)")
+            AF.request(endpoint).responseString { response in
+                self.cache.writeResponseToCache(response: response.value!)
+                let oneCallResponse = self.convertJSONToResponse(response: response.value!)
+                let mappedResults = self.mapper.mapToWeatherDescriptionAggregate(current: oneCallResponse.current)
+                listener.onDataReceived(weatherDescription: mappedResults)
+            }
         }
+        else {
+            let oneCallResponse = self.cache.readResponseFromCache()
+            listener.onDataReceived(weatherDescription: mapper.mapToWeatherDescriptionAggregate(current: oneCallResponse.current))
+        }
+//        let endpoint = ("https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longitude)&units=imperial&exclude=&appid=\(Constants.APIKEY)")
+//        AF.request(endpoint).responseDecodable(of: OneCallResponse.self) { response in
+//            let weatherDescriptionAggregate = self.mapper.mapToWeatherDescriptionAggregate(current: response.value!.current)
+//            listener.onDataReceived(weatherDescription: weatherDescriptionAggregate)
+//        }
     }
+
     // WARNING: - THIS WILL ONLY EVER RETRIEVE THE FIRST INDEX OF THE ARRAY.  SEE IF YOU NEED TO MAKE 7 INDIVIDUAL REQUESTS OR HOW YOU CAN WORK THIS OUT.
+    // response is the string we swapped it from decodable
     func fetchHourlyWeather(latitude: Float, longitude: Float, listener: FetchHourlyWeatherListener) {
-        let endpoint = ("https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longitude)&units=imperial&exclude=&appid=\(Constants.APIKEY)")
-        AF.request(endpoint).responseDecodable(of: OneCallResponse.self) { response in
-            var hourlyWeatherPayload = [HourlyWeather]()
-            for index in 0...response.value!.hourly.count-1 {
-                let hourlyWeather = self.mapper.mapToHourlyWeather(hourly: response.value!.hourly[index])
-                hourlyWeatherPayload.append(hourlyWeather)
+        var hourlyWeatherPayload = [HourlyWeather]()
+        
+        if cache.checkIsDataFresh() == false {
+            let endpoint = ("https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longitude)&units=imperial&exclude=&appid=\(Constants.APIKEY)")
+            AF.request(endpoint).responseString { response  in
+                self.cache.writeResponseToCache(response: response.value!)
+                let oneCallResponse = self.convertJSONToResponse(response: response.value!)
+                for index in 0...oneCallResponse.hourly.count-1 {
+                    let mappedResult = self.mapper.mapToHourlyWeather(hourly: oneCallResponse.hourly[index])
+                    hourlyWeatherPayload.append(mappedResult)
+                }
+                listener.onDataReceived(hourlyWeather: hourlyWeatherPayload)
+            }
+        }
+        else {
+            let oneCallResponse = self.cache.readResponseFromCache()
+            for index in 0...oneCallResponse.hourly.count - 1 {
+                let mappedResult = self.mapper.mapToHourlyWeather(hourly: oneCallResponse.hourly[index])
+                hourlyWeatherPayload.append(mappedResult)
             }
             listener.onDataReceived(hourlyWeather: hourlyWeatherPayload)
         }
     }
     
     func fetchWeeklyWeather(latitude: Float, longitude: Float, listener: FetchWeeklyWeatherListener) {
+        var weeklyWeatherPayload = [WeeklyWeather]()
         let endpoint = ("https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longitude)&units=imperial&exclude=&appid=\(Constants.APIKEY)")
-        AF.request(endpoint).responseDecodable(of: OneCallResponse.self) { response in
-            var weeklyWeatherPayload = [WeeklyWeather]()
-            for index in 0...response.value!.daily.count-1 {
-                let weeklyWeather = self.mapper.mapToWeeklyWeather(daily: response.value!.daily[index])
-                weeklyWeatherPayload.append(weeklyWeather)
+        if cache.checkIsDataFresh() == false {
+            AF.request(endpoint).responseString { response in
+                self.cache.writeResponseToCache(response: response.value!)
+                let oneCallResponse = self.convertJSONToResponse(response: response.value!)
+                for index in 0...oneCallResponse.daily.count - 1 {
+                    let mappedResult = self.mapper.mapToWeeklyWeather(daily: oneCallResponse.daily[index])
+                    weeklyWeatherPayload.append(mappedResult)
+                }
+                listener.onDataReceived(weeklyWeather: weeklyWeatherPayload)
+            }
+        }
+        else {
+            let oneCallResponse = self.cache.readResponseFromCache()
+            for index in 0...oneCallResponse.daily.count - 1 {
+                let mappedResult = self.mapper.mapToWeeklyWeather(daily: oneCallResponse.daily[index])
+                weeklyWeatherPayload.append(mappedResult)
             }
             listener.onDataReceived(weeklyWeather: weeklyWeatherPayload)
         }
     }
 }
-
-// let mappedResults = self.mapper.mapToWeatherDetail(current: oneCallResponse.current, hourly: oneCallResponse.hourly.first!)

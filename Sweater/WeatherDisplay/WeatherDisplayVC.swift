@@ -214,7 +214,7 @@ extension WeatherDisplayVC: CLLocationManagerDelegate {
 extension WeatherDisplayVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // must update this number.  You may need to make a switch case
-        return 1
+        return 7
     }
     
     /// The Layout was built this way to incorporate the various types of cells the View woudld be using.

@@ -9,56 +9,71 @@ import Foundation
 import Alamofire
 
 class WeatherResponseRepository {
+    let cache = SweatCache()
     let mapper = WeatherMapper()
     
     func fetchWeather(latitude: Float, longitude: Float) -> Void {
-       // let endpoint = ("https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longitude)&exclude=&appid=\(Constants.APIKEY)")
         let endpoint = ("https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longitude)&units=imperial&exclude=&appid=\(Constants.APIKEY)")
 
-//        AF.request(endpoint).responseJSON { response in
-//            print(response)
-//
-//        }
         AF.request(endpoint).responseDecodable(of: OneCallResponse.self) { response in
-//            self.mapper.findMinimumTemperature(listOfHours: response.value!.hourly)
-//            self.mapper.findMaximumTemperature(listOfHours: response.value!.hourly)
-//            print(response.description)
-//            print(response.value?.lat)
-//            print(response.value?.timezone)
-//            print(response.value?.current.weather)
-//            print(response.value?.current.temp)
-//            print(response.value?.current.feelsLike)
-//            print(response.value?.hourly[0].weather)
             print(response.value?.hourly[1].precipitation)
             print(response.value!.current.weather[0])
-                        
        }
     }
     
-    func fetchCurrentTemperature(latitude: Float, longitude: Float, listener: FetchTemperatureListener) {  // the repository doesn't know that the listener is a cell disguised as a cell.
-        // Polymorphism is being used here above witht the listener being passed in.  In this case the listener from the View's perspective is that it's a cell and also a listener.
-        let endpoint = ("https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longitude)&units=imperial&exclude=&appid=\(Constants.APIKEY)")
-        AF.request(endpoint).responseDecodable(of: OneCallResponse.self) { response in
-            let temp = self.mapper.mapToTemperatureModel(current: response.value!.current, hourly: response.value!.hourly)
-            listener.onDataReceived(temp: temp)
+    func convertJSONToResponse(response: String) -> OneCallResponse {
+        let responseInBytes: Data? = response.data(using: .utf8)
+        let decoder = JSONDecoder()
+        let oneCallResponse = try? decoder.decode(OneCallResponse.self, from: responseInBytes!)
+        return oneCallResponse!
+    }
+    
+    // the repository doesn't know that the listener is a cell disguised as a cell.
+    // Polymorphism is being used here above witht the listener being passed in.  In this case the listener from the View's perspective is that it's a cell and also a listener.
+    func fetchCurrentTemperature(latitude: Float, longitude: Float, listener: FetchTemperatureListener) {
+        if cache.checkIsDataFresh() == false {
+            let endpoint = ("https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longitude)&units=imperial&exclude=&appid=\(Constants.APIKEY)")
+            AF.request(endpoint).responseString { response in
+                self.cache.writeResponseToCache(response: response.value!)
+                let oneCallResponse = self.convertJSONToResponse(response: response.value!)
+                let mappedResults = self.mapper.mapToTemperatureModel(current: oneCallResponse.current, hourly: oneCallResponse.hourly)
+                listener.onDataReceived(temp: mappedResults)
+                }
+        } else {
+            let oneCallResponse = self.cache.readResponseFromCache()
+            let mappedResults = mapper.mapToTemperatureModel(current: oneCallResponse.current, hourly: oneCallResponse.hourly)
+            listener.onDataReceived(temp: mappedResults)
         }
     }
     
     func fetchCurrentFeelsLike(latitude: Float, longitude: Float, listener: FetchWeatherDetailListener) {
-        let endpoint = ("https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longitude)&units=imperial&exclude=&appid=\(Constants.APIKEY)")
-        AF.request(endpoint).responseDecodable(of: OneCallResponse.self) { response in
-            let temp = self.mapper.mapToTemperatureModel(current: response.value!.current, hourly: response.value!.hourly)
-            let feelsLike = String(temp.feelsLike)
-            listener.onDataReceived(weatherDetail: feelsLike)
+        if cache.checkIsDataFresh() == false {
+            let endpoint = ("https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longitude)&units=imperial&exclude=&appid=\(Constants.APIKEY)")
+            AF.request(endpoint).responseString { response in
+                self.cache.writeResponseToCache(response: response.value!)
+                let oneCallResponse = self.convertJSONToResponse(response: response.value!)
+                listener.onDataReceived(weatherDetail: String(oneCallResponse.current.feelsLike))
+            }
         }
+        else {
+           let oneCallResponse = self.cache.readResponseFromCache()
+            listener.onDataReceived(weatherDetail: String(oneCallResponse.current.feelsLike))
+       }
     }
     
-    func fetchCurrentHumidity(latitude: Float, longitude: Float, listener: FetchWeatherDetailListener){
-        let endpoint = ("https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longitude)&units=imperial&exclude=&appid=\(Constants.APIKEY)")
-        AF.request(endpoint).responseDecodable(of: OneCallResponse.self) { response in
-            let weatherDetail = self.mapper.mapToWeatherDetail(current: response.value!.current, hourly: response.value!.hourly[0])
-            let humidity = String(weatherDetail.humidity)
-            listener.onDataReceived(weatherDetail: humidity)
+    func fetchCurrentHumidity(latitude: Float, longitude: Float, listener: FetchWeatherDetailListener) {
+        if cache.checkIsDataFresh() == false {
+            let endpoint = ("https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longitude)&units=imperial&exclude=&appid=\(Constants.APIKEY)")
+            AF.request(endpoint).responseString { response in
+                self.cache.writeResponseToCache(response: response.value!)
+                let oneCallResponse = self.convertJSONToResponse(response: response.value!)
+               // let mappedResults = self.mapper.mapToWeatherDetail(current: oneCallResponse.current, hourly: oneCallResponse.hourly.first!)
+                listener.onDataReceived(weatherDetail: String(oneCallResponse.current.humidity))
+            }
+        }
+        else {
+            let oneCallResponse = self.cache.readResponseFromCache()
+            listener.onDataReceived(weatherDetail: String(oneCallResponse.current.humidity))
         }
     }
     
@@ -104,5 +119,4 @@ class WeatherResponseRepository {
     }
 }
 
-// BASE URL : https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}
-
+// let mappedResults = self.mapper.mapToWeatherDetail(current: oneCallResponse.current, hourly: oneCallResponse.hourly.first!)

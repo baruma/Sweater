@@ -8,7 +8,7 @@
 import Foundation
 
 /// Corresponds with Current in OpenWeatherMap
-class BaseWeather: Decodable {
+class BaseWeather: Codable {
     /// dt means date and time received.
     let dt: Int
     let sunrise: Int

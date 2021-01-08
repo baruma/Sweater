@@ -11,6 +11,7 @@ import CoreLocation
 class WeatherDisplayVC: UIViewController {
     let weatherResponseRepository = WeatherResponseRepository()
     let locationManager = CLLocationManager()
+    let sweatCache = SweatCache()
 
     var collectionView: UICollectionView!
    // let temperatureView = SweatTransparentView()
@@ -22,6 +23,15 @@ class WeatherDisplayVC: UIViewController {
         view.backgroundColor = .systemBackground
         configureLocationManagerServices()
         configureCollectionView()
+       // let temp = sweatCache.getPlist(withName: "Fruit")
+       // print(temp)//
+       // let temp = sweatCache.readResponseFromPlist(withName: "Fruit")
+        NotificationCenter.default.addObserver(self, selector: #selector(self.appResume), name: UIApplication.willEnterForegroundNotification, object: nil)
+}
+    
+    @objc
+     func appResume() {
+        collectionView.reloadData()
     }
     
     func configureLocationManagerServices() {
@@ -204,7 +214,7 @@ extension WeatherDisplayVC: CLLocationManagerDelegate {
 extension WeatherDisplayVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // must update this number.  You may need to make a switch case
-        return 7
+        return 1
     }
     
     /// The Layout was built this way to incorporate the various types of cells the View woudld be using.

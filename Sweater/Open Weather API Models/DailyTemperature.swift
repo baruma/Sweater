@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct DailyTemperature: Decodable {
+struct DailyTemperature: Codable {
     let day: Float
     let night: Float
     let eve: Float

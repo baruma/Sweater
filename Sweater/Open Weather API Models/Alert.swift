@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Alert: Decodable {
+struct Alert: Codable {
     let senderName: String
     let event: String
     let start: Int

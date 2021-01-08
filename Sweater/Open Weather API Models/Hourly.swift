@@ -9,7 +9,7 @@ import Foundation
 
 #warning("Need to work in getting precipitation information in here to display as a detail piece of information.")
 
-struct Hourly: Decodable {
+struct Hourly: Codable {
     let dt: Int
     let temp: Float
     let feelsLike: Float

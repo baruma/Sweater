@@ -10,12 +10,14 @@ import CoreLocation
 
 class WeatherDisplayVC: UIViewController {
     let weatherResponseRepository = WeatherResponseRepository()
-    let locationManager = CLLocationManager()
+    let controller = WeatherDisplayController()
     let sweatCache = SweatCache()
 
+    let locationManager = CLLocationManager()
+
     var collectionView: UICollectionView!
-   // let temperatureView = SweatTransparentView()
-    let controller = WeatherDisplayController()
+    let searchBar = UISearchBar()
+    
     var readableLocation: String = ""
     
     override func viewDidLoad() {
@@ -29,9 +31,26 @@ class WeatherDisplayVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.appResume), name: UIApplication.willEnterForegroundNotification, object: nil)
 }
     
-    @objc
-     func appResume() {
+    @objc func appResume() {
         collectionView.reloadData()
+    }
+    
+    func configureSearchBar() {
+            
+        
+        searchBar.delegate = self
+        searchBar.sizeToFit()
+        searchBar.showsCancelButton = true
+        searchBar.tintColor = .systemPink
+    }
+    
+    func configureNavigationBarDateAndLocation() {
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE, MMMM d"
+        let dateResult = formatter.string(from: date)
+        let dateAndLocation = dateResult + readableLocation
+        self.title = dateAndLocation
     }
     
     func configureLocationManagerServices() {
@@ -76,15 +95,6 @@ class WeatherDisplayVC: UIViewController {
                 print(country)
             }
         }
-    }
-    
-    func configureTimeAndLocationInNavigationBar() {
-        let date = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE, MMMM d"
-        let dateResult = formatter.string(from: date)
-        let dateAndLocation = dateResult + readableLocation
-        self.title = dateAndLocation
     }
 
     func configureCollectionView() {
@@ -200,7 +210,7 @@ extension WeatherDisplayVC: CLLocationManagerDelegate {
         controller.saveAndUpdateCoordinates(latitude: lat, longitude: lon)
         weatherResponseRepository.fetchWeather(latitude: lat, longitude: lon)
         convertCoordinatesToReadableLocation()
-        configureTimeAndLocationInNavigationBar()
+        configureNavigationBarDateAndLocation()
         collectionView.reloadData()
     }
 
@@ -226,34 +236,37 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
             switch indexPath.item {
             case 0:
                 let primaryCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatTemperatureCell.reuseID, for: indexPath) as! SweatTemperatureCell
-                controller.getMainTemperature(listener: primaryCell)  // this is where you put your support request in and give your number for the service to call you back on.
+               // controller.getMainTemperature(listener: primaryCell)  // this is where you put your support request in and give your number for the service to call you back on.
+                controller.getMainTemp().done { temperature in primaryCell.onDataReceived(temp: temperature)}
                 return primaryCell
             case 1:
                 let tertiaryCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeatherDetailInformationCell.reuseID, for: indexPath) as! SweatWeatherDetailInformationCell
-                controller.getFeelsLikeDetail(listener: tertiaryCell)
+                controller.getFeelsLikeTemperatureDetail().done { temperature in tertiaryCell.onDataReceived(weatherDetail: String(temperature.feelsLike))}
                 return tertiaryCell
             case 2:
                 let tertiaryCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeatherDetailInformationCell.reuseID, for: indexPath) as! SweatWeatherDetailInformationCell
-                controller.getHumidityDetail(listener: tertiaryCell)
+                controller.getHumidityDetail().done { weatherDetail in tertiaryCell.onDataReceived(weatherDetail: String(weatherDetail.humidity))}
+                //controller.getHumidityDetail(listener: tertiaryCell)
                 return tertiaryCell
             case 3:
                 let tertiaryCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeatherDetailInformationCell.reuseID, for: indexPath) as! SweatWeatherDetailInformationCell
-                controller.getPrecipitationDetail(listener: tertiaryCell)
+                controller.getPrecipitationDetail().done { weatherDetail in tertiaryCell.onDataReceived(weatherDetail: String(weatherDetail.precipitation))}
                 return tertiaryCell
             case 4:
                 let weatherDescriptionCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeatherDescriptionCell.reuseID, for: indexPath) as!
                     SweatWeatherDescriptionCell
-                controller.getWeatherDescription(listener: weatherDescriptionCell)
+                controller.getWeatherDescription().done { weatherDescription in weatherDescription.descriptions}
                 return weatherDescriptionCell
             case 5:
                 let hourlyWeatherCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatHourlyWeatherCell.reuseID, for: indexPath) as!
                     SweatHourlyWeatherCell
-                controller.getHourlyWeather(listener: hourlyWeatherCell)
+                controller.getHourlyWeather().done { hourlyWeather in hourlyWeather}
                 return hourlyWeatherCell
             case 6:
                 let weeklyWeatherCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeeklyWeatherCell.reuseID, for: indexPath) as!
                     SweatWeeklyWeatherCell
-                controller.getWeeklyWeather(listener: weeklyWeatherCell)
+               // controller.getWeeklyWeather(listener: weeklyWeatherCell)
+                controller.getWeeklyWeather().done {weeklyWeather in weeklyWeather}
                 return weeklyWeatherCell
             
             default:
@@ -269,3 +282,7 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
 }
 
 extension WeatherDisplayVC: UICollectionViewDelegate {}
+
+extension WeatherDisplayVC: UISearchBarDelegate {
+    
+}

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SweatWeeklyWeatherCell: UICollectionViewCell, FetchWeeklyWeatherListener {
+class SweatWeeklyWeatherCell: UICollectionViewCell {
     func onDataReceived(weeklyWeather: [WeeklyWeather]) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEE"

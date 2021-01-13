@@ -25,10 +25,8 @@ class WeatherDisplayVC: UIViewController {
         view.backgroundColor = .systemBackground
         configureLocationManagerServices()
         configureCollectionView()
-       // let temp = sweatCache.getPlist(withName: "Fruit")
-       // print(temp)//
-       // let temp = sweatCache.readResponseFromPlist(withName: "Fruit")
         NotificationCenter.default.addObserver(self, selector: #selector(self.appResume), name: UIApplication.willEnterForegroundNotification, object: nil)
+        configureSearchBar()
 }
     
     @objc func appResume() {
@@ -36,8 +34,9 @@ class WeatherDisplayVC: UIViewController {
     }
     
     func configureSearchBar() {
-            
-        
+        let rightBarButtonItem = UIBarButtonItem(customView: searchBar)
+        self.navigationItem.rightBarButtonItem = rightBarButtonItem
+        navigationController?.navigationBar.prefersLargeTitles = true
         searchBar.delegate = self
         searchBar.sizeToFit()
         searchBar.showsCancelButton = true
@@ -208,7 +207,7 @@ extension WeatherDisplayVC: CLLocationManagerDelegate {
         let lat = Float(currentLocation.coordinate.latitude)
         let lon = Float(currentLocation.coordinate.longitude)
         controller.saveAndUpdateCoordinates(latitude: lat, longitude: lon)
-        weatherResponseRepository.fetchWeather(latitude: lat, longitude: lon)
+       // weatherResponseRepository.fetchWeather(latitude: lat, longitude: lon)
         convertCoordinatesToReadableLocation()
         configureNavigationBarDateAndLocation()
         collectionView.reloadData()
@@ -255,18 +254,19 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
             case 4:
                 let weatherDescriptionCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeatherDescriptionCell.reuseID, for: indexPath) as!
                     SweatWeatherDescriptionCell
-                controller.getWeatherDescription().done { weatherDescription in weatherDescription.descriptions}
+                controller.getWeatherDescription().done { weatherDescriptionAggregate in weatherDescriptionCell.onDataReceived(weatherDescription: weatherDescriptionAggregate)}
                 return weatherDescriptionCell
             case 5:
                 let hourlyWeatherCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatHourlyWeatherCell.reuseID, for: indexPath) as!
                     SweatHourlyWeatherCell
-                controller.getHourlyWeather().done { hourlyWeather in hourlyWeather}
+               // controller.getHourlyWeather().done { hourlyWeather in hourlyWeather}
+                controller.getHourlyWeather().done { hourlyWeather in hourlyWeatherCell.onDataReceived(hourlyWeather: hourlyWeather)}
                 return hourlyWeatherCell
             case 6:
                 let weeklyWeatherCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeeklyWeatherCell.reuseID, for: indexPath) as!
                     SweatWeeklyWeatherCell
                // controller.getWeeklyWeather(listener: weeklyWeatherCell)
-                controller.getWeeklyWeather().done {weeklyWeather in weeklyWeather}
+                controller.getWeeklyWeather().done {weeklyWeather in weeklyWeatherCell.onDataReceived(weeklyWeather: weeklyWeather)}
                 return weeklyWeatherCell
             
             default:

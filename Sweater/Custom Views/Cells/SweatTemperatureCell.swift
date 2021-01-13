@@ -9,7 +9,7 @@ import UIKit
 
 // this is the person calling.
 
-class SweatTemperatureCell: UICollectionViewCell, FetchTemperatureListener {
+class SweatTemperatureCell: UICollectionViewCell {
     func onDataReceived(temp: Temperature) {
         mainTemperatureLabel.text = String(temp.main)
         minTemperatureLabel.text = String(temp.min)

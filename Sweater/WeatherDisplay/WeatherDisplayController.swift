@@ -63,37 +63,32 @@ class WeatherDisplayController {
 }
 
 // the protocol is the structure, shape or rules of the transaction to take place.  tech support can't just throw something outo f the garbage out at you, the need to give you actual procedures and follow a company protocol.
-protocol FetchTemperatureListener {
-    func onDataReceived(temp: Temperature)
-}
 
-protocol FetchFeelsLikeTemperatureListener {
-    func onDataReceieved(feelsLike: Temperature)
-}
-
-protocol FetchWeatherDescriptionListener {
-    func onDataReceived(weatherDescription: WeatherDescriptionAggregate)
-}
-
-protocol FetchWeatherDetailListener {
-    func onDataReceived(weatherDetail: String)
-}
-
-protocol FetchHourlyWeatherListener {
-    func onDataReceived(hourlyWeather: [HourlyWeather])
-}
-
-protocol FetchWeeklyWeatherListener {
-    func onDataReceived(weeklyWeather: [WeeklyWeather])
-}
-
-//protocol FetchPromise<TYPE> {
-//    
-//    func onSuccess(result: TYPE)
-//    func onFailure(error: Error)
-//    
+/// prob don't need the protocols
+//protocol FetchTemperatureListener {
+//    func onDataReceived(temp: Temperature)
 //}
-
+//
+//protocol FetchFeelsLikeTemperatureListener {
+//    func onDataReceieved(feelsLike: Temperature)
+//}
+//
+//protocol FetchWeatherDescriptionListener {
+//    func onDataReceived(weatherDescription: WeatherDescriptionAggregate)
+//}
+//
+//protocol FetchWeatherDetailListener {
+//    func onDataReceived(weatherDetail: String)
+//}
+//
+//protocol FetchHourlyWeatherListener {
+//    func onDataReceived(hourlyWeather: [HourlyWeather])
+//}
+//
+//protocol FetchWeeklyWeatherListener {
+//    func onDataReceived(weeklyWeather: [WeeklyWeather])
+//}
+  
 /// make an object that conforms to this protocol.  make a new object in the middle of a function that extends a protocol.
 
 /*

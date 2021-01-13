@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SweatWeatherDescriptionCell: UICollectionViewCell, FetchWeatherDescriptionListener {
+class SweatWeatherDescriptionCell: UICollectionViewCell {
     var mainDescriptions  = [String]()
     var detailedDescriptions = [String]()
     

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SweatHourlyWeatherCell: UICollectionViewCell, FetchHourlyWeatherListener {
+class SweatHourlyWeatherCell: UICollectionViewCell {
     func onDataReceived(hourlyWeather: [HourlyWeather]) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH a"

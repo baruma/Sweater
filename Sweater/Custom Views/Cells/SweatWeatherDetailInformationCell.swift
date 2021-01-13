@@ -7,13 +7,13 @@
 
 import UIKit
 
-class SweatWeatherDetailInformationCell: UICollectionViewCell, FetchWeatherDetailListener {
+class SweatWeatherDetailInformationCell: UICollectionViewCell {
     func onDataReceived(weatherDetail: String) {
         mainTemperatureLabel.text = weatherDetail
     }
     
     static let reuseID = "TertiaryCell"
-    #warning("Rename the main Temperature Label.s")
+    #warning("Rename the main Temperature Label.")
     let mainTemperatureLabel = SweatMainLabel()
     
     override init(frame: CGRect) {

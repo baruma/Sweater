@@ -14,11 +14,13 @@ class WeatherDisplayVC: UIViewController {
     let sweatCache = SweatCache()
 
     let locationManager = CLLocationManager()
+    let geoCoder = CLGeocoder()
 
     var collectionView: UICollectionView!
     let searchBar = UISearchBar()
     
     var readableLocation: String = ""
+    let address: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +29,9 @@ class WeatherDisplayVC: UIViewController {
         configureCollectionView()
         NotificationCenter.default.addObserver(self, selector: #selector(self.appResume), name: UIApplication.willEnterForegroundNotification, object: nil)
         configureSearchBar()
-}
+       let testVoid =  convertReadableLocationToCoordinates(searchBarEntry: "1 Infinite Loop, Cupertino, CA 95014")
+        print(testVoid)
+    }
     
     @objc func appResume() {
         collectionView.reloadData()
@@ -35,8 +39,10 @@ class WeatherDisplayVC: UIViewController {
     
     func configureSearchBar() {
         let rightBarButtonItem = UIBarButtonItem(customView: searchBar)
-        self.navigationItem.rightBarButtonItem = rightBarButtonItem
+        navigationController?.navigationBar.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationItem.rightBarButtonItem = rightBarButtonItem
+
         searchBar.delegate = self
         searchBar.sizeToFit()
         searchBar.showsCancelButton = true
@@ -65,8 +71,31 @@ class WeatherDisplayVC: UIViewController {
         }
     }
     
+    /// This function exists to convert human readable place names into coordinates that can be passed into the network call.
+    func convertReadableLocationToCoordinates(searchBarEntry: String) {
+        geoCoder.geocodeAddressString(searchBarEntry) { (placemarks, error) in
+            guard
+                let placemarks = placemarks,
+                let location = placemarks.first?.location
+            else {
+                // handle no location found
+                print("Could not retrieve coordinates.")
+                return
+            }
+            print(location)  // so we are getting the location. Now we have to do 2 things.  Put in SearchBar results in here and pass coordinates along.
+        }
+    }
+
+//    geocoder.geocodeAddressString(searchBarEntry: String) {
+//        placemarks, error in
+//        let placemark = placemarks?.first
+//        let lat = placemark?.location?.coordinate.latitude
+//        let lon = placemark?.location?.coordinate.longitude
+//        print("Lat: \(lat), Lon: \(lon)")
+//    }
+    
     func convertCoordinatesToReadableLocation() {
-        let geoCoder = CLGeocoder()
+       // let geoCoder = CLGeocoder()
         let latitude = CLLocationDegrees(controller.latitude)
         let longitude = CLLocationDegrees(controller.longitude)
         let location = CLLocation(latitude: latitude, longitude: longitude)
@@ -108,6 +137,7 @@ class WeatherDisplayVC: UIViewController {
         collectionView.register(SweatHourlyWeatherCell.self, forCellWithReuseIdentifier: SweatHourlyWeatherCell.reuseID)
         collectionView.register(SweatHourlyWeatherCell.self, forCellWithReuseIdentifier: SweatHourlyWeatherCell.reuseID)
         collectionView.register(SweatWeeklyWeatherCell.self, forCellWithReuseIdentifier: SweatWeeklyWeatherCell.reuseID)
+        collectionView.register(SweatDawnDuskCell.self, forCellWithReuseIdentifier: SweatDawnDuskCell.reuseID)
         collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -143,6 +173,11 @@ class WeatherDisplayVC: UIViewController {
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalWidth((0.3))))
+        
+        let duskDawnItem = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalWidth(1.0)))
         
         /// The groups that will be holding the items declared earlier.
         let temperatureInformationGroup = NSCollectionLayoutGroup.vertical(
@@ -187,6 +222,12 @@ class WeatherDisplayVC: UIViewController {
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(0.5)),
             subitems: [hourlyWeatherGroup, weeklyWeatherGroup])
+        
+        let duskAndDawnGroup = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalHeight(0.5)),
+            subitem: duskDawnItem, count: 1)
 
         let verticalParentGroup = NSCollectionLayoutGroup.vertical(
           layoutSize: NSCollectionLayoutSize(
@@ -223,7 +264,7 @@ extension WeatherDisplayVC: CLLocationManagerDelegate {
 extension WeatherDisplayVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // must update this number.  You may need to make a switch case
-        return 7
+        return 8
     }
     
     /// The Layout was built this way to incorporate the various types of cells the View woudld be using.
@@ -268,6 +309,10 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
                // controller.getWeeklyWeather(listener: weeklyWeatherCell)
                 controller.getWeeklyWeather().done {weeklyWeather in weeklyWeatherCell.onDataReceived(weeklyWeather: weeklyWeather)}
                 return weeklyWeatherCell
+            case 7:
+                let duskAndDawnCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatDawnDuskCell.reuseID, for: indexPath) as!
+                    SweatDawnDuskCell
+                return duskAndDawnCell
             
             default:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatTemperatureCell.reuseID, for: indexPath) as! SweatTemperatureCell

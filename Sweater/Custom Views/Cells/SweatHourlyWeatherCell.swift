@@ -54,19 +54,17 @@ class SweatHourlyWeatherCell: UICollectionViewCell {
         contentView.addSubview(scrollView)
         generateHourlyWeeklyWeatherViews()
         
-        layer.backgroundColor                                   = CGColor.init(red: 0, green: 255, blue: 0, alpha: 1.0)
+        layer.backgroundColor                                   = CGColor.init(red: 255, green: 255, blue: 255, alpha: 1.0)
         translatesAutoresizingMaskIntoConstraints               = false
         
         scrollView.translatesAutoresizingMaskIntoConstraints    = false
         scrollView.bounces                                      = true
         scrollView.isScrollEnabled                              = true
-        //1scrollView.backgroundColor = .systemGreen
         
         stackView.translatesAutoresizingMaskIntoConstraints     = false
         stackView.axis                                          = .horizontal
         stackView.distribution                                  = .equalSpacing
         stackView.spacing                                       = 10.0
-      //  stackView.backgroundColor                               = .systemPink
         
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),

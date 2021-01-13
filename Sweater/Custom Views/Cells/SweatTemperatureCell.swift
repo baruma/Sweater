@@ -43,7 +43,7 @@ class SweatTemperatureCell: UICollectionViewCell {
         stackView.spacing                                   = 20.0
         stackView.backgroundColor = .blue
         translatesAutoresizingMaskIntoConstraints = false
-        layer.backgroundColor = CGColor.init(red: 255, green: 250, blue: 250, alpha: 0.5)
+        layer.backgroundColor = CGColor.init(red: 255, green: 250, blue: 250, alpha: 1.0)
         mainTemperatureLabel.backgroundColor = .blue
     
         NSLayoutConstraint.activate([

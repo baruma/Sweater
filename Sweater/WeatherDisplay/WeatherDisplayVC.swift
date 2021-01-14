@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreLocation
+import PromiseKit
 
 class WeatherDisplayVC: UIViewController {
     let weatherResponseRepository = WeatherResponseRepository()
@@ -29,7 +30,7 @@ class WeatherDisplayVC: UIViewController {
         configureCollectionView()
         NotificationCenter.default.addObserver(self, selector: #selector(self.appResume), name: UIApplication.willEnterForegroundNotification, object: nil)
         configureSearchBar()
-       let testVoid =  convertReadableLocationToCoordinates(searchBarEntry: "1 Infinite Loop, Cupertino, CA 95014")
+        let testVoid =  convertReadableLocationToCoordinates(searchBarEntry: "1 Infinite Loop, Cupertino, CA 95014")
         print(testVoid)
     }
     
@@ -126,8 +127,6 @@ class WeatherDisplayVC: UIViewController {
     }
 
     func configureCollectionView() {
-        //let layout = UICollectionViewFlowLayout()
-        //layout.itemSize = CGSize(width: 100, height: 100)
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: generateLayout())
         collectionView.backgroundColor = .black
         view.addSubview(collectionView)
@@ -277,42 +276,66 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
             case 0:
                 let primaryCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatTemperatureCell.reuseID, for: indexPath) as! SweatTemperatureCell
                // controller.getMainTemperature(listener: primaryCell)  // this is where you put your support request in and give your number for the service to call you back on.
-                controller.getMainTemp().done { temperature in primaryCell.onDataReceived(temp: temperature)}
+//                controller.getMainTemp()
+//                    .done { temperature in
+//                        primaryCell.configure(data: temperature)
+//                    }.catch { error in
+//                        print(error)
+//                    }
+                configure(cell: primaryCell, fetchPromise: controller.getMainTemp())
                 return primaryCell
+                
             case 1:
                 let tertiaryCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeatherDetailInformationCell.reuseID, for: indexPath) as! SweatWeatherDetailInformationCell
-                controller.getFeelsLikeTemperatureDetail().done { temperature in tertiaryCell.onDataReceived(weatherDetail: String(temperature.feelsLike))}
+//                controller.getFeelsLikeTemperatureDetail()
+//                    .done { temperature in
+//                        tertiaryCell.configure(data: String(temperature.feelsLike))
+//                    }.catch { error in
+//                        print(error)
+//                    }
+                configure(cell: tertiaryCell, fetchPromise: controller.getFeelsLikeTemperatureDetail()
+                            .then{ temperature -> Promise<String> in
+                                Promise.value(String(temperature.feelsLike))
+                            }
+                )
                 return tertiaryCell
+                
             case 2:
                 let tertiaryCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeatherDetailInformationCell.reuseID, for: indexPath) as! SweatWeatherDetailInformationCell
-                controller.getHumidityDetail().done { weatherDetail in tertiaryCell.onDataReceived(weatherDetail: String(weatherDetail.humidity))}
-                //controller.getHumidityDetail(listener: tertiaryCell)
+                configure(cell: tertiaryCell, fetchPromise: controller.getHumidityDetail()
+                            .then({ weatherDetail -> Promise<String> in
+                                Promise.value(String(weatherDetail.humidity))
+                    
+                }))
                 return tertiaryCell
+                
             case 3:
                 let tertiaryCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeatherDetailInformationCell.reuseID, for: indexPath) as! SweatWeatherDetailInformationCell
-                controller.getPrecipitationDetail().done { weatherDetail in tertiaryCell.onDataReceived(weatherDetail: String(weatherDetail.precipitation))}
+                configure(cell: tertiaryCell, fetchPromise: controller.getPrecipitationDetail().then({ weatherDetail -> Promise<String> in Promise.value(String(weatherDetail.precipitation))}))
                 return tertiaryCell
+                
             case 4:
                 let weatherDescriptionCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeatherDescriptionCell.reuseID, for: indexPath) as!
                     SweatWeatherDescriptionCell
-                controller.getWeatherDescription().done { weatherDescriptionAggregate in weatherDescriptionCell.onDataReceived(weatherDescription: weatherDescriptionAggregate)}
+                configure(cell: weatherDescriptionCell, fetchPromise: controller.getWeatherDescription())
                 return weatherDescriptionCell
+                
             case 5:
                 let hourlyWeatherCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatHourlyWeatherCell.reuseID, for: indexPath) as!
                     SweatHourlyWeatherCell
-               // controller.getHourlyWeather().done { hourlyWeather in hourlyWeather}
-                controller.getHourlyWeather().done { hourlyWeather in hourlyWeatherCell.onDataReceived(hourlyWeather: hourlyWeather)}
+                configure(cell: hourlyWeatherCell, fetchPromise: controller.getHourlyWeather())
                 return hourlyWeatherCell
+                
             case 6:
                 let weeklyWeatherCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeeklyWeatherCell.reuseID, for: indexPath) as!
                     SweatWeeklyWeatherCell
-               // controller.getWeeklyWeather(listener: weeklyWeatherCell)
-                controller.getWeeklyWeather().done {weeklyWeather in weeklyWeatherCell.onDataReceived(weeklyWeather: weeklyWeather)}
+                configure(cell: weeklyWeatherCell, fetchPromise: controller.getWeeklyWeather())
                 return weeklyWeatherCell
-            case 7:
-                let duskAndDawnCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatDawnDuskCell.reuseID, for: indexPath) as!
-                    SweatDawnDuskCell
-                return duskAndDawnCell
+                
+//            case 7:
+//                let duskAndDawnCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatDawnDuskCell.reuseID, for: indexPath) as!
+//                    SweatDawnDuskCell
+//                return duskAndDawnCell
             
             default:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatTemperatureCell.reuseID, for: indexPath) as! SweatTemperatureCell
@@ -322,6 +345,14 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatTemperatureCell.reuseID, for: indexPath) as! SweatTemperatureCell
              return cell
+        }
+    }
+    
+    func configure<Cell : ConfigurableCell, ResultType>(cell: Cell, fetchPromise: Promise<ResultType>) {
+        fetchPromise.done { result in
+            cell.configure(data: result as! Cell.DataType)
+        }.catch { error in
+            print(error)
         }
     }
 }

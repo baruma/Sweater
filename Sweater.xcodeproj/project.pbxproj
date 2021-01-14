@@ -28,6 +28,8 @@
 		9670D5892578149F00CC638B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9670D5882578149F00CC638B /* Assets.xcassets */; };
 		9670D58C2578149F00CC638B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9670D58A2578149F00CC638B /* LaunchScreen.storyboard */; };
 		9671C10B25AF904200B988BF /* SweatDawnDuskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9671C10A25AF904200B988BF /* SweatDawnDuskCell.swift */; };
+		9671C10E25AFA78300B988BF /* ViewConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9671C10D25AFA78300B988BF /* ViewConfiguration.swift */; };
+		9671C11125AFAB7900B988BF /* ConfigurableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9671C11025AFAB7900B988BF /* ConfigurableCell.swift */; };
 		9676D549258AB064002383C0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9676D548258AB064002383C0 /* Constants.swift */; };
 		9676D54D258AB533002383C0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9676D54C258AB533002383C0 /* Constants.swift */; };
 		9676D550258AC395002383C0 /* HourlyWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9676D54F258AC395002383C0 /* HourlyWeather.swift */; };
@@ -75,6 +77,8 @@
 		9670D58B2578149F00CC638B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9670D58D2578149F00CC638B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9671C10A25AF904200B988BF /* SweatDawnDuskCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweatDawnDuskCell.swift; sourceTree = "<group>"; };
+		9671C10D25AFA78300B988BF /* ViewConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewConfiguration.swift; sourceTree = "<group>"; };
+		9671C11025AFAB7900B988BF /* ConfigurableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurableCell.swift; sourceTree = "<group>"; };
 		9676D548258AB064002383C0 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9676D54C258AB533002383C0 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9676D54F258AC395002383C0 /* HourlyWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeather.swift; sourceTree = "<group>"; };
@@ -211,6 +215,7 @@
 				96CB753025A0E3A300E77828 /* SweatHourlyWeatherCell.swift */,
 				960C68F125A4CFC9004DBCB8 /* SweatWeeklyWeatherCell.swift */,
 				9671C10A25AF904200B988BF /* SweatDawnDuskCell.swift */,
+				9671C11025AFAB7900B988BF /* ConfigurableCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -236,6 +241,7 @@
 			children = (
 				9670D5832578149C00CC638B /* WeatherDisplayVC.swift */,
 				964E55EE257C52FB00D6AF84 /* WeatherDisplayController.swift */,
+				9671C10D25AFA78300B988BF /* ViewConfiguration.swift */,
 			);
 			path = WeatherDisplay;
 			sourceTree = "<group>";
@@ -407,6 +413,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9671C11125AFAB7900B988BF /* ConfigurableCell.swift in Sources */,
 				9628B6EE257EAC4200FD761A /* Hourly.swift in Sources */,
 				9628B6F1257EAC5600FD761A /* Daily.swift in Sources */,
 				960C68F225A4CFC9004DBCB8 /* SweatWeeklyWeatherCell.swift in Sources */,
@@ -426,6 +433,7 @@
 				960C68F925A64DC1004DBCB8 /* SweatCache.swift in Sources */,
 				9676D54D258AB533002383C0 /* Constants.swift in Sources */,
 				964E55F2257C5FE600D6AF84 /* WeatherResponseRepository.swift in Sources */,
+				9671C10E25AFA78300B988BF /* ViewConfiguration.swift in Sources */,
 				96C12B0E25A3C5AD0028EB2B /* HourlyWeatherView.swift in Sources */,
 				9690263425804DAD00AB22F1 /* SweatMainLabel.swift in Sources */,
 				9690263F2580512500AB22F1 /* WeatherDetail.swift in Sources */,

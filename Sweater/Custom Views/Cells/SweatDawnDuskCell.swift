@@ -31,13 +31,13 @@ class SweatDawnDuskCell: UICollectionViewCell {
         stackView.axis                                      = .horizontal
         stackView.distribution                              = .equalSpacing
         stackView.spacing                                   = 20.0
-        stackView.backgroundColor = .blue
+        stackView.backgroundColor                           = .blue
         
         translatesAutoresizingMaskIntoConstraints           = false
-        layer.backgroundColor = CGColor.init(red: 255, green: 250, blue: 250, alpha: 1.0)
+        layer.backgroundColor                               = CGColor.init(red: 255, green: 250, blue: 250, alpha: 1.0)
         
-        dawnLabel.backgroundColor = .purple
-        duskLabel.backgroundColor = .purple
+        dawnLabel.backgroundColor                           = .purple
+        duskLabel.backgroundColor                           = .purple
         
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 50),

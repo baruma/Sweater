@@ -9,12 +9,19 @@ import UIKit
 
 // this is the person calling.
 
-class SweatTemperatureCell: UICollectionViewCell {
-    func onDataReceived(temp: Temperature) {
-        mainTemperatureLabel.text = String(temp.main)
-        minTemperatureLabel.text = String(temp.min)
-        maxtemperatureLabel.text = String(temp.max)
+class SweatTemperatureCell: UICollectionViewCell, ConfigurableCell {
+    
+    func configure(data: Temperature) {
+        mainTemperatureLabel.text = String(data.main)
+        minTemperatureLabel.text = String(data.min)
+        maxtemperatureLabel.text = String(data.max)
     }
+    
+//    func onDataReceived(temp: Temperature) {
+//        mainTemperatureLabel.text = String(temp.main)
+//        minTemperatureLabel.text = String(temp.min)
+//        maxtemperatureLabel.text = String(temp.max)
+//    }
     
     static let reuseID          = "PrimaryCell"
     let stackView               = UIStackView()

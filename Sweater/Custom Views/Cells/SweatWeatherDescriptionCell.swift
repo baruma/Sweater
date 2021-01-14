@@ -7,13 +7,14 @@
 
 import UIKit
 
-class SweatWeatherDescriptionCell: UICollectionViewCell {
+class SweatWeatherDescriptionCell: UICollectionViewCell, ConfigurableCell {
+
     var mainDescriptions  = [String]()
     var detailedDescriptions = [String]()
     
-    func onDataReceived(weatherDescription: WeatherDescriptionAggregate) {
-        generalDescriptionTextView.text = weatherDescription.descriptions.map{$0.main!}.joined(separator: " ")
-        detailDescriptionTextView.text = weatherDescription.descriptions.map{$0.detailed!}.joined(separator: " ")
+    func configure(data: WeatherDescriptionAggregate) {
+        generalDescriptionTextView.text = data.descriptions.map{$0.main!}.joined(separator: " ")
+        detailDescriptionTextView.text = data.descriptions.map{$0.detailed!}.joined(separator: " ")
     }
     
     static let reuseID = "SecondaryCell"

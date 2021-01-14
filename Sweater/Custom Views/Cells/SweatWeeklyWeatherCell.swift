@@ -7,18 +7,32 @@
 
 import UIKit
 
-class SweatWeeklyWeatherCell: UICollectionViewCell {
-    func onDataReceived(weeklyWeather: [WeeklyWeather]) {
+class SweatWeeklyWeatherCell: UICollectionViewCell, ConfigurableCell {
+//    func onDataReceived(weeklyWeather: [WeeklyWeather]) {
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "EEE"
+//
+//        for index in 0...weeklyWeather.count-1 {
+//            weeklyViews[index].maxTemperatureLabel.text = String(weeklyWeather[index].temp.max)
+//            weeklyViews[index].minTemperatureLabel.text = String(weeklyWeather[index].temp.min)
+//            let date = Date(timeIntervalSince1970: TimeInterval(weeklyWeather[index].dt))
+//            let dayString = dateFormatter.string(from: date)
+//            weeklyViews[index].dayLabel.text = dayString
+//        }
+//    }
+
+    func configure(data: [WeeklyWeather]) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEE"
     
-        for index in 0...weeklyWeather.count-1 {
-            weeklyViews[index].maxTemperatureLabel.text = String(weeklyWeather[index].temp.max)
-            weeklyViews[index].minTemperatureLabel.text = String(weeklyWeather[index].temp.min)
-            let date = Date(timeIntervalSince1970: TimeInterval(weeklyWeather[index].dt))
+        for index in 0...data.count-1 {
+            weeklyViews[index].maxTemperatureLabel.text = String(data[index].temp.max)
+            weeklyViews[index].minTemperatureLabel.text = String(data[index].temp.min)
+            let date = Date(timeIntervalSince1970: TimeInterval(data[index].dt))
             let dayString = dateFormatter.string(from: date)
             weeklyViews[index].dayLabel.text = dayString
         }
+
     }
     
     static let reuseID = "SweatWeeklyWeatherCell"

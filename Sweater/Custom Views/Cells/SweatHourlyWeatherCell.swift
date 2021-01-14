@@ -7,15 +7,16 @@
 
 import UIKit
 
-class SweatHourlyWeatherCell: UICollectionViewCell {
-    func onDataReceived(hourlyWeather: [HourlyWeather]) {
+class SweatHourlyWeatherCell: UICollectionViewCell, ConfigurableCell {
+    
+    func configure(data: [HourlyWeather]) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH a"
-    
-        for index in 0...hourlyWeather.count-1 {
-            hourlyViews[index].temperatureLabel.text = String(hourlyWeather[index].temp)
-            
-            let date = Date(timeIntervalSince1970: TimeInterval(hourlyWeather[index].dt))
+
+        for index in 0...data.count-1 {
+            hourlyViews[index].temperatureLabel.text = String(data[index].temp)
+
+            let date = Date(timeIntervalSince1970: TimeInterval(data[index].dt))
             let hourString = dateFormatter.string(from: date)
             hourlyViews[index].timeLabel.text = hourString
         }

@@ -17,12 +17,6 @@ class SweatTemperatureCell: UICollectionViewCell, ConfigurableCell {
         maxtemperatureLabel.text = String(data.max)
     }
     
-//    func onDataReceived(temp: Temperature) {
-//        mainTemperatureLabel.text = String(temp.main)
-//        minTemperatureLabel.text = String(temp.min)
-//        maxtemperatureLabel.text = String(temp.max)
-//    }
-    
     static let reuseID          = "PrimaryCell"
     let stackView               = UIStackView()
     let mainTemperatureLabel    = SweatMainLabel()

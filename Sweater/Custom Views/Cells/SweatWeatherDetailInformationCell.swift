@@ -11,10 +11,6 @@ import UIKit
 
 class SweatWeatherDetailInformationCell: UICollectionViewCell, ConfigurableCell {
   
-    func configure(data: String) {
-        mainTemperatureLabel.text = data
-    }
-    
     static let reuseID = "TertiaryCell"
     let mainTemperatureLabel = SweatMainLabel()
     
@@ -25,6 +21,10 @@ class SweatWeatherDetailInformationCell: UICollectionViewCell, ConfigurableCell 
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(data: String) {
+        mainTemperatureLabel.text = data
     }
     
     private func configure() {

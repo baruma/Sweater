@@ -9,19 +9,6 @@ import UIKit
 
 class SweatHourlyWeatherCell: UICollectionViewCell, ConfigurableCell {
     
-    func configure(data: [HourlyWeather]) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH a"
-
-        for index in 0...data.count-1 {
-            hourlyViews[index].temperatureLabel.text = String(data[index].temp)
-
-            let date = Date(timeIntervalSince1970: TimeInterval(data[index].dt))
-            let hourString = dateFormatter.string(from: date)
-            hourlyViews[index].timeLabel.text = hourString
-        }
-    }
-    
     static let reuseID = "SweatHourlyWeatherCell"
     var hourlyWeatherView = HourlyWeatherView()
     let scrollView = UIScrollView()
@@ -36,7 +23,19 @@ class SweatHourlyWeatherCell: UICollectionViewCell, ConfigurableCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    func configure(data: [HourlyWeather]) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH a"
+
+        for index in 0...data.count-1 {
+            hourlyViews[index].temperatureLabel.text = String(data[index].temp)
+
+            let date = Date(timeIntervalSince1970: TimeInterval(data[index].dt))
+            let hourString = dateFormatter.string(from: date)
+            hourlyViews[index].timeLabel.text = hourString
+        }
+    }
     /// This function generates HourlyWeatherDetailViews for the 48 Hourly Weather responses receieved from the API call.
     
     // MOVE THIS UP IN THE PROTOCOL
@@ -45,6 +44,8 @@ class SweatHourlyWeatherCell: UICollectionViewCell, ConfigurableCell {
     private func generateHourlyWeeklyWeatherViews() {
         for index in 0...48 {
             let view = HourlyWeatherView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+            // accessibility identifiers are not seen by the user but allow these ui elements to be read in the console when issues occur with them.
+            view.accessibilityIdentifier = "HOURLY WEATHER VIEW"
             stackView.addArrangedSubview(view)
             hourlyViews.append(view)
         }

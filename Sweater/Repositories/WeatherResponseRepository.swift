@@ -111,9 +111,7 @@ class WeatherResponseRepository {
                 }
                 return Promise.value(weeklyWeatherPayload)
             }
-        
     }
-
     
     // Relevant af
 //    func fetchCurrentPrecipitation(latitude: Float, longitude: Float) -> Promise<WeatherDetail> {

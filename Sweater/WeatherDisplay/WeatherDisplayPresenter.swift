@@ -9,7 +9,8 @@ import Foundation
 import CoreLocation
 import PromiseKit
 
-class WeatherDisplayController {
+class WeatherDisplayPresenter : MVPPresenter<WeatherDisplayVC> {
+    
     let repository = WeatherResponseRepository()
     /// These variables are declared here so that the lat and long coordinates from the VC can be passed here and used globally throughout the Controller.
     /// The coordinates in this case are set to Boston.
@@ -31,6 +32,7 @@ class WeatherDisplayController {
         self.latitude = latitude
         self.longitude = longitude
         print(latitude, longitude)
+        
     }
     
     func getMainTemp() -> Promise<Temperature> {
@@ -64,30 +66,6 @@ class WeatherDisplayController {
 
 // the protocol is the structure, shape or rules of the transaction to take place.  tech support can't just throw something outo f the garbage out at you, the need to give you actual procedures and follow a company protocol.
 
-/// prob don't need the protocols
-//protocol FetchTemperatureListener {
-//    func onDataReceived(temp: Temperature)
-//}
-//
-//protocol FetchFeelsLikeTemperatureListener {
-//    func onDataReceieved(feelsLike: Temperature)
-//}
-//
-//protocol FetchWeatherDescriptionListener {
-//    func onDataReceived(weatherDescription: WeatherDescriptionAggregate)
-//}
-//
-//protocol FetchWeatherDetailListener {
-//    func onDataReceived(weatherDetail: String)
-//}
-//
-//protocol FetchHourlyWeatherListener {
-//    func onDataReceived(hourlyWeather: [HourlyWeather])
-//}
-//
-//protocol FetchWeeklyWeatherListener {
-//    func onDataReceived(weeklyWeather: [WeeklyWeather])
-//}
   
 /// make an object that conforms to this protocol.  make a new object in the middle of a function that extends a protocol.
 

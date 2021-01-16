@@ -9,9 +9,12 @@ import UIKit
 import CoreLocation
 import PromiseKit
 
-class WeatherDisplayVC: UIViewController {
+class WeatherDisplayVC: UIViewController, MVPView {
+    
+    typealias Presenter = WeatherDisplayPresenter
+    
     let weatherResponseRepository = WeatherResponseRepository()
-    let controller = WeatherDisplayController()
+    let controller = WeatherDisplayPresenter()
     let sweatCache = SweatCache()
 
     let locationManager = CLLocationManager()
@@ -32,10 +35,19 @@ class WeatherDisplayVC: UIViewController {
         configureSearchBar()
         let testVoid =  convertReadableLocationToCoordinates(searchBarEntry: "1 Infinite Loop, Cupertino, CA 95014")
         print(testVoid)
+        getPresenter().attach(view: self)
     }
-    
+
+    override func viewDidDisappear(_ animated: Bool) {
+        getPresenter().detach()
+    }
+
     @objc func appResume() {
         collectionView.reloadData()
+    }
+    
+    func getPresenter() -> WeatherDisplayPresenter {
+        return controller
     }
     
     func configureSearchBar() {
@@ -86,14 +98,6 @@ class WeatherDisplayVC: UIViewController {
             print(location)  // so we are getting the location. Now we have to do 2 things.  Put in SearchBar results in here and pass coordinates along.
         }
     }
-
-//    geocoder.geocodeAddressString(searchBarEntry: String) {
-//        placemarks, error in
-//        let placemark = placemarks?.first
-//        let lat = placemark?.location?.coordinate.latitude
-//        let lon = placemark?.location?.coordinate.longitude
-//        print("Lat: \(lat), Lon: \(lon)")
-//    }
     
     func convertCoordinatesToReadableLocation() {
        // let geoCoder = CLGeocoder()
@@ -151,33 +155,6 @@ class WeatherDisplayVC: UIViewController {
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(0.70)))
         
-        /// Displays weather detail information (Humidity, Precipitation, UVI, Cloudiness.  These are prone to change depending on user preference).
-        let detailWeatherInformationItem = NSCollectionLayoutItem(
-            layoutSize: NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalHeight(1/3)))
-        
-        // so we declared the description group and how it will be laid out.
-        let weatherDescriptionItem = NSCollectionLayoutItem(
-            layoutSize: NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalHeight(1.0)))
-        
-        let hourlyWeatherItem = NSCollectionLayoutItem(
-            layoutSize: NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalWidth(0.3)))
-        
-        let weeklyWeatherItem = NSCollectionLayoutItem(
-            layoutSize: NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalWidth((0.3))))
-        
-        let duskDawnItem = NSCollectionLayoutItem(
-            layoutSize: NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalWidth(1.0)))
-        
         /// The groups that will be holding the items declared earlier.
         let temperatureInformationGroup = NSCollectionLayoutGroup.vertical(
           layoutSize: NSCollectionLayoutSize(
@@ -185,11 +162,23 @@ class WeatherDisplayVC: UIViewController {
             heightDimension: .fractionalHeight(1.0)),
             subitem: temperatureItem, count: 1)
         
+        /// Displays weather detail information (Humidity, Precipitation, UVI, Cloudiness.  These are prone to change depending on user preference).
+        let detailWeatherInformationItem = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalHeight(1/3)))
+        
+        
         let detailWeatherInformationGroup = NSCollectionLayoutGroup.vertical(
           layoutSize: NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(0.30),
             heightDimension: .fractionalHeight(1.0)),
             subitem: detailWeatherInformationItem, count: 3)
+        
+        let weatherDescriptionItem = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalHeight(1.0)))
         
         let weatherDescriptionGroup = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
@@ -197,17 +186,38 @@ class WeatherDisplayVC: UIViewController {
                 heightDimension: .fractionalWidth(0.3)),
                 subitem: weatherDescriptionItem, count: 1)
         
+        let hourlyWeatherItem = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalWidth(0.3)))
+        
         let hourlyWeatherGroup = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(0.3)),
                 subitem: hourlyWeatherItem, count: 1)
         
+        let weeklyWeatherItem = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalWidth((0.3))))
+        
         let weeklyWeatherGroup = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(0.7)),
                 subitem: weeklyWeatherItem, count: 1)
+
+        let duskDawnItem = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalWidth(1.0)))
+        
+        let duskDawnGroup = NSCollectionLayoutGroup.horizontal(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalHeight(1.0)),
+            subitem: duskDawnItem, count: 1)
         
         /// The nested group holds onto all of the groups declared earlier.
         let horizontalParentGroup = NSCollectionLayoutGroup.horizontal(
@@ -221,18 +231,12 @@ class WeatherDisplayVC: UIViewController {
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(0.5)),
             subitems: [hourlyWeatherGroup, weeklyWeatherGroup])
-        
-        let duskAndDawnGroup = NSCollectionLayoutGroup.vertical(
-            layoutSize: NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalHeight(0.5)),
-            subitem: duskDawnItem, count: 1)
 
         let verticalParentGroup = NSCollectionLayoutGroup.vertical(
           layoutSize: NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(1.0)),
-            subitems: [horizontalParentGroup, weatherDescriptionGroup, hourlyAndWeeklyGroup])
+            subitems: [horizontalParentGroup, weatherDescriptionGroup, hourlyAndWeeklyGroup, duskDawnGroup])
         
         let section = NSCollectionLayoutSection(group: verticalParentGroup)
         let layout = UICollectionViewCompositionalLayout(section: section)
@@ -275,24 +279,11 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
             switch indexPath.item {
             case 0:
                 let primaryCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatTemperatureCell.reuseID, for: indexPath) as! SweatTemperatureCell
-               // controller.getMainTemperature(listener: primaryCell)  // this is where you put your support request in and give your number for the service to call you back on.
-//                controller.getMainTemp()
-//                    .done { temperature in
-//                        primaryCell.configure(data: temperature)
-//                    }.catch { error in
-//                        print(error)
-//                    }
                 configure(cell: primaryCell, fetchPromise: controller.getMainTemp())
                 return primaryCell
                 
             case 1:
                 let tertiaryCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeatherDetailInformationCell.reuseID, for: indexPath) as! SweatWeatherDetailInformationCell
-//                controller.getFeelsLikeTemperatureDetail()
-//                    .done { temperature in
-//                        tertiaryCell.configure(data: String(temperature.feelsLike))
-//                    }.catch { error in
-//                        print(error)
-//                    }
                 configure(cell: tertiaryCell, fetchPromise: controller.getFeelsLikeTemperatureDetail()
                             .then{ temperature -> Promise<String> in
                                 Promise.value(String(temperature.feelsLike))
@@ -305,7 +296,6 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
                 configure(cell: tertiaryCell, fetchPromise: controller.getHumidityDetail()
                             .then({ weatherDetail -> Promise<String> in
                                 Promise.value(String(weatherDetail.humidity))
-                    
                 }))
                 return tertiaryCell
                 

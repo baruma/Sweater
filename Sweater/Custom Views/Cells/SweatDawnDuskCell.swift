@@ -37,10 +37,14 @@ class SweatDawnDuskCell: UICollectionViewCell {
         layer.backgroundColor                               = CGColor.init(red: 255, green: 250, blue: 250, alpha: 1.0)
         
         dawnLabel.backgroundColor                           = .purple
-        duskLabel.backgroundColor                           = .purple
+        duskLabel.backgroundColor                           = .systemYellow
+        
+        backgroundColor = .systemGreen
         
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 50),
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
            // stackView.leadingAnchor.constraint(equalTo: mainTemperatureLabel.trailingAnchor, constant: 10),
             stackView.widthAnchor.constraint(equalToConstant: 200),
             stackView.heightAnchor.constraint(equalToConstant: 200)

@@ -70,28 +70,30 @@ class SweatWeeklyWeatherCell: UICollectionViewCell, ConfigurableCell {
         scrollView.translatesAutoresizingMaskIntoConstraints    = false
         scrollView.bounces                                      = true
         scrollView.isScrollEnabled                              = true
-        //1scrollView.backgroundColor = .systemGreen
-        backgroundColor = .systemBackground
         
+        backgroundColor = .systemTeal
+        
+        scrollView.backgroundColor = .red
         stackView.translatesAutoresizingMaskIntoConstraints     = false
         stackView.axis                                          = .horizontal
         stackView.distribution                                  = .equalSpacing
         stackView.spacing                                       = 10.0
-      //  stackView.backgroundColor                               = .systemPink
+        stackView.backgroundColor = .blue
         
+        #warning("Consider removing height anchors since this is what got the cell working before.")
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
             scrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0),
             scrollView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
             scrollView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
             scrollView.widthAnchor.constraint(greaterThanOrEqualTo: contentView.widthAnchor),
-            //scrollView.heightAnchor.constraint(equalToConstant: 100),
+          //  scrollView.heightAnchor.constraint(equalToConstant: 160),
                                                
             stackView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 0),
             stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 0),
             stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 0),
             stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: 0),
-            //stackView.heightAnchor.constraint(equalToConstant: 100),
+        //    stackView.heightAnchor.constraint(equalToConstant: 160),
         ])
     }
 }

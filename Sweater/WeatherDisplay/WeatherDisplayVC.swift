@@ -168,7 +168,6 @@ class WeatherDisplayVC: UIViewController, MVPView {
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(1/3)))
         
-        
         let detailWeatherInformationGroup = NSCollectionLayoutGroup.vertical(
           layoutSize: NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(0.30),
@@ -189,31 +188,31 @@ class WeatherDisplayVC: UIViewController, MVPView {
         let hourlyWeatherItem = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalWidth(0.3)))
+                heightDimension: .fractionalHeight(1.0)))
         
         let hourlyWeatherGroup = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalHeight(0.3)),
+                heightDimension: .fractionalHeight(0.5)),
                 subitem: hourlyWeatherItem, count: 1)
         
         let weeklyWeatherItem = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalWidth((0.3))))
+                heightDimension: .fractionalHeight((1.0))))
         
         let weeklyWeatherGroup = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalHeight(0.7)),
+                heightDimension: .fractionalHeight(0.5)),
                 subitem: weeklyWeatherItem, count: 1)
 
         let duskDawnItem = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalWidth(1.0)))
+                heightDimension: .fractionalHeight(1.0)))
         
-        let duskDawnGroup = NSCollectionLayoutGroup.horizontal(
+        let duskDawnGroup = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(1.0)),
@@ -229,14 +228,20 @@ class WeatherDisplayVC: UIViewController, MVPView {
         let hourlyAndWeeklyGroup = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalHeight(0.5)),
+                heightDimension: .fractionalHeight(0.33)),
             subitems: [hourlyWeatherGroup, weeklyWeatherGroup])
+        
+        let dawnAndDuskLayoutGroup = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .estimated(100)),
+            subitem: duskDawnGroup, count: 1)
 
         let verticalParentGroup = NSCollectionLayoutGroup.vertical(
           layoutSize: NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(1.0)),
-            subitems: [horizontalParentGroup, weatherDescriptionGroup, hourlyAndWeeklyGroup, duskDawnGroup])
+            subitems: [horizontalParentGroup, weatherDescriptionGroup, hourlyAndWeeklyGroup, dawnAndDuskLayoutGroup])
         
         let section = NSCollectionLayoutSection(group: verticalParentGroup)
         let layout = UICollectionViewCompositionalLayout(section: section)
@@ -322,10 +327,10 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
                 configure(cell: weeklyWeatherCell, fetchPromise: controller.getWeeklyWeather())
                 return weeklyWeatherCell
                 
-//            case 7:
-//                let duskAndDawnCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatDawnDuskCell.reuseID, for: indexPath) as!
-//                    SweatDawnDuskCell
-//                return duskAndDawnCell
+            case 7:
+                let duskAndDawnCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatDawnDuskCell.reuseID, for: indexPath) as!
+                    SweatDawnDuskCell
+                return duskAndDawnCell
             
             default:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatTemperatureCell.reuseID, for: indexPath) as! SweatTemperatureCell

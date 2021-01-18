@@ -9,6 +9,7 @@ import Foundation
 
 
 class MVPPresenter<MvpView: MVPView> {
+    typealias View = MvpView
     
     var view: MvpView? = nil
     

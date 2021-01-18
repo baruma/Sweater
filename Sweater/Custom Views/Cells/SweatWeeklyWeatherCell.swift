@@ -73,7 +73,7 @@ class SweatWeeklyWeatherCell: UICollectionViewCell, ConfigurableCell {
         
         backgroundColor = .systemTeal
         
-        scrollView.backgroundColor = .red
+        scrollView.backgroundColor = .yellow
         stackView.translatesAutoresizingMaskIntoConstraints     = false
         stackView.axis                                          = .horizontal
         stackView.distribution                                  = .equalSpacing

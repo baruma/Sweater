@@ -27,6 +27,9 @@ class SweatDawnDuskCell: UICollectionViewCell {
         stackView.addSubview(duskLabel)
         contentView.addSubview(stackView)
         
+        dawnLabel.text = "Dawn"
+        duskLabel.text = "Dusk"
+        
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis                                      = .horizontal
         stackView.distribution                              = .equalSpacing
@@ -46,8 +49,8 @@ class SweatDawnDuskCell: UICollectionViewCell {
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
            // stackView.leadingAnchor.constraint(equalTo: mainTemperatureLabel.trailingAnchor, constant: 10),
-            stackView.widthAnchor.constraint(equalToConstant: 200),
-            stackView.heightAnchor.constraint(equalToConstant: 200)
+//            stackView.widthAnchor.constraint(equalToConstant: 400),
+//            stackView.heightAnchor.constraint(equalToConstant: 200)
         ])
     }
 }

@@ -26,6 +26,15 @@ class WeatherDisplayVC: UIViewController, MVPView {
     var readableLocation: String = ""
     let address: String = ""
     
+    enum Section: Int, CaseIterable {
+        case currentTemp = 0
+        case currentDescription = 1
+        case forecast = 2
+        case duskDawn = 3
+    }
+
+    let SectionItemCount: [Int] = [4,1,2,1]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -129,6 +138,19 @@ class WeatherDisplayVC: UIViewController, MVPView {
             }
         }
     }
+    
+    func generateLayout() -> UICollectionViewLayout {
+          let layout = UICollectionViewCompositionalLayout { (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+              let sectionLayoutKind = Section.allCases[sectionIndex]
+              switch (sectionLayoutKind) {
+              case .currentTemp: return self.generateTemperatureSectionLayout()
+              case .currentDescription: return self.generateCurrentWeatherDescriptionSectionLayout()
+              case .forecast: return self.generateForecastSectionLayout()
+              case .duskDawn: return self.generateDuskDawnSectionLayout()
+              }
+          }
+          return layout
+      }
 
     func configureCollectionView() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: generateLayout())
@@ -145,109 +167,104 @@ class WeatherDisplayVC: UIViewController, MVPView {
         collectionView.delegate = self
         collectionView.dataSource = self
     }
-
-    func generateLayout() -> UICollectionViewLayout {
-        /// The items below will be dropped into their corresponding groups.
-        /// Displays current temperature, and min and max temperatures for the day.
-        ///
+    
+    func generateTemperatureSectionLayout() -> NSCollectionLayoutSection {
         /// The temperature Item is a single custom cell that displays the primary current temperature, and the min and max tempratures of the day.
         let temperatureItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(0.70)))
-        
+
         /// The groups that will be holding the items declared earlier.
-        let temperatureInformationGroup = NSCollectionLayoutGroup.vertical(
+        let temperatureGroup = NSCollectionLayoutGroup.vertical(
           layoutSize: NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(0.70),
             heightDimension: .fractionalHeight(1.0)),
             subitem: temperatureItem, count: 1)
         
-        /// Displays weather detail information (Humidity, Precipitation, UVI, Cloudiness.  These are prone to change depending on user preference).
-        let detailWeatherInformationItem = NSCollectionLayoutItem(
+            let detailWeatherInformationItem = NSCollectionLayoutItem(
+                layoutSize: NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .fractionalHeight(1/3)))
+    
+            let detailWeatherInformationGroup = NSCollectionLayoutGroup.vertical(
+              layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(0.30),
+                heightDimension: .fractionalHeight(1.0)),
+                subitem: detailWeatherInformationItem, count: 3)
+        
+        let combinedGroup = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalHeight(1/3)))
+                heightDimension: .fractionalHeight(0.3)),
+                subitems: [temperatureGroup, detailWeatherInformationGroup])
         
-        let detailWeatherInformationGroup = NSCollectionLayoutGroup.vertical(
-          layoutSize: NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.30),
-            heightDimension: .fractionalHeight(1.0)),
-            subitem: detailWeatherInformationItem, count: 3)
-        
+        let section = NSCollectionLayoutSection(group: combinedGroup)
+        return section
+    }
+    
+    func generateCurrentWeatherDescriptionSectionLayout() -> NSCollectionLayoutSection {
         let weatherDescriptionItem = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(1.0)))
-        
         let weatherDescriptionGroup = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalWidth(0.3)),
-                subitem: weatherDescriptionItem, count: 1)
-        
+            subitem: weatherDescriptionItem, count: 1)
+        let section = NSCollectionLayoutSection(group: weatherDescriptionGroup)
+        return section
+    }
+    
+    func generateForecastSectionLayout() -> NSCollectionLayoutSection {
         let hourlyWeatherItem = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(1.0)))
-        
+
         let hourlyWeatherGroup = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(0.5)),
                 subitem: hourlyWeatherItem, count: 1)
-        
+
         let weeklyWeatherItem = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight((1.0))))
-        
+
         let weeklyWeatherGroup = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(0.5)),
                 subitem: weeklyWeatherItem, count: 1)
-
+        
+        let combinedGroup = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalHeight(0.3)),
+                subitems: [hourlyWeatherGroup, weeklyWeatherGroup])
+        
+        let section = NSCollectionLayoutSection(group: combinedGroup)
+        return section
+    }
+    
+    func generateDuskDawnSectionLayout() -> NSCollectionLayoutSection {
         let duskDawnItem = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(1.0)))
-        
+
         let duskDawnGroup = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(1.0)),
             subitem: duskDawnItem, count: 1)
-        
-        /// The nested group holds onto all of the groups declared earlier.
-        let horizontalParentGroup = NSCollectionLayoutGroup.horizontal(
-            layoutSize: NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalHeight(1/3)),
-                subitems: [temperatureInformationGroup, detailWeatherInformationGroup])
-        
-        let hourlyAndWeeklyGroup = NSCollectionLayoutGroup.vertical(
-            layoutSize: NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalHeight(0.33)),
-            subitems: [hourlyWeatherGroup, weeklyWeatherGroup])
-        
-        let dawnAndDuskLayoutGroup = NSCollectionLayoutGroup.vertical(
-            layoutSize: NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .estimated(100)),
-            subitem: duskDawnGroup, count: 1)
 
-        let verticalParentGroup = NSCollectionLayoutGroup.vertical(
-          layoutSize: NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalHeight(1.0)),
-            subitems: [horizontalParentGroup, weatherDescriptionGroup, hourlyAndWeeklyGroup, dawnAndDuskLayoutGroup])
-        
-        let section = NSCollectionLayoutSection(group: verticalParentGroup)
-        let layout = UICollectionViewCompositionalLayout(section: section)
-        
-        return layout
+        let section = NSCollectionLayoutSection(group: duskDawnGroup)
+        return section
     }
+
 }
 
 extension WeatherDisplayVC: CLLocationManagerDelegate {
@@ -272,15 +289,16 @@ extension WeatherDisplayVC: CLLocationManagerDelegate {
 extension WeatherDisplayVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // must update this number.  You may need to make a switch case
-        return 8
+        return SectionItemCount[section]
     }
     
     /// The Layout was built this way to incorporate the various types of cells the View woudld be using.
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         print("Section \(indexPath.section) Row \(indexPath.row) Index \(indexPath.item)")
-            
+        
+        // indexpath has both the section and the item
         switch indexPath.section {
-        case 0:
+        case Section.currentTemp.rawValue:
             switch indexPath.item {
             case 0:
                 let primaryCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatTemperatureCell.reuseID, for: indexPath) as! SweatTemperatureCell
@@ -301,7 +319,7 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
                 configure(cell: tertiaryCell, fetchPromise: controller.getHumidityDetail()
                             .then({ weatherDetail -> Promise<String> in
                                 Promise.value(String(weatherDetail.humidity))
-                }))
+                            }))
                 return tertiaryCell
                 
             case 3:
@@ -309,38 +327,46 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
                 configure(cell: tertiaryCell, fetchPromise: controller.getPrecipitationDetail().then({ weatherDetail -> Promise<String> in Promise.value(String(weatherDetail.precipitation))}))
                 return tertiaryCell
                 
-            case 4:
-                let weatherDescriptionCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeatherDescriptionCell.reuseID, for: indexPath) as!
-                    SweatWeatherDescriptionCell
-                configure(cell: weatherDescriptionCell, fetchPromise: controller.getWeatherDescription())
-                return weatherDescriptionCell
-                
-            case 5:
+            default:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatTemperatureCell.reuseID, for: indexPath) as! SweatTemperatureCell
+                return cell
+            }
+        case Section.currentDescription.rawValue:
+            let weatherDescriptionCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeatherDescriptionCell.reuseID, for: indexPath) as!
+                SweatWeatherDescriptionCell
+            configure(cell: weatherDescriptionCell, fetchPromise: controller.getWeatherDescription())
+            return weatherDescriptionCell
+            
+        case Section.forecast.rawValue:
+            switch indexPath.item {
+            case 0:
                 let hourlyWeatherCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatHourlyWeatherCell.reuseID, for: indexPath) as!
                     SweatHourlyWeatherCell
                 configure(cell: hourlyWeatherCell, fetchPromise: controller.getHourlyWeather())
                 return hourlyWeatherCell
                 
-            case 6:
+            case 1:
                 let weeklyWeatherCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeeklyWeatherCell.reuseID, for: indexPath) as!
                     SweatWeeklyWeatherCell
                 configure(cell: weeklyWeatherCell, fetchPromise: controller.getWeeklyWeather())
                 return weeklyWeatherCell
                 
-            case 7:
-                let duskAndDawnCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatDawnDuskCell.reuseID, for: indexPath) as!
-                    SweatDawnDuskCell
-                return duskAndDawnCell
-            
             default:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatTemperatureCell.reuseID, for: indexPath) as! SweatTemperatureCell
                 return cell
             }
-            
-        default:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatTemperatureCell.reuseID, for: indexPath) as! SweatTemperatureCell
-             return cell
-        }
+                
+            case Section.duskDawn.rawValue:
+                let duskAndDawnCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatDawnDuskCell.reuseID, for: indexPath) as!
+                    SweatDawnDuskCell
+                return duskAndDawnCell
+                
+            default:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatTemperatureCell.reuseID, for: indexPath) as! SweatTemperatureCell
+                return cell
+            }
+
+        
     }
     
     func configure<Cell : ConfigurableCell, ResultType>(cell: Cell, fetchPromise: Promise<ResultType>) {
@@ -352,8 +378,10 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
     }
 }
 
-extension WeatherDisplayVC: UICollectionViewDelegate {}
-
-extension WeatherDisplayVC: UISearchBarDelegate {
-    
+extension WeatherDisplayVC: UICollectionViewDelegate {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return SectionItemCount.count
+    }
 }
+
+extension WeatherDisplayVC: UISearchBarDelegate {}

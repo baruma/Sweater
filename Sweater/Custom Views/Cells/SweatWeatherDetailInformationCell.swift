@@ -10,9 +10,15 @@ import UIKit
 #warning("Rename the main Temperature Label.")
 
 class SweatWeatherDetailInformationCell: UICollectionViewCell, ConfigurableCell {
+    
+    /// The weather data displays in order of :
+    /// 1. FeelsLike
+    /// 2. Precipitation
+    /// 3. Humidity
+    /// You will need to insert the labels as a stack view with each corresponding numreric value to display weather to viewer.
   
     static let reuseID = "TertiaryCell"
-    let mainTemperatureLabel = SweatMainLabel()
+    let mainTemperatureLabel = SweatMainLabel(textAlignment: .center, fontSize: 15)
     
     override init(frame: CGRect) {
         super.init(frame: frame)

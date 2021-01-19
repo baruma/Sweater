@@ -31,9 +31,10 @@ class WeatherDisplayVC: UIViewController, MVPView {
         case currentDescription = 1
         case forecast = 2
         case duskDawn = 3
+        case supplementary = 4
     }
 
-    let SectionItemCount: [Int] = [4,1,2,1]
+    let SectionItemCount: [Int] = [4,1,2,1,1]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -147,6 +148,7 @@ class WeatherDisplayVC: UIViewController, MVPView {
               case .currentDescription: return self.generateCurrentWeatherDescriptionSectionLayout()
               case .forecast: return self.generateForecastSectionLayout()
               case .duskDawn: return self.generateDuskDawnSectionLayout()
+              case .supplementary: return self.generateSupplementaryInformationLayout()
               }
           }
           return layout
@@ -163,6 +165,7 @@ class WeatherDisplayVC: UIViewController, MVPView {
         collectionView.register(SweatHourlyWeatherCell.self, forCellWithReuseIdentifier: SweatHourlyWeatherCell.reuseID)
         collectionView.register(SweatWeeklyWeatherCell.self, forCellWithReuseIdentifier: SweatWeeklyWeatherCell.reuseID)
         collectionView.register(SweatDawnDuskCell.self, forCellWithReuseIdentifier: SweatDawnDuskCell.reuseID)
+        collectionView.register(SweatSupplementaryInformationCell.self, forCellWithReuseIdentifier: SweatSupplementaryInformationCell.reuseID)
         collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -221,29 +224,29 @@ class WeatherDisplayVC: UIViewController, MVPView {
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(1.0)))
-
+        
         let hourlyWeatherGroup = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(0.5)),
-                subitem: hourlyWeatherItem, count: 1)
-
+            subitem: hourlyWeatherItem, count: 1)
+        
         let weeklyWeatherItem = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight((1.0))))
-
+        
         let weeklyWeatherGroup = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(0.5)),
-                subitem: weeklyWeatherItem, count: 1)
+            subitem: weeklyWeatherItem, count: 1)
         
         let combinedGroup = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(0.3)),
-                subitems: [hourlyWeatherGroup, weeklyWeatherGroup])
+            subitems: [hourlyWeatherGroup, weeklyWeatherGroup])
         
         let section = NSCollectionLayoutSection(group: combinedGroup)
         return section
@@ -254,17 +257,34 @@ class WeatherDisplayVC: UIViewController, MVPView {
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(1.0)))
-
+        
         let duskDawnGroup = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalHeight(0.1)),
             subitem: duskDawnItem, count: 1)
-
+        
         let section = NSCollectionLayoutSection(group: duskDawnGroup)
         return section
     }
+    
+    func generateSupplementaryInformationLayout() -> NSCollectionLayoutSection {
+        let supplementaryInfoItem = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalHeight(1.0)))
+        
+        let supplementaryInfoGroup = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalHeight(0.4)),
+            subitem: supplementaryInfoItem, count: 1)
+        
+        let section = NSCollectionLayoutSection(group: supplementaryInfoGroup)
+        return section
+    }
 }
+
 
 extension WeatherDisplayVC: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -330,6 +350,7 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatTemperatureCell.reuseID, for: indexPath) as! SweatTemperatureCell
                 return cell
             }
+            
         case Section.currentDescription.rawValue:
             let weatherDescriptionCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeatherDescriptionCell.reuseID, for: indexPath) as!
                 SweatWeatherDescriptionCell
@@ -361,12 +382,18 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
             configure(cell: duskAndDawnCell, fetchPromise: controller.getDuskDawn())
             return duskAndDawnCell
             
+            
+        case Section.supplementary.rawValue:
+            let supplementaryCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatSupplementaryInformationCell.reuseID, for: indexPath) as!
+                SweatSupplementaryInformationCell
+            configure(cell: supplementaryCell, fetchPromise: controller.getSupplementaryInformation())
+            return supplementaryCell
+            
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatTemperatureCell.reuseID, for: indexPath) as! SweatTemperatureCell
             return cell
-        }
-
         
+        }
     }
     
     func configure<Cell : ConfigurableCell, ResultType>(cell: Cell, fetchPromise: Promise<ResultType>) {

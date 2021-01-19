@@ -121,6 +121,14 @@ class WeatherResponseRepository {
             }
     }
     
+    func fetchSupplementaryInformation(latitude: Float, longitude: Float) -> Promise<SupplementaryInformation> {
+        return fetchOneCallResponse(latitude: latitude, longitude: longitude)
+            .then { oneCallResponse -> Promise<SupplementaryInformation> in
+                let mappedResult = self.mapper.mapToSupplementaryInformation(current: oneCallResponse.current)
+                return Promise.value(mappedResult)
+        }
+    }
+    
 
     
     // Relevant af

@@ -41,6 +41,10 @@ class WeatherMapper {
         return DawnDusk(dawn: current.sunrise, dusk: current.sunset)
     }
     
+    func mapToSupplementaryInformation(current: Current) -> SupplementaryInformation {
+        return SupplementaryInformation(pressure: current.pressure, uvi: current.uvi, clouds: current.clouds, windSpeed: current.windSpeed)
+    }
+    
     /// The functions below find the min and max temperatures of the day. Should be placed in a different file away from the Mapper.
     
     func findMinimumTemperature(listOfHours: [Hourly]) -> Float {

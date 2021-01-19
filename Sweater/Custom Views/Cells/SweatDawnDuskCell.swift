@@ -37,8 +37,8 @@ class SweatDawnDuskCell: UICollectionViewCell, ConfigurableCell {
     }
     
     private func configure() {
-        stackView.addSubview(dawnLabel)
-        stackView.addSubview(duskLabel)
+        stackView.addArrangedSubview(dawnLabel)
+        stackView.addArrangedSubview(duskLabel)
         contentView.addSubview(stackView)
               
         stackView.translatesAutoresizingMaskIntoConstraints = false

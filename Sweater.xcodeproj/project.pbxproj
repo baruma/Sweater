@@ -14,6 +14,7 @@
 		960C68F925A64DC1004DBCB8 /* SweatCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960C68F825A64DC1004DBCB8 /* SweatCache.swift */; };
 		961B472A257ED2A500608BB6 /* Current.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961B4729257ED2A500608BB6 /* Current.swift */; };
 		9623994A25B6F1BE004171DA /* DawnDusk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9623994925B6F1BE004171DA /* DawnDusk.swift */; };
+		9623994D25B7276C004171DA /* SweatSupplementaryInformationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9623994C25B7276C004171DA /* SweatSupplementaryInformationCell.swift */; };
 		9628B6E8257EABCF00FD761A /* BaseWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9628B6E7257EABCF00FD761A /* BaseWeather.swift */; };
 		9628B6EB257EAC2600FD761A /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9628B6EA257EAC2600FD761A /* Weather.swift */; };
 		9628B6EE257EAC4200FD761A /* Hourly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9628B6ED257EAC4200FD761A /* Hourly.swift */; };
@@ -23,6 +24,7 @@
 		964E55EF257C52FB00D6AF84 /* WeatherDisplayPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964E55EE257C52FB00D6AF84 /* WeatherDisplayPresenter.swift */; };
 		964E55F2257C5FE600D6AF84 /* WeatherResponseRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964E55F1257C5FE600D6AF84 /* WeatherResponseRepository.swift */; };
 		96661279257EDC39001BB7D3 /* OneCallResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96661278257EDC39001BB7D3 /* OneCallResponse.swift */; };
+		966709BF25B78C3A002ED0DA /* SupplementaryInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966709BE25B78C3A002ED0DA /* SupplementaryInformation.swift */; };
 		9670D5802578149C00CC638B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9670D57F2578149C00CC638B /* AppDelegate.swift */; };
 		9670D5822578149C00CC638B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9670D5812578149C00CC638B /* SceneDelegate.swift */; };
 		9670D5842578149C00CC638B /* WeatherDisplayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9670D5832578149C00CC638B /* WeatherDisplayVC.swift */; };
@@ -64,6 +66,7 @@
 		960C68F825A64DC1004DBCB8 /* SweatCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweatCache.swift; sourceTree = "<group>"; };
 		961B4729257ED2A500608BB6 /* Current.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Current.swift; sourceTree = "<group>"; };
 		9623994925B6F1BE004171DA /* DawnDusk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DawnDusk.swift; sourceTree = "<group>"; };
+		9623994C25B7276C004171DA /* SweatSupplementaryInformationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweatSupplementaryInformationCell.swift; sourceTree = "<group>"; };
 		9628B6E7257EABCF00FD761A /* BaseWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWeather.swift; sourceTree = "<group>"; };
 		9628B6EA257EAC2600FD761A /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		9628B6ED257EAC4200FD761A /* Hourly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hourly.swift; sourceTree = "<group>"; };
@@ -73,6 +76,7 @@
 		964E55EE257C52FB00D6AF84 /* WeatherDisplayPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDisplayPresenter.swift; sourceTree = "<group>"; };
 		964E55F1257C5FE600D6AF84 /* WeatherResponseRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherResponseRepository.swift; sourceTree = "<group>"; };
 		96661278257EDC39001BB7D3 /* OneCallResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneCallResponse.swift; sourceTree = "<group>"; };
+		966709BE25B78C3A002ED0DA /* SupplementaryInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementaryInformation.swift; sourceTree = "<group>"; };
 		9670D57C2578149C00CC638B /* Sweater.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sweater.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9670D57F2578149C00CC638B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9670D5812578149C00CC638B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -143,6 +147,14 @@
 			path = Caching;
 			sourceTree = "<group>";
 		};
+		9623995025B72795004171DA /* Cell Abstraction */ = {
+			isa = PBXGroup;
+			children = (
+				9671C11025AFAB7900B988BF /* ConfigurableCell.swift */,
+			);
+			path = "Cell Abstraction";
+			sourceTree = "<group>";
+		};
 		9670D5732578149C00CC638B = {
 			isa = PBXGroup;
 			children = (
@@ -190,6 +202,7 @@
 				9676D54F258AC395002383C0 /* HourlyWeather.swift */,
 				960C68F425A53F60004DBCB8 /* WeeklyWeather.swift */,
 				9623994925B6F1BE004171DA /* DawnDusk.swift */,
+				966709BE25B78C3A002ED0DA /* SupplementaryInformation.swift */,
 			);
 			path = "Sweater Data Models";
 			sourceTree = "<group>";
@@ -222,7 +235,8 @@
 				96CB753025A0E3A300E77828 /* SweatHourlyWeatherCell.swift */,
 				960C68F125A4CFC9004DBCB8 /* SweatWeeklyWeatherCell.swift */,
 				9671C10A25AF904200B988BF /* SweatDawnDuskCell.swift */,
-				9671C11025AFAB7900B988BF /* ConfigurableCell.swift */,
+				9623994C25B7276C004171DA /* SweatSupplementaryInformationCell.swift */,
+				9623995025B72795004171DA /* Cell Abstraction */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -438,9 +452,11 @@
 				969026552581A55300AB22F1 /* WeatherDescriptionAggregate.swift in Sources */,
 				960C68F525A53F60004DBCB8 /* WeeklyWeather.swift in Sources */,
 				9628B6F8257ECC9900FD761A /* DailyTemperature.swift in Sources */,
+				9623994D25B7276C004171DA /* SweatSupplementaryInformationCell.swift in Sources */,
 				96CB753825A1818300E77828 /* NestingHourlyWeatherCell.swift in Sources */,
 				9690263025804C6600AB22F1 /* WeatherMapper.swift in Sources */,
 				9628B6EB257EAC2600FD761A /* Weather.swift in Sources */,
+				966709BF25B78C3A002ED0DA /* SupplementaryInformation.swift in Sources */,
 				969026692588484900AB22F1 /* ErrorCodes.swift in Sources */,
 				9690263C258050BD00AB22F1 /* WeatherDescription.swift in Sources */,
 				96CB753125A0E3A300E77828 /* SweatHourlyWeatherCell.swift in Sources */,

@@ -23,20 +23,24 @@ class SweatDawnDuskCell: UICollectionViewCell, ConfigurableCell {
     }
     
     func configure(data: DawnDusk) {
-        dawnLabel.text = String(data.dawn)
-        duskLabel.text = String(data.dusk)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        
+        let dawnTime = Date(timeIntervalSince1970: TimeInterval(data.dawn))
+        let duskTime = Date(timeIntervalSince1970: TimeInterval(data.dusk))
+        
+        let dawnTimeString = dateFormatter.string(from: dawnTime)
+        let duskTimeString = dateFormatter.string(from: duskTime)
+
+        dawnLabel.text = dawnTimeString
+        duskLabel.text = duskTimeString
     }
     
     private func configure() {
         stackView.addSubview(dawnLabel)
         stackView.addSubview(duskLabel)
         contentView.addSubview(stackView)
-        
-//        view.accessibilityIdentifier = "HOURLY WEATHER VIEW"
-        contentView.accessibilityIdentifier = "Hello  i am SweatDawnDuskCell"
-//        dawnLabel.text = "I AM DAWN"
-//        duskLabel.text = "I AM DUSK"
-//        
+              
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis                                      = .horizontal
         stackView.distribution                              = .fill
@@ -44,8 +48,6 @@ class SweatDawnDuskCell: UICollectionViewCell, ConfigurableCell {
         stackView.backgroundColor                           = .red
         
         translatesAutoresizingMaskIntoConstraints           = false
-        //layer.backgroundColor                               = CGColor.init(red: 255, green: 250, blue: 250, alpha: 1.0)
-        
         dawnLabel.backgroundColor                           = .systemPurple
         duskLabel.backgroundColor                           = .systemBlue
         
@@ -55,12 +57,6 @@ class SweatDawnDuskCell: UICollectionViewCell, ConfigurableCell {
             stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-           // stackView.heightAnchor.constraint(equalToConstant: 100)
-            //stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
-            //stackView.heightAnchor.constraint(equalToConstant: 100)
-           // stackView.leadingAnchor.constraint(equalTo: mainTemperatureLabel.trailingAnchor, constant: 10),
-//            stackView.widthAnchor.constraint(equalToConstant: 400),
-//            stackView.heightAnchor.constraint(equalToConstant: 200)
         ])
     }
 }

@@ -20,20 +20,6 @@ class SweatWeeklyWeatherCell: UICollectionViewCell, ConfigurableCell {
 //            weeklyViews[index].dayLabel.text = dayString
 //        }
 //    }
-
-    func configure(data: [WeeklyWeather]) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEE"
-    
-        for index in 0...data.count-1 {
-            weeklyViews[index].maxTemperatureLabel.text = String(data[index].temp.max)
-            weeklyViews[index].minTemperatureLabel.text = String(data[index].temp.min)
-            let date = Date(timeIntervalSince1970: TimeInterval(data[index].dt))
-            let dayString = dateFormatter.string(from: date)
-            weeklyViews[index].dayLabel.text = dayString
-        }
-
-    }
     
     static let reuseID = "SweatWeeklyWeatherCell"
     var weeklyWeatherView = WeeklyWeatherView()
@@ -48,6 +34,19 @@ class SweatWeeklyWeatherCell: UICollectionViewCell, ConfigurableCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(data: [WeeklyWeather]) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEE"
+    
+        for index in 0...data.count-1 {
+            weeklyViews[index].maxTemperatureLabel.text = String(data[index].temp.max)
+            weeklyViews[index].minTemperatureLabel.text = String(data[index].temp.min)
+            let date = Date(timeIntervalSince1970: TimeInterval(data[index].dt))
+            let dayString = dateFormatter.string(from: date)
+            weeklyViews[index].dayLabel.text = dayString
+        }
     }
     
     /// This function generates WeeklyWeatherViews for the 7 Weekly Weather responses receieved from the API call.

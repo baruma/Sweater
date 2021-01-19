@@ -113,6 +113,16 @@ class WeatherResponseRepository {
             }
     }
     
+    func fetchDawnDusk(latitude: Float, longitude: Float) -> Promise<DawnDusk> {
+        return fetchOneCallResponse(latitude: latitude, longitude: longitude)
+            .then { oneCallResponse -> Promise<DawnDusk> in
+                let mappedResult = self.mapper.mapToDawnDusk(current: oneCallResponse.current)
+                return Promise.value(mappedResult)
+            }
+    }
+    
+
+    
     // Relevant af
 //    func fetchCurrentPrecipitation(latitude: Float, longitude: Float) -> Promise<WeatherDetail> {
 //        return fetchOneCallResponse(latitude: latitude, longitude: longitude)

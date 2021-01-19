@@ -35,6 +35,12 @@ class WeatherMapper {
         return WeeklyWeather(dt: daily.dt, temp: daily.temp, weather: daily.weather)
     }
     
+    /// Below here, write out functions that map data to dusk + dawn
+
+    func mapToDawnDusk(current: Current) -> DawnDusk {
+        return DawnDusk(dawn: current.sunrise, dusk: current.sunset)
+    }
+    
     /// The functions below find the min and max temperatures of the day. Should be placed in a different file away from the Mapper.
     
     func findMinimumTemperature(listOfHours: [Hourly]) -> Float {

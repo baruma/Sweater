@@ -45,7 +45,6 @@ class SweatHourlyWeatherCell: UICollectionViewCell, ConfigurableCell {
         for index in 0...48 {
             let view = HourlyWeatherView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
             // accessibility identifiers are not seen by the user but allow these ui elements to be read in the console when issues occur with them.
-            view.accessibilityIdentifier = "HOURLY WEATHER VIEW"
             stackView.addArrangedSubview(view)
             hourlyViews.append(view)
         }

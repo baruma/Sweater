@@ -258,13 +258,12 @@ class WeatherDisplayVC: UIViewController, MVPView {
         let duskDawnGroup = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalHeight(1.0)),
+                heightDimension: .fractionalHeight(0.1)),
             subitem: duskDawnItem, count: 1)
 
         let section = NSCollectionLayoutSection(group: duskDawnGroup)
         return section
     }
-
 }
 
 extension WeatherDisplayVC: CLLocationManagerDelegate {
@@ -355,16 +354,17 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatTemperatureCell.reuseID, for: indexPath) as! SweatTemperatureCell
                 return cell
             }
-                
-            case Section.duskDawn.rawValue:
-                let duskAndDawnCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatDawnDuskCell.reuseID, for: indexPath) as!
-                    SweatDawnDuskCell
-                return duskAndDawnCell
-                
-            default:
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatTemperatureCell.reuseID, for: indexPath) as! SweatTemperatureCell
-                return cell
-            }
+            
+        case Section.duskDawn.rawValue:
+            let duskAndDawnCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatDawnDuskCell.reuseID, for: indexPath) as!
+                SweatDawnDuskCell
+            configure(cell: duskAndDawnCell, fetchPromise: controller.getDuskDawn())
+            return duskAndDawnCell
+            
+        default:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatTemperatureCell.reuseID, for: indexPath) as! SweatTemperatureCell
+            return cell
+        }
 
         
     }

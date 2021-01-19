@@ -71,7 +71,7 @@ class SweatWeeklyWeatherCell: UICollectionViewCell, ConfigurableCell {
         scrollView.bounces                                      = true
         scrollView.isScrollEnabled                              = true
         
-        backgroundColor = .systemTeal
+        backgroundColor = .systemBackground
         
         scrollView.backgroundColor = .yellow
         stackView.translatesAutoresizingMaskIntoConstraints     = false

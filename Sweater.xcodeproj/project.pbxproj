@@ -13,6 +13,7 @@
 		960C68F525A53F60004DBCB8 /* WeeklyWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960C68F425A53F60004DBCB8 /* WeeklyWeather.swift */; };
 		960C68F925A64DC1004DBCB8 /* SweatCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 960C68F825A64DC1004DBCB8 /* SweatCache.swift */; };
 		961B472A257ED2A500608BB6 /* Current.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961B4729257ED2A500608BB6 /* Current.swift */; };
+		9623994A25B6F1BE004171DA /* DawnDusk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9623994925B6F1BE004171DA /* DawnDusk.swift */; };
 		9628B6E8257EABCF00FD761A /* BaseWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9628B6E7257EABCF00FD761A /* BaseWeather.swift */; };
 		9628B6EB257EAC2600FD761A /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9628B6EA257EAC2600FD761A /* Weather.swift */; };
 		9628B6EE257EAC4200FD761A /* Hourly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9628B6ED257EAC4200FD761A /* Hourly.swift */; };
@@ -62,6 +63,7 @@
 		960C68F425A53F60004DBCB8 /* WeeklyWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyWeather.swift; sourceTree = "<group>"; };
 		960C68F825A64DC1004DBCB8 /* SweatCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweatCache.swift; sourceTree = "<group>"; };
 		961B4729257ED2A500608BB6 /* Current.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Current.swift; sourceTree = "<group>"; };
+		9623994925B6F1BE004171DA /* DawnDusk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DawnDusk.swift; sourceTree = "<group>"; };
 		9628B6E7257EABCF00FD761A /* BaseWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWeather.swift; sourceTree = "<group>"; };
 		9628B6EA257EAC2600FD761A /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		9628B6ED257EAC4200FD761A /* Hourly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hourly.swift; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 				969026542581A55300AB22F1 /* WeatherDescriptionAggregate.swift */,
 				9676D54F258AC395002383C0 /* HourlyWeather.swift */,
 				960C68F425A53F60004DBCB8 /* WeeklyWeather.swift */,
+				9623994925B6F1BE004171DA /* DawnDusk.swift */,
 			);
 			path = "Sweater Data Models";
 			sourceTree = "<group>";
@@ -467,6 +470,7 @@
 				9676D550258AC395002383C0 /* HourlyWeather.swift in Sources */,
 				9628B6F5257EAC9100FD761A /* Alert.swift in Sources */,
 				9690265D2588185300AB22F1 /* SweatTemperatureCell.swift in Sources */,
+				9623994A25B6F1BE004171DA /* DawnDusk.swift in Sources */,
 				9628B6E8257EABCF00FD761A /* BaseWeather.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

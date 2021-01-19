@@ -62,6 +62,10 @@ class WeatherDisplayPresenter : MVPPresenter<WeatherDisplayVC> {
     func getWeeklyWeather() -> Promise<[WeeklyWeather]> {
        return repository.fetchWeeklyWeather(latitude: latitude, longitude: longitude)
     }
+    
+    func getDuskDawn() -> Promise<DawnDusk> {
+        return repository.fetchDawnDusk(latitude: latitude, longitude: longitude)
+    }
 }
 
 // the protocol is the structure, shape or rules of the transaction to take place.  tech support can't just throw something outo f the garbage out at you, the need to give you actual procedures and follow a company protocol.

@@ -36,8 +36,8 @@ class SweatWeatherDetailInformationCell: UICollectionViewCell, ConfigurableCell 
     private func configure() {
         contentView.addSubview(mainTemperatureLabel)
         translatesAutoresizingMaskIntoConstraints = false
-        layer.backgroundColor = CGColor.init(red: 255, green: 250, blue: 250, alpha: 1)
-        mainTemperatureLabel.backgroundColor = .blue
+       // layer.backgroundColor = CGColor.init(red: 255, green: 250, blue: 250, alpha: 1)
+    //    mainTemperatureLabel.backgroundColor = .blue
         mainTemperatureLabel.text = "SCREAMING BLUE"
 
         NSLayoutConstraint.activate([

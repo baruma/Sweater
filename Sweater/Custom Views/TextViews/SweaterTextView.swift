@@ -29,16 +29,15 @@ class SweaterTextView: UITextView {
         let edgeInset: CGFloat = 10
         layer.cornerRadius = 10
         
-        backgroundColor                             = .red
         textColor                                   = .label
         tintColor                                   = .label
         textAlignment                               = .left
         textContainerInset                          = UIEdgeInsets(top: 10, left: edgeInset, bottom: edgeInset, right: edgeInset)
         font                                        = UIFont.preferredFont(forTextStyle: .headline)
         font                                        = .systemFont(ofSize: 20, weight: UIFont.Weight(rawValue: 2))
-        backgroundColor                             = #colorLiteral(red: 0.9764705882, green: 0.9607843137, blue: 0.831372549, alpha: 1)
+        backgroundColor                             = .clear
                         
-        backgroundColor                             = .tertiarySystemBackground
+      //  backgroundColor                             = .tertiarySystemBackground
         autocorrectionType                          = .no
         returnKeyType                               = .done
                     

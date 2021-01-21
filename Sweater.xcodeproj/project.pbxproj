@@ -192,6 +192,13 @@
 			path = Sweater;
 			sourceTree = "<group>";
 		};
+		96832CD725B9F6DF0030480B /* Filters */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Filters;
+			sourceTree = "<group>";
+		};
 		9690263725804FCC00AB22F1 /* Sweater Data Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -282,6 +289,7 @@
 		96B09A9D257AFBA100B2E053 /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
+				96832CD725B9F6DF0030480B /* Filters */,
 				96A8776B259A83B6003F0B6B /* TextViews */,
 				96B828E4258964440014AF0B /* Buttons */,
 				96CB753625A1815900E77828 /* CollectionViews */,

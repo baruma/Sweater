@@ -48,10 +48,10 @@ class SweatSupplementaryInformationCell: UICollectionViewCell, ConfigurableCell 
     }
     
     func configure(data: SupplementaryInformation) {
-        uviDataLabel.text = String(data.uvi)
-        cloudDataLabel.text = String(data.clouds)
+        uviDataLabel.text       = String(data.uvi)
+        cloudDataLabel.text     = String(data.clouds)
         windSpeedDataLabel.text = String(data.windSpeed)
-        pressureDataLabel.text = String(data.pressure)
+        pressureDataLabel.text  = String(data.pressure)
     }
     
     private func configure() {
@@ -64,15 +64,17 @@ class SweatSupplementaryInformationCell: UICollectionViewCell, ConfigurableCell 
         
         containerStackView.translatesAutoresizingMaskIntoConstraints    = false
         containerStackView.axis                                         = .vertical
-        containerStackView.distribution                                 = .fillEqually
+        containerStackView.distribution                                 = .fillProportionally
         containerStackView.spacing                                      = 5.0
-        containerStackView.backgroundColor = .systemIndigo
+        containerStackView.backgroundColor                              = .systemIndigo
+        
         /// Parent stackviews filled with respective children stackviews.
         uviAndCloudsStackView.addArrangedSubview(uviStackView)
         uviAndCloudsStackView.addArrangedSubview(cloudStackView)
         
         windspeedAndPressureStackView.addArrangedSubview(windSpeedStackView)
         windspeedAndPressureStackView.addArrangedSubview(pressureStackView)
+        
         
         /// Supplementary Information stackviews getting corresponding title and data labels.
         uviStackView.addArrangedSubview(uviTitleLabel)
@@ -86,61 +88,46 @@ class SweatSupplementaryInformationCell: UICollectionViewCell, ConfigurableCell 
         
         pressureStackView.addArrangedSubview(pressureTitleLabel)
         pressureStackView.addArrangedSubview(pressureDataLabel)
-        
-        /// Setting stackview specific attributes for uviAndCloudStackView and windspeedAndPressureStackView.
-        uviAndCloudsStackView.translatesAutoresizingMaskIntoConstraints = false
-        uviAndCloudsStackView.axis                                      = .horizontal
-        uviAndCloudsStackView.distribution                              = .fillProportionally
-        uviAndCloudsStackView.spacing                                   = 20.0
-        
-        windspeedAndPressureStackView.translatesAutoresizingMaskIntoConstraints = false
-        windspeedAndPressureStackView.axis                                      = .horizontal
-        windspeedAndPressureStackView.distribution                              = .fillProportionally
-        windspeedAndPressureStackView.spacing                                   = 20.0
-        
+
         /// Setting stackview specific attributes for child stackviews.
         uviStackView.translatesAutoresizingMaskIntoConstraints  = false
         uviStackView.axis                                       = .vertical
-        uviStackView.distribution                               = .fillProportionally
+        uviStackView.distribution                               = .fillEqually
         uviStackView.spacing                                    = 5.0
         
         cloudStackView.translatesAutoresizingMaskIntoConstraints = false
         cloudStackView.axis                                      = .vertical
-        cloudStackView.distribution                              = .fillProportionally
+        cloudStackView.distribution                              = .fillEqually
         cloudStackView.spacing                                   = 5.0
         
         windSpeedStackView.translatesAutoresizingMaskIntoConstraints = false
         windSpeedStackView.axis                                      = .vertical
-        windSpeedStackView.distribution                              = .fillProportionally
+        windSpeedStackView.distribution                              = .fillEqually
         windSpeedStackView.spacing                                   = 5.0
         
         pressureStackView.translatesAutoresizingMaskIntoConstraints = false
         pressureStackView.axis                                      = .vertical
-        pressureStackView.distribution                              = .fillProportionally
+        pressureStackView.distribution                              = .fillEqually
         pressureStackView.spacing                                   = 5.0
-        
-        /// Colors on parent stackviews for testing.
-        uviAndCloudsStackView.backgroundColor = .systemTeal
-        windspeedAndPressureStackView.backgroundColor = .systemTeal
         
         /// Colors on uvi, cloud, windspeed and pressure stackviews.
         uviStackView.backgroundColor            = .red
         cloudStackView.backgroundColor          = .blue
         windSpeedStackView.backgroundColor      = .purple
-        pressureStackView.backgroundColor       = .yellow
+        pressureStackView.backgroundColor       = .orange
         
         /// Declaring text to make visibility for testing easier.
-        uviTitleLabel.text = "UVI TITLE LABEL"
-        uviDataLabel.text = "UVI DATA LABEL"
+        uviTitleLabel.text  = "UVI"
+        uviDataLabel.text   = "UVI DATA LABEL"
         
-        cloudTitleLabel.text = "CLOUD TITLE LABEL"
-        cloudDataLabel.text = "CLOUD DATA LABEL"
+        cloudTitleLabel.text    = "CLOUDS"
+        cloudDataLabel.text     = "CLOUD DATA LABEL"
         
-        windSpeedTitleLabel.text = "WINDSPEED TITLE LABEL"
-        windSpeedDataLabel.text = "WINDSPEED DATA LABEL"
+        windSpeedTitleLabel.text    = "WINDSPEED"
+        windSpeedDataLabel.text     = "WINDSPEED DATA LABEL"
         
-        pressureTitleLabel.text = "PRESSURE TITLE LABEL"
-        pressureDataLabel.text = "PRESSURE DATA LABEL"
+        pressureTitleLabel.text     = "PRESSURE"
+        pressureDataLabel.text      = "PRESSURE DATA LABEL"
         
         /// Content View adding everything in here
         contentView.addSubview(uviAndCloudsStackView)
@@ -150,7 +137,13 @@ class SweatSupplementaryInformationCell: UICollectionViewCell, ConfigurableCell 
             containerStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
             containerStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
             containerStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
-            containerStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0)
+            containerStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0),
+            
+            uviAndCloudsStackView.widthAnchor.constraint(equalTo: containerStackView.widthAnchor),
+            
+            windspeedAndPressureStackView.widthAnchor.constraint(equalTo: containerStackView.widthAnchor),
+            windspeedAndPressureStackView.topAnchor.constraint(equalTo: uviAndCloudsStackView.bottomAnchor, constant: 0),
+            
         ])
     }
 }

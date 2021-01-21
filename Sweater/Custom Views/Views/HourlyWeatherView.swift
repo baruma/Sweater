@@ -29,14 +29,14 @@ class HourlyWeatherView: UIView {
         stackView.addArrangedSubview(timeLabel)
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.distribution = .fillEqually
-        stackView.spacing = 10.0
-        stackView.backgroundColor = .yellow
+        stackView.axis                                      = .vertical
+        stackView.distribution                              = .fillEqually
+        stackView.spacing                                   = 10.0
+      //  stackView.backgroundColor = .yellow
         
         translatesAutoresizingMaskIntoConstraints   = false
-        temperatureLabel.backgroundColor            = .brown
-        timeLabel.backgroundColor                   = .black
+     //   temperatureLabel.backgroundColor            = .brown
+     //   timeLabel.backgroundColor                   = .black
         
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: self.topAnchor, constant: 5),

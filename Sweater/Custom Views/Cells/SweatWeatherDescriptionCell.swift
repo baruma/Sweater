@@ -33,11 +33,12 @@ class SweatWeatherDescriptionCell: UICollectionViewCell, ConfigurableCell {
     private func configure() {
         contentView.addSubview(generalDescriptionTextView)
         contentView.addSubview(detailDescriptionTextView)
+        
         translatesAutoresizingMaskIntoConstraints = false
-        layer.backgroundColor = CGColor.init(red: 255, green: 250, blue: 250, alpha: 1)
-        generalDescriptionTextView.backgroundColor = .red
-        detailDescriptionTextView.backgroundColor = .red
-
+        
+        generalDescriptionTextView.textColor = .white
+        detailDescriptionTextView.textColor = .white
+                
         NSLayoutConstraint.activate([
             generalDescriptionTextView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             generalDescriptionTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),

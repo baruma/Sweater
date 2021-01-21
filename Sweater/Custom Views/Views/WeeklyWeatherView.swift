@@ -35,16 +35,16 @@ class WeeklyWeatherView: UIView {
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
         stackView.spacing = 10.0
-        stackView.backgroundColor = .yellow
+    //    stackView.backgroundColor = .yellow
         
         translatesAutoresizingMaskIntoConstraints   = false
-        maxTemperatureLabel.backgroundColor         = .red
-        dayLabel.backgroundColor                    = .blue
-        minTemperatureLabel.backgroundColor         = .systemPink
-        weatherImage.backgroundColor                = .gray
-        maxTemperatureLabel.text                       = "140°"
-        minTemperatureLabel.text                       = "-10°"
-        dayLabel.text                                  = "Wednesday"
+//        maxTemperatureLabel.backgroundColor         = .red
+//        dayLabel.backgroundColor                    = .blue
+//        minTemperatureLabel.backgroundColor         = .systemPink
+//        weatherImage.backgroundColor                = .gray
+//        maxTemperatureLabel.text                       = "140°"
+//        minTemperatureLabel.text                       = "-10°"
+//        dayLabel.text                                  = "Wednesday"
         
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: self.topAnchor, constant: 5),

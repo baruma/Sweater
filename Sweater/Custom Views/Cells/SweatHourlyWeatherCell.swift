@@ -37,14 +37,9 @@ class SweatHourlyWeatherCell: UICollectionViewCell, ConfigurableCell {
         }
     }
     /// This function generates HourlyWeatherDetailViews for the 48 Hourly Weather responses receieved from the API call.
-    
-    // MOVE THIS UP IN THE PROTOCOL
-    // DON'T CREATE THE VIEW TILL YOU KNOW HOW MANY CELLS ARE AVAILABLE
-    // CREATE CHECK AGAINST REFRESHES THAT WILL PREVENT 48 MORE CELLS FROM BEING MADE
     private func generateHourlyWeeklyWeatherViews() {
         for index in 0...48 {
             let view = HourlyWeatherView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
-            // accessibility identifiers are not seen by the user but allow these ui elements to be read in the console when issues occur with them.
             stackView.addArrangedSubview(view)
             hourlyViews.append(view)
         }
@@ -55,7 +50,7 @@ class SweatHourlyWeatherCell: UICollectionViewCell, ConfigurableCell {
         contentView.addSubview(scrollView)
         generateHourlyWeeklyWeatherViews()
         
-        layer.backgroundColor                                   = CGColor.init(red: 255, green: 255, blue: 255, alpha: 1.0)
+       // layer.backgroundColor                                   = CGColor.init(red: 255, green: 255, blue: 255, alpha: 1.0)
         translatesAutoresizingMaskIntoConstraints               = false
         
         scrollView.translatesAutoresizingMaskIntoConstraints    = false

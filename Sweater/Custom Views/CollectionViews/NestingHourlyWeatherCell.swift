@@ -28,7 +28,7 @@ class NestingHourlyWeatherCell: UICollectionViewCell {
     }
         
     private func configure() {
-        collectionView.backgroundColor = .systemBackground
+      //  collectionView.backgroundColor = .systemBackground
     }
 }
 

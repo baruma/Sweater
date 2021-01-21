@@ -42,11 +42,12 @@ class SweatTemperatureCell: UICollectionViewCell, ConfigurableCell {
         stackView.axis                                      = .vertical
         stackView.distribution                              = .fillProportionally
         stackView.spacing                                   = 20.0
-        stackView.backgroundColor = .blue
+  //      stackView.backgroundColor = .blue
         
-        translatesAutoresizingMaskIntoConstraints = false
-        layer.backgroundColor = CGColor.init(red: 255, green: 250, blue: 250, alpha: 1.0)
-        mainTemperatureLabel.backgroundColor = .blue
+        translatesAutoresizingMaskIntoConstraints           = false
+        //layer.backgroundColor                               = CGColor.init(red: 255, green: 250, blue: 250, alpha: 1.0)
+        //mainTemperatureLabel.backgroundColor                = .blue
+        //contentView.backgroundColor                         = .clear
     
         NSLayoutConstraint.activate([
             mainTemperatureLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 50),

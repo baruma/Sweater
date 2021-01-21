@@ -10,8 +10,8 @@ import UIKit
 class SweatDawnDuskCell: UICollectionViewCell, ConfigurableCell {
     static let reuseID          = "SweatDawnDuskCell"
     let stackView               = UIStackView()
-    let dawnLabel               = SweatMainLabel(textAlignment: .center, fontSize: 20)
-    let duskLabel               = SweatMainLabel(textAlignment: .center, fontSize: 20)
+    let dawnLabel               = SweatMainLabel(textAlignment: .center, fontSize: 18)
+    let duskLabel               = SweatMainLabel(textAlignment: .center, fontSize: 18)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -32,8 +32,8 @@ class SweatDawnDuskCell: UICollectionViewCell, ConfigurableCell {
         let dawnTimeString = dateFormatter.string(from: dawnTime)
         let duskTimeString = dateFormatter.string(from: duskTime)
 
-        dawnLabel.text = dawnTimeString
-        duskLabel.text = duskTimeString
+        dawnLabel.text = "Sunrise at : " + dawnTimeString
+        duskLabel.text = "Sunset at : " + duskTimeString
     }
     
     private func configure() {
@@ -44,19 +44,14 @@ class SweatDawnDuskCell: UICollectionViewCell, ConfigurableCell {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis                                      = .horizontal
         stackView.distribution                              = .fill
-        stackView.spacing                                   = 40.0
-        stackView.backgroundColor                           = .red
-        
+        stackView.spacing                                   = 40.0        
         translatesAutoresizingMaskIntoConstraints           = false
-        dawnLabel.backgroundColor                           = .systemPurple
-        duskLabel.backgroundColor                           = .systemBlue
-        
-        backgroundColor = .systemYellow
-        
+                
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
+            stackView.heightAnchor.constraint(equalTo: contentView.heightAnchor, constant: 0)
         ])
     }
 }

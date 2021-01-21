@@ -19,12 +19,14 @@ class WeatherDisplayVC: UIViewController, MVPView {
 
     let locationManager = CLLocationManager()
     let geoCoder = CLGeocoder()
+    let geocodertwo = CLGeocoder()
 
+    // alternatively you can use this : lazy var collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: generateLayout())
     var collectionView: UICollectionView!
-    let searchBar = UISearchBar()
+//    let searchBar = UISearchBar()
     
     var readableLocation: String = ""
-    let address: String = ""
+    let address: String = "" 
     
     enum Section: Int, CaseIterable {
         case currentTemp = 0
@@ -35,14 +37,27 @@ class WeatherDisplayVC: UIViewController, MVPView {
     }
 
     let SectionItemCount: [Int] = [4,1,2,1,1]
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-        configureLocationManagerServices()
         configureCollectionView()
+        navigationController?.navigationBar.backgroundColor = .clear
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.navigationBar.tintColor = .clear
+        navigationController?.navigationBar.barTintColor = .clear
+
+        
+//        let backgroundImageView = UIView()
+//        backgroundImageView. = UIImage(named: "background1")
+//
+        
+        //collectionView.backgroundView = backgroundImageView
+       // view.backgroundColor = UIColor.withpatt
+//        collectionView.backgroundColor = .clear
+        
+        configureLocationManagerServices()
         NotificationCenter.default.addObserver(self, selector: #selector(self.appResume), name: UIApplication.willEnterForegroundNotification, object: nil)
-        configureSearchBar()
+     //   configureSearchBar()
         let testVoid =  convertReadableLocationToCoordinates(searchBarEntry: "1 Infinite Loop, Cupertino, CA 95014")
         print(testVoid)
         getPresenter().attach(view: self)
@@ -60,17 +75,17 @@ class WeatherDisplayVC: UIViewController, MVPView {
         return controller
     }
     
-    func configureSearchBar() {
-        let rightBarButtonItem = UIBarButtonItem(customView: searchBar)
-        navigationController?.navigationBar.backgroundColor = .systemBackground
-        navigationController?.navigationBar.prefersLargeTitles = true
-        self.navigationItem.rightBarButtonItem = rightBarButtonItem
-
-        searchBar.delegate = self
-        searchBar.sizeToFit()
-        searchBar.showsCancelButton = true
-        searchBar.tintColor = .systemPink
-    }
+//    func configureSearchBar() {
+//        let rightBarButtonItem = UIBarButtonItem(customView: searchBar)
+//        navigationController?.navigationBar.backgroundColor = .systemBackground
+//        navigationController?.navigationBar.prefersLargeTitles = true
+//        self.navigationItem.rightBarButtonItem = rightBarButtonItem
+//
+//        searchBar.delegate = self
+//        searchBar.sizeToFit()
+//        searchBar.showsCancelButton = true
+//        searchBar.tintColor = .systemPink
+//    }
     
     func configureNavigationBarDateAndLocation() {
         let date = Date()
@@ -88,6 +103,7 @@ class WeatherDisplayVC: UIViewController, MVPView {
 
         // You are unable to use locationManager here due to a scoping issue. This is specific to Swift.
         if CLLocationManager.locationServicesEnabled() {
+            
             /// There is a frequency to monitoring for location changes.  This is being used so locationManager isn't constantly being called.
             locationManager.startMonitoringSignificantLocationChanges()
             print("Locationmanager has been hit")
@@ -169,6 +185,12 @@ class WeatherDisplayVC: UIViewController, MVPView {
         collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         collectionView.delegate = self
         collectionView.dataSource = self
+        
+        //let backgroundImageView = UIView()
+        let backgroundImageView = UIColor(patternImage: UIImage(named: "background1")!)
+
+        
+        collectionView.backgroundColor = backgroundImageView
     }
     
     func generateTemperatureSectionLayout() -> NSCollectionLayoutSection {
@@ -245,7 +267,7 @@ class WeatherDisplayVC: UIViewController, MVPView {
         let combinedGroup = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalHeight(0.3)),
+                heightDimension: .fractionalHeight(0.4)),
             subitems: [hourlyWeatherGroup, weeklyWeatherGroup])
         
         let section = NSCollectionLayoutSection(group: combinedGroup)
@@ -277,7 +299,7 @@ class WeatherDisplayVC: UIViewController, MVPView {
         let supplementaryInfoGroup = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalHeight(0.4)),
+                heightDimension: .fractionalHeight(0.15)),
             subitem: supplementaryInfoItem, count: 1)
         
         let section = NSCollectionLayoutSection(group: supplementaryInfoGroup)

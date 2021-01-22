@@ -10,7 +10,7 @@ import CoreLocation
 import PromiseKit
 
 class WeatherDisplayVC: UIViewController, MVPView {
-    
+
     typealias Presenter = WeatherDisplayPresenter
     
     let weatherResponseRepository = WeatherResponseRepository()
@@ -19,11 +19,11 @@ class WeatherDisplayVC: UIViewController, MVPView {
 
     let locationManager = CLLocationManager()
     let geoCoder = CLGeocoder()
-    let geocodertwo = CLGeocoder()
 
     // alternatively you can use this : lazy var collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: generateLayout())
     var collectionView: UICollectionView!
-//    let searchBar = UISearchBar()
+    let searchBar = UISearchBar()
+    let gradientView = DarkTransparentGradientView()
     
     var readableLocation: String = ""
     let address: String = "" 
@@ -41,28 +41,36 @@ class WeatherDisplayVC: UIViewController, MVPView {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
+        gradientView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
         navigationController?.navigationBar.backgroundColor = .clear
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.tintColor = .clear
         navigationController?.navigationBar.barTintColor = .clear
 
-        
-//        let backgroundImageView = UIView()
-//        backgroundImageView. = UIImage(named: "background1")
-//
-        
-        //collectionView.backgroundView = backgroundImageView
-       // view.backgroundColor = UIColor.withpatt
-//        collectionView.backgroundColor = .clear
-        
         configureLocationManagerServices()
         NotificationCenter.default.addObserver(self, selector: #selector(self.appResume), name: UIApplication.willEnterForegroundNotification, object: nil)
-     //   configureSearchBar()
-        let testVoid =  convertReadableLocationToCoordinates(searchBarEntry: "1 Infinite Loop, Cupertino, CA 95014")
-        print(testVoid)
+        configureSearchBar()
+       // let testVoid =  convertReadableLocationToCoordinates(searchBarEntry: "1 Infinite Loop, Cupertino, CA 95014")
+       // print(testVoid)
         getPresenter().attach(view: self)
+    
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        convertReadableLocationToCoordinates(searchBarEntry: "Georgia Atlanta")
     }
 
+    
+    func getCoordinateFrom(address: String, completion: @escaping(_ coordinate: CLLocationCoordinate2D?, _ error: Error?) -> () ) {
+        CLGeocoder().geocodeAddressString(address) {
+            print("Entered address " + address)
+            
+//            print("Result " + $0)
+            completion($0?.first?.location?.coordinate, $1)
+            
+        }
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         getPresenter().detach()
     }
@@ -75,17 +83,19 @@ class WeatherDisplayVC: UIViewController, MVPView {
         return controller
     }
     
-//    func configureSearchBar() {
-//        let rightBarButtonItem = UIBarButtonItem(customView: searchBar)
-//        navigationController?.navigationBar.backgroundColor = .systemBackground
-//        navigationController?.navigationBar.prefersLargeTitles = true
-//        self.navigationItem.rightBarButtonItem = rightBarButtonItem
-//
-//        searchBar.delegate = self
-//        searchBar.sizeToFit()
-//        searchBar.showsCancelButton = true
-//        searchBar.tintColor = .systemPink
-//    }
+    func configureSearchBar() {
+        let rightBarButtonItem = UIBarButtonItem(customView: searchBar)
+        navigationController?.navigationBar.backgroundColor = .clear
+        navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationItem.rightBarButtonItem = rightBarButtonItem
+        
+        searchBar.sizeToFit()
+        searchBar.delegate            = self
+        searchBar.showsCancelButton   = true
+        searchBar.tintColor           = .systemBlue
+        searchBar.isTranslucent       = true
+        searchBar.placeholder         = "City, Country"
+    }
     
     func configureNavigationBarDateAndLocation() {
         let date = Date()
@@ -172,8 +182,10 @@ class WeatherDisplayVC: UIViewController, MVPView {
 
     func configureCollectionView() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: generateLayout())
-        collectionView.backgroundColor = .black
+       // collectionView.backgroundColor = .black
         view.addSubview(collectionView)
+//        collectionView.addSubview(gradientView)
+//        gradientView.clipsToBounds = true
         collectionView.register(SweatTemperatureCell.self, forCellWithReuseIdentifier: SweatTemperatureCell.reuseID)
         collectionView.register(SweatWeatherDetailInformationCell.self, forCellWithReuseIdentifier: SweatWeatherDetailInformationCell.reuseID)
         collectionView.register(SweatWeatherDescriptionCell.self, forCellWithReuseIdentifier: SweatWeatherDescriptionCell.reuseID)
@@ -187,9 +199,8 @@ class WeatherDisplayVC: UIViewController, MVPView {
         collectionView.dataSource = self
         
         //let backgroundImageView = UIView()
-        let backgroundImageView = UIColor(patternImage: UIImage(named: "background1")!)
-
-        
+       // ImageView.image = ImageToFilter.addFilter(.Mono)
+        let backgroundImageView = UIColor(patternImage: UIImage(named: "background1")!.addFilter(filter: .Transfer))
         collectionView.backgroundColor = backgroundImageView
     }
     
@@ -330,7 +341,8 @@ extension WeatherDisplayVC: CLLocationManagerDelegate {
 extension WeatherDisplayVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // must update this number.  You may need to make a switch case
-        return SectionItemCount[section]
+       // return SectionItemCount[section]
+        return 0
     }
     
     /// The Layout was built this way to incorporate the various types of cells the View woudld be using.
@@ -433,4 +445,50 @@ extension WeatherDisplayVC: UICollectionViewDelegate {
     }
 }
 
-extension WeatherDisplayVC: UISearchBarDelegate {}
+extension WeatherDisplayVC: UISearchBarDelegate {
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        <#code#>
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        <#code#>
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        <#code#>
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        <#code#>
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        <#code#>
+    }
+}
+
+enum FilterType : String {
+    case Chrome = "CIPhotoEffectChrome"
+    case Fade = "CIPhotoEffectFade"
+    case Instant = "CIPhotoEffectInstant"
+    case Mono = "CIPhotoEffectMono"
+    case Noir = "CIPhotoEffectNoir"
+    case Process = "CIPhotoEffectProcess"
+    case Tonal = "CIPhotoEffectTonal"
+    case Transfer =  "CIPhotoEffectTransfer"
+}
+
+extension UIImage {
+    func addFilter(filter : FilterType) -> UIImage {
+        let filter = CIFilter(name: filter.rawValue)
+        // convert UIImage to CIImage and set as input
+        let ciInput = CIImage(image: self)
+        filter?.setValue(ciInput, forKey: "inputImage")
+        // get output CIImage, render as CGImage first to retain proper UIImage scale
+        let ciOutput = filter?.outputImage
+        let ciContext = CIContext()
+        let cgImage = ciContext.createCGImage(ciOutput!, from: (ciOutput?.extent)!)
+        //Return the image
+        return UIImage(cgImage: cgImage!)
+    }
+}

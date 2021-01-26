@@ -45,7 +45,7 @@ class WeatherResponseRepository {
     }
 
     func fetchCurrentFeelsLike(latitude: Float, longitude: Float) -> Promise<Temperature> {
-        #warning("that clusre syntax people keep talking about now you finally ran into it")
+        #warning("that closure syntax people keep talking about now you finally ran into it")
         return fetchOneCallResponse(latitude: latitude, longitude: longitude)
             .then { oneCallResponse -> Promise<Temperature> in
                 let mappedResults = self.mapper.mapToTemperatureModel(current: oneCallResponse.current, hourly: oneCallResponse.hourly)

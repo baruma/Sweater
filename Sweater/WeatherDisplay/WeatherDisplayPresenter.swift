@@ -32,7 +32,6 @@ class WeatherDisplayPresenter : MVPPresenter<WeatherDisplayVC> {
         self.latitude = latitude
         self.longitude = longitude
         print(latitude, longitude)
-        
     }
     
     func getMainTemp() -> Promise<Temperature> {

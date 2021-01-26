@@ -9,7 +9,7 @@ import UIKit
 import CoreLocation
 import PromiseKit
 
-class WeatherDisplayVC: UIViewController, MVPView {
+class WeatherDisplayVC: UIViewController, MVPView, CLLocationManagerDelegate {
 
     typealias Presenter = WeatherDisplayPresenter
     
@@ -22,11 +22,21 @@ class WeatherDisplayVC: UIViewController, MVPView {
 
     // alternatively you can use this : lazy var collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: generateLayout())
     var collectionView: UICollectionView!
-    let searchBar = UISearchBar()
     let gradientView = DarkTransparentGradientView()
+
+    #warning("We left off here squaring away the UISearchController")
+    let searchBar = UISearchBar()
+    // let searchResultsController =
+    let searchController = UISearchController(searchResultsController: <#T##UIViewController?#>)
     
     var readableLocation: String = ""
-    let address: String = "" 
+    let address: String = ""
+    
+    var searchBarText: String = ""
+    var isSearchActive: Bool = false
+    
+    let viewController = UIViewController()
+    let locationResultsTableVC = LocationResultTableVC()
     
     enum Section: Int, CaseIterable {
         case currentTemp = 0
@@ -53,13 +63,16 @@ class WeatherDisplayVC: UIViewController, MVPView {
        // let testVoid =  convertReadableLocationToCoordinates(searchBarEntry: "1 Infinite Loop, Cupertino, CA 95014")
        // print(testVoid)
         getPresenter().attach(view: self)
-    
     }
     
     override func viewWillAppear(_ animated: Bool) {
         convertReadableLocationToCoordinates(searchBarEntry: "Georgia Atlanta")
     }
-
+    
+    func configureSearchController() {
+        searchController.obscuresBackgroundDuringPresentation = true
+        
+    }
     
     func getCoordinateFrom(address: String, completion: @escaping(_ coordinate: CLLocationCoordinate2D?, _ error: Error?) -> () ) {
         CLGeocoder().geocodeAddressString(address) {
@@ -92,9 +105,13 @@ class WeatherDisplayVC: UIViewController, MVPView {
         searchBar.sizeToFit()
         searchBar.delegate            = self
         searchBar.showsCancelButton   = true
+        
         searchBar.tintColor           = .systemBlue
         searchBar.isTranslucent       = true
         searchBar.placeholder         = "City, Country"
+        
+        searchController.searchBar.layoutIfNeeded()
+        searchController.isActive = true
     }
     
     func configureNavigationBarDateAndLocation() {
@@ -121,17 +138,17 @@ class WeatherDisplayVC: UIViewController, MVPView {
     }
     
     /// This function exists to convert human readable place names into coordinates that can be passed into the network call.
-    func convertReadableLocationToCoordinates(searchBarEntry: String) {
-        geoCoder.geocodeAddressString(searchBarEntry) { (placemarks, error) in
-            guard
-                let placemarks = placemarks,
-                let location = placemarks.first?.location
-            else {
-                // handle no location found
-                print("Could not retrieve coordinates.")
-                return
+    
+    func convertReadableLocationToCoordinates(searchBarEntry: String) -> Promise<CLLocation> {
+        return Promise {seal in
+            geoCoder.geocodeAddressString(searchBarEntry) { (placemarks, error) in
+                guard let placemarks = placemarks, let location = placemarks.first?.location
+                else {
+                    print("Could not retrieve coordinates.")
+                    return
+                }
+                seal.fulfill(location)
             }
-            print(location)  // so we are getting the location. Now we have to do 2 things.  Put in SearchBar results in here and pass coordinates along.
         }
     }
     
@@ -142,7 +159,6 @@ class WeatherDisplayVC: UIViewController, MVPView {
         let location = CLLocation(latitude: latitude, longitude: longitude)
 
         geoCoder.reverseGeocodeLocation(location) { (placemarks, error) in
-
              // Place details
             guard let placeMark = placemarks?.first else { return }
 
@@ -319,7 +335,7 @@ class WeatherDisplayVC: UIViewController, MVPView {
 }
 
 
-extension WeatherDisplayVC: CLLocationManagerDelegate {
+extension WeatherDisplayVC {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let currentLocation: CLLocation = locations[0]
         let lat = Float(currentLocation.coordinate.latitude)
@@ -446,25 +462,27 @@ extension WeatherDisplayVC: UICollectionViewDelegate {
 }
 
 extension WeatherDisplayVC: UISearchBarDelegate {
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        <#code#>
-    }
-    
+//    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+//        <#code#>
+//    }
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        <#code#>
+        searchBarText = searchText
+        // The two classes below are being hit but nothing is being presented.  Figure it out.
+//        searchController.searchResultsController?.present(locationResultsTableVC, animated: true, completion: nil)
+//        searchController.searchResultsUpdater?.updateSearchResults(for: searchController)
+        
     }
-    
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        <#code#>
-    }
-    
+
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        <#code#>
+        convertReadableLocationToCoordinates(searchBarEntry: searchBarText)
+        // what are we trying to do here, we are trying to present a tableview of the one result we're going to get to the viewer.
+//        searchController.searchResultsUpdater
     }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        <#code#>
-    }
+
+//    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+//        <#code#>
+//    }
 }
 
 enum FilterType : String {

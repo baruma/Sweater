@@ -9,7 +9,7 @@ import UIKit
 import CoreLocation
 import PromiseKit
 
-class WeatherDisplayVC: UIViewController, MVPView, CLLocationManagerDelegate {
+class WeatherDisplayVC: UIViewController, MVPView, CLLocationManagerDelegate, UISearchControllerDelegate {
 
     typealias Presenter = WeatherDisplayPresenter
     
@@ -23,11 +23,6 @@ class WeatherDisplayVC: UIViewController, MVPView, CLLocationManagerDelegate {
     // alternatively you can use this : lazy var collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: generateLayout())
     var collectionView: UICollectionView!
     let gradientView = DarkTransparentGradientView()
-
-    #warning("We left off here squaring away the UISearchController")
-    let searchBar = UISearchBar()
-    // let searchResultsController =
-    let searchController = UISearchController(searchResultsController: <#T##UIViewController?#>)
     
     var readableLocation: String = ""
     let address: String = ""
@@ -35,8 +30,10 @@ class WeatherDisplayVC: UIViewController, MVPView, CLLocationManagerDelegate {
     var searchBarText: String = ""
     var isSearchActive: Bool = false
     
-    let viewController = UIViewController()
-    let locationResultsTableVC = LocationResultTableVC()
+    var locationResultVC = LocationResultVC()
+
+    var searchBar = UISearchBar()
+    lazy var searchController = UISearchController(searchResultsController: locationResultVC)
     
     enum Section: Int, CaseIterable {
         case currentTemp = 0
@@ -59,9 +56,9 @@ class WeatherDisplayVC: UIViewController, MVPView, CLLocationManagerDelegate {
 
         configureLocationManagerServices()
         NotificationCenter.default.addObserver(self, selector: #selector(self.appResume), name: UIApplication.willEnterForegroundNotification, object: nil)
-        configureSearchBar()
-       // let testVoid =  convertReadableLocationToCoordinates(searchBarEntry: "1 Infinite Loop, Cupertino, CA 95014")
-       // print(testVoid)
+      //  configureSearchBar()
+        navigationItem.searchController = searchController
+        
         getPresenter().attach(view: self)
     }
     
@@ -70,8 +67,9 @@ class WeatherDisplayVC: UIViewController, MVPView, CLLocationManagerDelegate {
     }
     
     func configureSearchController() {
+        searchController.delegate = self
         searchController.obscuresBackgroundDuringPresentation = true
-        
+        searchController.automaticallyShowsSearchResultsController = true
     }
     
     func getCoordinateFrom(address: String, completion: @escaping(_ coordinate: CLLocationCoordinate2D?, _ error: Error?) -> () ) {
@@ -468,16 +466,16 @@ extension WeatherDisplayVC: UISearchBarDelegate {
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         searchBarText = searchText
-        // The two classes below are being hit but nothing is being presented.  Figure it out.
+//         The two classes below are being hit but nothing is being presented.  Figure it out.
 //        searchController.searchResultsController?.present(locationResultsTableVC, animated: true, completion: nil)
-//        searchController.searchResultsUpdater?.updateSearchResults(for: searchController)
+ //       searchController.searchResultsUpdater?.updateSearchResults(for: searchController)
+        searchController.searchResultsUpdater?.updateSearchResults(for: searchController)
+        configureSearchController()
         
     }
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         convertReadableLocationToCoordinates(searchBarEntry: searchBarText)
-        // what are we trying to do here, we are trying to present a tableview of the one result we're going to get to the viewer.
-//        searchController.searchResultsUpdater
     }
 
 //    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

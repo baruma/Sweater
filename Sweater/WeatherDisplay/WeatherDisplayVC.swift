@@ -27,12 +27,12 @@ class WeatherDisplayVC: UIViewController, MVPView, CLLocationManagerDelegate, UI
     var readableLocation: String = ""
     let address: String = ""
     
-    var searchBarText: String = ""
+   // var searchBarText: String = ""
     var isSearchActive: Bool = false
     
     var locationResultVC = LocationResultVC()
 
-    var searchBar = UISearchBar()
+   // var searchBar = UISearchBar()
     lazy var searchController = UISearchController(searchResultsController: locationResultVC)
     
     enum Section: Int, CaseIterable {
@@ -53,11 +53,9 @@ class WeatherDisplayVC: UIViewController, MVPView, CLLocationManagerDelegate, UI
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.tintColor = .clear
         navigationController?.navigationBar.barTintColor = .clear
-
+        configureSearchController()
         configureLocationManagerServices()
         NotificationCenter.default.addObserver(self, selector: #selector(self.appResume), name: UIApplication.willEnterForegroundNotification, object: nil)
-      //  configureSearchBar()
-        navigationItem.searchController = searchController
         
         getPresenter().attach(view: self)
     }
@@ -67,9 +65,17 @@ class WeatherDisplayVC: UIViewController, MVPView, CLLocationManagerDelegate, UI
     }
     
     func configureSearchController() {
+        navigationItem.searchController = searchController
+
         searchController.delegate = self
+        searchController.searchResultsUpdater = self
+        searchController.automaticallyShowsScopeBar = false
         searchController.obscuresBackgroundDuringPresentation = true
         searchController.automaticallyShowsSearchResultsController = true
+        searchController.searchBar.placeholder = "City, Country"
+        searchController.searchBar.delegate = self
+        definesPresentationContext = true
+
     }
     
     func getCoordinateFrom(address: String, completion: @escaping(_ coordinate: CLLocationCoordinate2D?, _ error: Error?) -> () ) {
@@ -93,25 +99,25 @@ class WeatherDisplayVC: UIViewController, MVPView, CLLocationManagerDelegate, UI
     func getPresenter() -> WeatherDisplayPresenter {
         return controller
     }
-    
-    func configureSearchBar() {
-        let rightBarButtonItem = UIBarButtonItem(customView: searchBar)
-        navigationController?.navigationBar.backgroundColor = .clear
-        navigationController?.navigationBar.prefersLargeTitles = true
-        self.navigationItem.rightBarButtonItem = rightBarButtonItem
-        
-        searchBar.sizeToFit()
-        searchBar.delegate            = self
-        searchBar.showsCancelButton   = true
-        
-        searchBar.tintColor           = .systemBlue
-        searchBar.isTranslucent       = true
-        searchBar.placeholder         = "City, Country"
-        
-        searchController.searchBar.layoutIfNeeded()
-        searchController.isActive = true
-    }
-    
+//
+//    func configureSearchBar() {
+//        let rightBarButtonItem = UIBarButtonItem(customView: searchBar)
+//        navigationController?.navigationBar.backgroundColor = .clear
+//        navigationController?.navigationBar.prefersLargeTitles = true
+//        self.navigationItem.rightBarButtonItem = rightBarButtonItem
+//
+//        searchBar.sizeToFit()
+//        searchBar.delegate            = self
+//        searchBar.showsCancelButton   = true
+//
+//        searchBar.tintColor           = .systemBlue
+//        searchBar.isTranslucent       = true
+//        searchBar.placeholder         = "City, Country"
+//
+//        searchController.searchBar.layoutIfNeeded()
+//        searchController.isActive = true
+//    }
+//
     func configureNavigationBarDateAndLocation() {
         let date = Date()
         let formatter = DateFormatter()
@@ -452,6 +458,15 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
         }
     }
 }
+// This protocol defines methods to update search results based on information the user enters into the search bar.
+extension WeatherDisplayVC: UISearchResultsUpdating {
+  func updateSearchResults(for searchController: UISearchController) {
+    // let searchBar = searchController.searchBar
+//    let category = Candy.Category(rawValue:
+//      searchBar.scopeButtonTitles![searchBar.selectedScopeButtonIndex])
+//    filterContentForSearchText(searchBar.text!, category: category)
+  }
+}
 
 extension WeatherDisplayVC: UICollectionViewDelegate {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -460,28 +475,34 @@ extension WeatherDisplayVC: UICollectionViewDelegate {
 }
 
 extension WeatherDisplayVC: UISearchBarDelegate {
-//    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-//        <#code#>
-//    }
+//  func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+//    let category = Candy.Category(rawValue:
+//      searchBar.scopeButtonTitles![selectedScope])
+//    filterContentForSearchText(searchBar.text!, category: category)
+  }
 
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        searchBarText = searchText
-//         The two classes below are being hit but nothing is being presented.  Figure it out.
-//        searchController.searchResultsController?.present(locationResultsTableVC, animated: true, completion: nil)
- //       searchController.searchResultsUpdater?.updateSearchResults(for: searchController)
-        searchController.searchResultsUpdater?.updateSearchResults(for: searchController)
-        configureSearchController()
-        
-    }
 
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        convertReadableLocationToCoordinates(searchBarEntry: searchBarText)
-    }
-
-//    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-//        <#code#>
-//    }
-}
+//extension WeatherDisplayVC: UISearchBarDelegate {
+////    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+////        <#code#>
+////    }
+//
+////    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+////        searchBarText = searchText
+////
+////        searchController.searchResultsUpdater?.updateSearchResults(for: searchController)
+////        configureSearchController()
+////        
+////    }
+////
+////    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+////        convertReadableLocationToCoordinates(searchBarEntry: searchBarText)
+////    }
+//
+////    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+////        <#code#>
+////    }
+//}
 
 enum FilterType : String {
     case Chrome = "CIPhotoEffectChrome"

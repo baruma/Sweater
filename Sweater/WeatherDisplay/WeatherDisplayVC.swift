@@ -30,11 +30,13 @@ class WeatherDisplayVC: UIViewController, MVPView, CLLocationManagerDelegate, UI
    // var searchBarText: String = ""
     var isSearchActive: Bool = false
     
-    var locationResultVC = LocationResultVC()
+    var locationResultVC = LocationResultTableView()
 
    // var searchBar = UISearchBar()
+    // We made progress on solving this by looking into the documentation and clarifying that the protocol and delegate pattern is set with the init.  You may need a referesher on the capabilities of protocols and delegates.
+    // We almost always start problem solving by understanding our code and reading the docs if we don't or if we don't know why it's not working.
     lazy var searchController = UISearchController(searchResultsController: locationResultVC)
-    
+
     enum Section: Int, CaseIterable {
         case currentTemp = 0
         case currentDescription = 1
@@ -68,14 +70,14 @@ class WeatherDisplayVC: UIViewController, MVPView, CLLocationManagerDelegate, UI
         navigationItem.searchController = searchController
 
         searchController.delegate = self
-        searchController.searchResultsUpdater = self
+        searchController.searchResultsUpdater = locationResultVC  
+        searchController.hidesNavigationBarDuringPresentation = false
         searchController.automaticallyShowsScopeBar = false
         searchController.obscuresBackgroundDuringPresentation = true
         searchController.automaticallyShowsSearchResultsController = true
         searchController.searchBar.placeholder = "City, Country"
-        searchController.searchBar.delegate = self
+       // searchController.searchBar.delegate = self
         definesPresentationContext = true
-
     }
     
     func getCoordinateFrom(address: String, completion: @escaping(_ coordinate: CLLocationCoordinate2D?, _ error: Error?) -> () ) {

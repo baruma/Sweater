@@ -32,10 +32,8 @@ class WeatherDisplayVC: UIViewController, MVPView, CLLocationManagerDelegate, UI
     //JLI: might be moved if you refactor geocoding
     var readableLocation: String = ""
     let address: String = ""
-    
-    var isSearchActive: Bool = false //JLI: unused
-    
-    var locationResultVC = LocationResultTableViewVC()    //JLI: can be let
+        
+    let locationResultVC = LocationResultTableViewVC()
 
     lazy var searchController = UISearchController(searchResultsController: locationResultVC)
 

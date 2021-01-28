@@ -14,9 +14,7 @@ import PromiseKit
 class LocationResultTableViewVC: UITableViewController, UISearchResultsUpdating {
     private let geoCoderManager = GeoCoderManager()
     private var geoCodedPlace = ""
-    private var suggestedPlace = ""
-    private var suggestedCity = ""
-    private var suggestedCountry = ""
+    private var locationSearchResult: LocationSearchResult? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,47 +43,38 @@ class LocationResultTableViewVC: UITableViewController, UISearchResultsUpdating 
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
         ])
     }
-    
-    // We need a function that returns the readable and tableviewcell insertable placename because updateSearchResults hates this.
-    
-    func updateSearchResults(for searchController: UISearchController, fetchPromise: Promise<CLPlacemark>) {
+
+    func updateSearchResults(for searchController: UISearchController) {
         print(searchController.searchBar.text)
-    
         searchBarText = searchController.searchBar.text!
         
-        fetchPromise.done { result  in
-            let cityName = result.locality
-            let countryName = result.country
-            let searchableCityEntry = self.geoCoderManager.convertUserEntryToSearchableHumanReadableLocation(searchBarEntry: cityName!)
-            let searchableCountryEntry = self.geoCoderManager.convertUserEntryToSearchableHumanReadableLocation(searchBarEntry: countryName!)
-            self.suggestedCity = cityName!
-            self.suggestedCountry = countryName!
+        self.geoCoderManager.convertUserEntryToSearchableHumanReadableLocation(searchBarEntry: searchBarText).done { result  in
+            let cityName = result.locality ?? ""
+            let administrativeAreaName = result.administrativeArea ?? ""
+            let countryName = result.country ?? ""
+            let searchableCityEntry = self.geoCoderManager.convertUserEntryToSearchableHumanReadableLocation(searchBarEntry: cityName)
+            let searchableAdministrativeArea = self.geoCoderManager.convertUserEntryToSearchableHumanReadableLocation(searchBarEntry: administrativeAreaName)
+            let searchableCountryEntry = self.geoCoderManager.convertUserEntryToSearchableHumanReadableLocation(searchBarEntry: countryName)
+          
+            self.locationSearchResult = LocationSearchResult(city: cityName,administrativeArea: administrativeAreaName, country: countryName)
+            self.tableView.reloadData()
         }.catch { error  in
             print(error)
         }
-        tableView.reloadData()
     }
-    
-    func updateSearchResults(for searchController: UISearchController) {
-        
-    }
-    
-//    func configure<Cell : ConfigurableCell, ResultType>(cell: Cell, fetchPromise: Promise<ResultType>) {
-//        fetchPromise.done { result in
-//            cell.configure(data: result as! Cell.DataType)  //JLI: Ideally, we shouldnt need ! or casting
-//        }.catch { error in
-//            print(error)
-//        }
-//    }
-//
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
         
         cell.backgroundColor = .systemGray6
-        cell.textLabel?.text = searchBarText
         cell.textLabel?.textColor = .black
+        /// TODO: - Need to add a throw instead of a return
+        guard let location = locationSearchResult else {
+            print("Something went wrong with finding the city and country names.")
+            return cell
+        }
         
+        cell.textLabel?.text = location.city + " " + location.administrativeArea + " " +  location.country
         return cell
     }
     

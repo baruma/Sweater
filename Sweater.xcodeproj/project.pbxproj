@@ -57,6 +57,7 @@
 		96C39D8725B24C1A002CB661 /* MVPPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C39D8625B24C1A002CB661 /* MVPPresenter.swift */; };
 		96CB753125A0E3A300E77828 /* SweatHourlyWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CB753025A0E3A300E77828 /* SweatHourlyWeatherCell.swift */; };
 		96CB753825A1818300E77828 /* NestingHourlyWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CB753725A1818300E77828 /* NestingHourlyWeatherCell.swift */; };
+		96DCE07925C2524000122CF4 /* LocationSearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DCE07825C2524000122CF4 /* LocationSearchResult.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -114,6 +115,7 @@
 		96C39D8625B24C1A002CB661 /* MVPPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MVPPresenter.swift; sourceTree = "<group>"; };
 		96CB753025A0E3A300E77828 /* SweatHourlyWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweatHourlyWeatherCell.swift; sourceTree = "<group>"; };
 		96CB753725A1818300E77828 /* NestingHourlyWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestingHourlyWeatherCell.swift; sourceTree = "<group>"; };
+		96DCE07825C2524000122CF4 /* LocationSearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchResult.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +214,7 @@
 			isa = PBXGroup;
 			children = (
 				9681E40B25C223B0006BF5A3 /* GeoCoderManager.swift */,
+				96DCE07825C2524000122CF4 /* LocationSearchResult.swift */,
 			);
 			path = "Geocoding Manager";
 			sourceTree = "<group>";
@@ -508,6 +511,7 @@
 				9690263425804DAD00AB22F1 /* SweatMainLabel.swift in Sources */,
 				9690263F2580512500AB22F1 /* WeatherDetail.swift in Sources */,
 				969026642588188D00AB22F1 /* SweatWeatherDetailInformationCell.swift in Sources */,
+				96DCE07925C2524000122CF4 /* LocationSearchResult.swift in Sources */,
 				9670D5802578149C00CC638B /* AppDelegate.swift in Sources */,
 				96B828E22589622F0014AF0B /* SweatDetailLabel.swift in Sources */,
 				96661279257EDC39001BB7D3 /* OneCallResponse.swift in Sources */,

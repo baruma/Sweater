@@ -21,7 +21,7 @@
 		9628B6F1257EAC5600FD761A /* Daily.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9628B6F0257EAC5600FD761A /* Daily.swift */; };
 		9628B6F5257EAC9100FD761A /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9628B6F4257EAC9100FD761A /* Alert.swift */; };
 		9628B6F8257ECC9900FD761A /* DailyTemperature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9628B6F7257ECC9900FD761A /* DailyTemperature.swift */; };
-		9645730A25BF747E0088FD41 /* LocationResultTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9645730925BF747E0088FD41 /* LocationResultTableView.swift */; };
+		9645730A25BF747E0088FD41 /* LocationResultTableViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9645730925BF747E0088FD41 /* LocationResultTableViewVC.swift */; };
 		964E55EF257C52FB00D6AF84 /* WeatherDisplayPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964E55EE257C52FB00D6AF84 /* WeatherDisplayPresenter.swift */; };
 		964E55F2257C5FE600D6AF84 /* WeatherResponseRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964E55F1257C5FE600D6AF84 /* WeatherResponseRepository.swift */; };
 		96661279257EDC39001BB7D3 /* OneCallResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96661278257EDC39001BB7D3 /* OneCallResponse.swift */; };
@@ -37,6 +37,7 @@
 		9676D549258AB064002383C0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9676D548258AB064002383C0 /* Constants.swift */; };
 		9676D54D258AB533002383C0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9676D54C258AB533002383C0 /* Constants.swift */; };
 		9676D550258AC395002383C0 /* HourlyWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9676D54F258AC395002383C0 /* HourlyWeather.swift */; };
+		9681E40C25C223B0006BF5A3 /* GeoCoderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9681E40B25C223B0006BF5A3 /* GeoCoderManager.swift */; };
 		9690263025804C6600AB22F1 /* WeatherMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9690262F25804C6600AB22F1 /* WeatherMapper.swift */; };
 		9690263425804DAD00AB22F1 /* SweatMainLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9690263325804DAD00AB22F1 /* SweatMainLabel.swift */; };
 		969026392580504C00AB22F1 /* Temperature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969026382580504C00AB22F1 /* Temperature.swift */; };
@@ -75,7 +76,7 @@
 		9628B6F0257EAC5600FD761A /* Daily.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Daily.swift; sourceTree = "<group>"; };
 		9628B6F4257EAC9100FD761A /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		9628B6F7257ECC9900FD761A /* DailyTemperature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyTemperature.swift; sourceTree = "<group>"; };
-		9645730925BF747E0088FD41 /* LocationResultTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationResultTableView.swift; sourceTree = "<group>"; };
+		9645730925BF747E0088FD41 /* LocationResultTableViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationResultTableViewVC.swift; sourceTree = "<group>"; };
 		964E55EE257C52FB00D6AF84 /* WeatherDisplayPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDisplayPresenter.swift; sourceTree = "<group>"; };
 		964E55F1257C5FE600D6AF84 /* WeatherResponseRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherResponseRepository.swift; sourceTree = "<group>"; };
 		96661278257EDC39001BB7D3 /* OneCallResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneCallResponse.swift; sourceTree = "<group>"; };
@@ -93,6 +94,7 @@
 		9676D548258AB064002383C0 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9676D54C258AB533002383C0 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9676D54F258AC395002383C0 /* HourlyWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeather.swift; sourceTree = "<group>"; };
+		9681E40B25C223B0006BF5A3 /* GeoCoderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoCoderManager.swift; sourceTree = "<group>"; };
 		9690262F25804C6600AB22F1 /* WeatherMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherMapper.swift; sourceTree = "<group>"; };
 		9690263325804DAD00AB22F1 /* SweatMainLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweatMainLabel.swift; sourceTree = "<group>"; };
 		969026382580504C00AB22F1 /* Temperature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Temperature.swift; sourceTree = "<group>"; };
@@ -162,7 +164,7 @@
 		9645730C25BF748B0088FD41 /* LocationResult */ = {
 			isa = PBXGroup;
 			children = (
-				9645730925BF747E0088FD41 /* LocationResultTableView.swift */,
+				9645730925BF747E0088FD41 /* LocationResultTableViewVC.swift */,
 			);
 			path = LocationResult;
 			sourceTree = "<group>";
@@ -188,6 +190,7 @@
 		9670D57E2578149C00CC638B /* Sweater */ = {
 			isa = PBXGroup;
 			children = (
+				9681E40A25C22394006BF5A3 /* Geocoding Manager */,
 				96C39D8225B24830002CB661 /* Architecture */,
 				969026672588483700AB22F1 /* Utilities */,
 				96B09A9B257AFB7700B2E053 /* WeatherDisplay */,
@@ -203,6 +206,14 @@
 				9670D58D2578149F00CC638B /* Info.plist */,
 			);
 			path = Sweater;
+			sourceTree = "<group>";
+		};
+		9681E40A25C22394006BF5A3 /* Geocoding Manager */ = {
+			isa = PBXGroup;
+			children = (
+				9681E40B25C223B0006BF5A3 /* GeoCoderManager.swift */,
+			);
+			path = "Geocoding Manager";
 			sourceTree = "<group>";
 		};
 		96832CD725B9F6DF0030480B /* Filters */ = {
@@ -481,9 +492,10 @@
 				966709BF25B78C3A002ED0DA /* SupplementaryInformation.swift in Sources */,
 				969026692588484900AB22F1 /* ErrorCodes.swift in Sources */,
 				9690263C258050BD00AB22F1 /* WeatherDescription.swift in Sources */,
+				9681E40C25C223B0006BF5A3 /* GeoCoderManager.swift in Sources */,
 				96CB753125A0E3A300E77828 /* SweatHourlyWeatherCell.swift in Sources */,
 				96AEE2CC25BB0FB40001107C /* DarkTransparentGradientView.swift in Sources */,
-				9645730A25BF747E0088FD41 /* LocationResultTableView.swift in Sources */,
+				9645730A25BF747E0088FD41 /* LocationResultTableViewVC.swift in Sources */,
 				96C39D8425B248F5002CB661 /* MVPView.swift in Sources */,
 				969026612588186F00AB22F1 /* SweatWeatherDescriptionCell.swift in Sources */,
 				9670D5842578149C00CC638B /* WeatherDisplayVC.swift in Sources */,

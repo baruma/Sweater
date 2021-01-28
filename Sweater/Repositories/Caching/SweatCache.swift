@@ -9,7 +9,10 @@ import Foundation
 
 /// MARK: - CONSIDER MAKING THIS ASYNC LATER ON AS FRAMES WILL SKIP WITH THE MORE CALLS YOUR APPS MAKES
 
+
+//JLI: Keep the latest OneCallResponse in memory (as a property) so we don't have to deserialize it every request
 class SweatCache {
+    //JLI: Set visibiility modifier
     var lastUpdated: Date?
     let freshThresholdInSeconds = 60*60 // 1 hour
     
@@ -29,6 +32,8 @@ class SweatCache {
     }
     
     func readResponseFromCache() -> OneCallResponse {
+        //JLI: Refactor so we don't have to have data! in line 36
+        //  possibly update the respoinse to return OneCallResponse? and nil for some cases (like first time running after app install)
         let data = try? Data.init(contentsOf: fileURL)
         let decoder = JSONDecoder()
         let oneCallResponse = try? decoder.decode(OneCallResponse.self, from: data!)

@@ -9,32 +9,34 @@ import UIKit
 import CoreLocation
 import PromiseKit
 
+//JLI: General notes.  Removed unused code.  Have a path to display error cases
+//JLI: Make sure there is a valid flow to show weather data when the user selects don't allow for location permission (finish search bar stuff)
 class WeatherDisplayVC: UIViewController, MVPView, CLLocationManagerDelegate, UISearchControllerDelegate {
 
     typealias Presenter = WeatherDisplayPresenter
     
+    //JLI: Set visibilty on these properties.  Most of them should be private
+    
     let weatherResponseRepository = WeatherResponseRepository()
     let controller = WeatherDisplayPresenter()
-    let sweatCache = SweatCache()
+    let sweatCache = SweatCache()   //JLI: unused
 
+    //JLI: Can you make a class that does geocoding for better reuse
+    // and can you have the presenter call that class
     let locationManager = CLLocationManager()
-    let geoCoder = CLGeocoder()
 
-    // alternatively you can use this : lazy var collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: generateLayout())
+    // JLI: Shouldn't need !
     var collectionView: UICollectionView!
     let gradientView = DarkTransparentGradientView()
     
+    //JLI: might be moved if you refactor geocoding
     var readableLocation: String = ""
     let address: String = ""
     
-   // var searchBarText: String = ""
-    var isSearchActive: Bool = false
+    var isSearchActive: Bool = false //JLI: unused
     
-    var locationResultVC = LocationResultTableView()
+    var locationResultVC = LocationResultTableViewVC()    //JLI: can be let
 
-   // var searchBar = UISearchBar()
-    // We made progress on solving this by looking into the documentation and clarifying that the protocol and delegate pattern is set with the init.  You may need a referesher on the capabilities of protocols and delegates.
-    // We almost always start problem solving by understanding our code and reading the docs if we don't or if we don't know why it's not working.
     lazy var searchController = UISearchController(searchResultsController: locationResultVC)
 
     enum Section: Int, CaseIterable {
@@ -51,6 +53,7 @@ class WeatherDisplayVC: UIViewController, MVPView, CLLocationManagerDelegate, UI
         super.viewDidLoad()
         configureCollectionView()
         gradientView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+        //JLI: move the next 4 lines to a method called "configureNavigationController"
         navigationController?.navigationBar.backgroundColor = .clear
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.tintColor = .clear
@@ -62,24 +65,22 @@ class WeatherDisplayVC: UIViewController, MVPView, CLLocationManagerDelegate, UI
         getPresenter().attach(view: self)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        convertReadableLocationToCoordinates(searchBarEntry: "Georgia Atlanta")
-    }
+    override func viewWillAppear(_ animated: Bool) { }
     
     func configureSearchController() {
         navigationItem.searchController = searchController
 
-        searchController.delegate = self
-        searchController.searchResultsUpdater = locationResultVC  
-        searchController.hidesNavigationBarDuringPresentation = false
-        searchController.automaticallyShowsScopeBar = false
-        searchController.obscuresBackgroundDuringPresentation = true
-        searchController.automaticallyShowsSearchResultsController = true
-        searchController.searchBar.placeholder = "City, Country"
-       // searchController.searchBar.delegate = self
-        definesPresentationContext = true
+        searchController.delegate                                   = self
+        searchController.searchResultsUpdater                       = locationResultVC
+        searchController.hidesNavigationBarDuringPresentation       = false
+        searchController.automaticallyShowsScopeBar                 = false
+        searchController.obscuresBackgroundDuringPresentation       = true
+        searchController.automaticallyShowsSearchResultsController  = true
+        searchController.searchBar.placeholder                      = "City, Country"
+        definesPresentationContext                                  = true
     }
     
+    //JLI: move this out of a view controller
     func getCoordinateFrom(address: String, completion: @escaping(_ coordinate: CLLocationCoordinate2D?, _ error: Error?) -> () ) {
         CLGeocoder().geocodeAddressString(address) {
             print("Entered address " + address)
@@ -101,25 +102,7 @@ class WeatherDisplayVC: UIViewController, MVPView, CLLocationManagerDelegate, UI
     func getPresenter() -> WeatherDisplayPresenter {
         return controller
     }
-//
-//    func configureSearchBar() {
-//        let rightBarButtonItem = UIBarButtonItem(customView: searchBar)
-//        navigationController?.navigationBar.backgroundColor = .clear
-//        navigationController?.navigationBar.prefersLargeTitles = true
-//        self.navigationItem.rightBarButtonItem = rightBarButtonItem
-//
-//        searchBar.sizeToFit()
-//        searchBar.delegate            = self
-//        searchBar.showsCancelButton   = true
-//
-//        searchBar.tintColor           = .systemBlue
-//        searchBar.isTranslucent       = true
-//        searchBar.placeholder         = "City, Country"
-//
-//        searchController.searchBar.layoutIfNeeded()
-//        searchController.isActive = true
-//    }
-//
+
     func configureNavigationBarDateAndLocation() {
         let date = Date()
         let formatter = DateFormatter()
@@ -144,49 +127,37 @@ class WeatherDisplayVC: UIViewController, MVPView, CLLocationManagerDelegate, UI
     }
     
     /// This function exists to convert human readable place names into coordinates that can be passed into the network call.
-    
-    func convertReadableLocationToCoordinates(searchBarEntry: String) -> Promise<CLLocation> {
-        return Promise {seal in
-            geoCoder.geocodeAddressString(searchBarEntry) { (placemarks, error) in
-                guard let placemarks = placemarks, let location = placemarks.first?.location
-                else {
-                    print("Could not retrieve coordinates.")
-                    return
-                }
-                seal.fulfill(location)
-            }
-        }
-    }
-    
-    func convertCoordinatesToReadableLocation() {
-       // let geoCoder = CLGeocoder()
-        let latitude = CLLocationDegrees(controller.latitude)
-        let longitude = CLLocationDegrees(controller.longitude)
-        let location = CLLocation(latitude: latitude, longitude: longitude)
-
-        geoCoder.reverseGeocodeLocation(location) { (placemarks, error) in
-             // Place details
-            guard let placeMark = placemarks?.first else { return }
-
-            // Location name
-            if let locationName = placeMark.location {
-                print(locationName)
-            }
-            // City
-            if var city = placeMark.subAdministrativeArea {
-                print(city)
-                self.readableLocation = city
-            }
-            // Zip code
-            if let zip = placeMark.isoCountryCode {
-                print(zip)
-            }
-            // Country
-            if let country = placeMark.country {
-                print(country)
-            }
-        }
-    }
+        
+    //JLI: This function do anything other than print stuff
+//    func convertCoordinatesToReadableLocation() {
+//       // let geoCoder = CLGeocoder()
+//        let latitude = CLLocationDegrees(controller.latitude)
+//        let longitude = CLLocationDegrees(controller.longitude)
+//        let location = CLLocation(latitude: latitude, longitude: longitude)
+//
+//        geoCoder.reverseGeocodeLocation(location) { (placemarks, error) in
+//             // Place details
+//            guard let placeMark = placemarks?.first else { return }
+//
+//            // Location name
+//            if let locationName = placeMark.location {
+//                print(locationName)
+//            }
+//            // City
+//            if var city = placeMark.subAdministrativeArea {
+//                print(city)
+//                self.readableLocation = city
+//            }
+//            // Zip code
+//            if let zip = placeMark.isoCountryCode {
+//                print(zip)
+//            }
+//            // Country
+//            if let country = placeMark.country {
+//                print(country)
+//            }
+//        }
+//    }
     
     func generateLayout() -> UICollectionViewLayout {
           let layout = UICollectionViewCompositionalLayout { (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
@@ -348,7 +319,7 @@ extension WeatherDisplayVC {
         let lon = Float(currentLocation.coordinate.longitude)
         controller.saveAndUpdateCoordinates(latitude: lat, longitude: lon)
        // weatherResponseRepository.fetchWeather(latitude: lat, longitude: lon)
-        convertCoordinatesToReadableLocation()
+      //  convertCoordinatesToReadableLocation()
         configureNavigationBarDateAndLocation()
         collectionView.reloadData()
     }
@@ -375,6 +346,8 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
         switch indexPath.section {
         case Section.currentTemp.rawValue:
             switch indexPath.item {
+            // represent these cases with something less hardcoded.  0 could be a constant like let  WeatherDescriptionCellIndex = 0
+            //   and replace it with case WeatherDescriptionCellIndex
             case 0:
                 let primaryCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatTemperatureCell.reuseID, for: indexPath) as! SweatTemperatureCell
                 configure(cell: primaryCell, fetchPromise: controller.getMainTemp())
@@ -454,12 +427,13 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
     
     func configure<Cell : ConfigurableCell, ResultType>(cell: Cell, fetchPromise: Promise<ResultType>) {
         fetchPromise.done { result in
-            cell.configure(data: result as! Cell.DataType)
+            cell.configure(data: result as! Cell.DataType)  //JLI: Ideally, we shouldnt need ! or casting
         }.catch { error in
             print(error)
         }
     }
 }
+
 // This protocol defines methods to update search results based on information the user enters into the search bar.
 extension WeatherDisplayVC: UISearchResultsUpdating {
   func updateSearchResults(for searchController: UISearchController) {
@@ -506,6 +480,8 @@ extension WeatherDisplayVC: UISearchBarDelegate {
 ////    }
 //}
 
+
+//JLI: Move this stuff to another file
 enum FilterType : String {
     case Chrome = "CIPhotoEffectChrome"
     case Fade = "CIPhotoEffectFade"

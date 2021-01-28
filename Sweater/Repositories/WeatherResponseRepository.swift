@@ -9,10 +9,14 @@ import Foundation
 import Alamofire
 import PromiseKit
 
+//JLI: General notes: Refactor so we don't use !
 class WeatherResponseRepository {
+    
+    //JLI: update visibility modifier
     let cache = SweatCache()
     let mapper = WeatherMapper()
     
+    //JLI: You probably don't need convertJSONToResponse and fetchOneCallResponse
     func convertJSONToResponse(response: String) -> OneCallResponse {
         let responseInBytes: Data? = response.data(using: .utf8)
         let decoder = JSONDecoder()

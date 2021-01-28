@@ -11,6 +11,7 @@ import PromiseKit
 
 class WeatherDisplayPresenter : MVPPresenter<WeatherDisplayVC> {
     
+    //JLI: add visibility modifier to these properties 
     let repository = WeatherResponseRepository()
     /// These variables are declared here so that the lat and long coordinates from the VC can be passed here and used globally throughout the Controller.
     /// The coordinates in this case are set to Boston.

@@ -34,10 +34,10 @@ class SweatTemperatureCell: UICollectionViewCell, ConfigurableCell {
         contentView.addSubview(stackView)
         stackView.addArrangedSubview(minTemperatureLabel)
         stackView.addArrangedSubview(maxtemperatureLabel)
-        backgroundColor = .orange
-        mainTemperatureLabel.backgroundColor = .red
-        minTemperatureLabel.backgroundColor = .blue
-        maxtemperatureLabel.backgroundColor = .purple
+//        backgroundColor = .orange
+//        mainTemperatureLabel.backgroundColor = .red
+//        minTemperatureLabel.backgroundColor = .blue
+//        maxtemperatureLabel.backgroundColor = .purple
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis                                      = .vertical

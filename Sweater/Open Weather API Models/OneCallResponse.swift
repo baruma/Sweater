@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// This class is responsible for compiling the other data models into here and pull all their data at once.  This way you do not have to call each individual data model class from the Repository. 
+/// Compiles all the other data models into here and pull all their data at once.  This way you do not have to call each individual data model class from the Repository. 
 
 class OneCallResponse: Codable {
     let lat: Float

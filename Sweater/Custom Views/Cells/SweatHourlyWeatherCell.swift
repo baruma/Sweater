@@ -8,7 +8,6 @@
 import UIKit
 
 class SweatHourlyWeatherCell: UICollectionViewCell, ConfigurableCell {
-    
     static let reuseID = "SweatHourlyWeatherCell"
     var hourlyWeatherView = HourlyWeatherView()
     let scrollView = UIScrollView()
@@ -50,7 +49,6 @@ class SweatHourlyWeatherCell: UICollectionViewCell, ConfigurableCell {
         contentView.addSubview(scrollView)
         generateHourlyWeeklyWeatherViews()
         
-       // layer.backgroundColor                                   = CGColor.init(red: 255, green: 255, blue: 255, alpha: 1.0)
         translatesAutoresizingMaskIntoConstraints               = false
         
         scrollView.translatesAutoresizingMaskIntoConstraints    = false

@@ -9,12 +9,14 @@ import UIKit
 import CoreLocation
 import PromiseKit
 
-// Keep this class as dumb as possible.  Send the location data to the WeatherVC, then have the WeatherVC send this data to the Repository.
-
 class LocationResultTableViewVC: UITableViewController, UISearchResultsUpdating {
     private let geoCoderManager = GeoCoderManager()
     private var geoCodedPlace = ""
     private var locationSearchResult: LocationSearchResult? = nil
+    
+    private var searchController: UISearchController? = nil
+        
+    public var locationResultListener: LocationResultListener? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,17 +49,21 @@ class LocationResultTableViewVC: UITableViewController, UISearchResultsUpdating 
     func updateSearchResults(for searchController: UISearchController) {
         print(searchController.searchBar.text)
         searchBarText = searchController.searchBar.text!
-        
+        self.searchController = searchController  
         self.geoCoderManager.convertUserEntryToSearchableHumanReadableLocation(searchBarEntry: searchBarText).done { result  in
             let cityName = result.locality ?? ""
             let administrativeAreaName = result.administrativeArea ?? ""
             let countryName = result.country ?? ""
+            let latitude = result.location?.coordinate.latitude ?? 0.0
+            let longitude = result.location?.coordinate.longitude ?? 0.0
             let searchableCityEntry = self.geoCoderManager.convertUserEntryToSearchableHumanReadableLocation(searchBarEntry: cityName)
             let searchableAdministrativeArea = self.geoCoderManager.convertUserEntryToSearchableHumanReadableLocation(searchBarEntry: administrativeAreaName)
             let searchableCountryEntry = self.geoCoderManager.convertUserEntryToSearchableHumanReadableLocation(searchBarEntry: countryName)
           
-            self.locationSearchResult = LocationSearchResult(city: cityName,administrativeArea: administrativeAreaName, country: countryName)
+            self.locationSearchResult = LocationSearchResult(city: cityName,administrativeArea: administrativeAreaName, country: countryName, latitude: latitude, longitude: longitude)
             self.tableView.reloadData()
+            
+            
         }.catch { error  in
             print(error)
         }
@@ -76,6 +82,15 @@ class LocationResultTableViewVC: UITableViewController, UISearchResultsUpdating 
         
         cell.textLabel?.text = location.city + " " + location.administrativeArea + " " +  location.country
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let location = locationSearchResult else {
+            print("locationSearchResult is nil.")
+            return
+        }
+        locationResultListener?.onResultSelected(selectedPlacemark: location)
+        searchController?.isActive = false
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

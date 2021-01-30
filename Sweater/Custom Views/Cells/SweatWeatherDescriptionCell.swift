@@ -8,7 +8,6 @@
 import UIKit
 
 class SweatWeatherDescriptionCell: UICollectionViewCell, ConfigurableCell {
-
     var mainDescriptions  = [String]()
     var detailedDescriptions = [String]()
     

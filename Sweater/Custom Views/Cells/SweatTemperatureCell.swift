@@ -7,10 +7,7 @@
 
 import UIKit
 
-// this is the person calling.
-
 class SweatTemperatureCell: UICollectionViewCell, ConfigurableCell {
-    
     func configure(data: Temperature) {
         mainTemperatureLabel.text = String(data.main) + "°"
         minTemperatureLabel.text = String(data.min) + "°"
@@ -37,18 +34,18 @@ class SweatTemperatureCell: UICollectionViewCell, ConfigurableCell {
         contentView.addSubview(stackView)
         stackView.addArrangedSubview(minTemperatureLabel)
         stackView.addArrangedSubview(maxtemperatureLabel)
+        backgroundColor = .orange
+        mainTemperatureLabel.backgroundColor = .red
+        minTemperatureLabel.backgroundColor = .blue
+        maxtemperatureLabel.backgroundColor = .purple
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis                                      = .vertical
         stackView.distribution                              = .fillProportionally
         stackView.spacing                                   = 20.0
-  //      stackView.backgroundColor = .blue
         
         translatesAutoresizingMaskIntoConstraints           = false
-        //layer.backgroundColor                               = CGColor.init(red: 255, green: 250, blue: 250, alpha: 1.0)
-        //mainTemperatureLabel.backgroundColor                = .blue
-        //contentView.backgroundColor                         = .clear
-    
+
         NSLayoutConstraint.activate([
             mainTemperatureLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 50),
             mainTemperatureLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),

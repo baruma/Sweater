@@ -58,6 +58,8 @@
 		96CB753125A0E3A300E77828 /* SweatHourlyWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CB753025A0E3A300E77828 /* SweatHourlyWeatherCell.swift */; };
 		96CB753825A1818300E77828 /* NestingHourlyWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CB753725A1818300E77828 /* NestingHourlyWeatherCell.swift */; };
 		96DCE07925C2524000122CF4 /* LocationSearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DCE07825C2524000122CF4 /* LocationSearchResult.swift */; };
+		96F1BB4225C4823100773A6B /* CityGreetingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F1BB4125C4823000773A6B /* CityGreetingCell.swift */; };
+		96F1BB4625C4840B00773A6B /* SweatCityGreetingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F1BB4525C4840B00773A6B /* SweatCityGreetingLabel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -116,6 +118,8 @@
 		96CB753025A0E3A300E77828 /* SweatHourlyWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweatHourlyWeatherCell.swift; sourceTree = "<group>"; };
 		96CB753725A1818300E77828 /* NestingHourlyWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestingHourlyWeatherCell.swift; sourceTree = "<group>"; };
 		96DCE07825C2524000122CF4 /* LocationSearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchResult.swift; sourceTree = "<group>"; };
+		96F1BB4125C4823000773A6B /* CityGreetingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityGreetingCell.swift; sourceTree = "<group>"; };
+		96F1BB4525C4840B00773A6B /* SweatCityGreetingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweatCityGreetingLabel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -245,6 +249,7 @@
 		9690264725816FF800AB22F1 /* Labels */ = {
 			isa = PBXGroup;
 			children = (
+				96F1BB4525C4840B00773A6B /* SweatCityGreetingLabel.swift */,
 				9690263325804DAD00AB22F1 /* SweatMainLabel.swift */,
 				96B828DE2589621D0014AF0B /* SweatSecondaryLabel.swift */,
 				96B828E12589622F0014AF0B /* SweatDetailLabel.swift */,
@@ -264,6 +269,7 @@
 		9690265B2588182500AB22F1 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				96F1BB4125C4823000773A6B /* CityGreetingCell.swift */,
 				9690265C2588185300AB22F1 /* SweatTemperatureCell.swift */,
 				969026632588188D00AB22F1 /* SweatWeatherDetailInformationCell.swift */,
 				969026602588186F00AB22F1 /* SweatWeatherDescriptionCell.swift */,
@@ -511,6 +517,7 @@
 				9690263425804DAD00AB22F1 /* SweatMainLabel.swift in Sources */,
 				9690263F2580512500AB22F1 /* WeatherDetail.swift in Sources */,
 				969026642588188D00AB22F1 /* SweatWeatherDetailInformationCell.swift in Sources */,
+				96F1BB4625C4840B00773A6B /* SweatCityGreetingLabel.swift in Sources */,
 				96DCE07925C2524000122CF4 /* LocationSearchResult.swift in Sources */,
 				9670D5802578149C00CC638B /* AppDelegate.swift in Sources */,
 				96B828E22589622F0014AF0B /* SweatDetailLabel.swift in Sources */,
@@ -519,6 +526,7 @@
 				969026392580504C00AB22F1 /* Temperature.swift in Sources */,
 				96B828DF2589621D0014AF0B /* SweatSecondaryLabel.swift in Sources */,
 				96A8776D259A83EC003F0B6B /* SweaterTextView.swift in Sources */,
+				96F1BB4225C4823100773A6B /* CityGreetingCell.swift in Sources */,
 				964E55EF257C52FB00D6AF84 /* WeatherDisplayPresenter.swift in Sources */,
 				9670D5822578149C00CC638B /* SceneDelegate.swift in Sources */,
 				961B472A257ED2A500608BB6 /* Current.swift in Sources */,

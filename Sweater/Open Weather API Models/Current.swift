@@ -7,7 +7,7 @@
 
 //import Foundation
 
-/// This class is responsible for initializing the BaseWeather data model.
+/// Responsible for initializing the BaseWeather data model.
 class Current: BaseWeather {
     var temp: Float
     var feelsLike: Float

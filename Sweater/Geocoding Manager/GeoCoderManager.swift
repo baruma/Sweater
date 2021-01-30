@@ -41,35 +41,5 @@ class GeoCoderManager {
             }
         }
     }
-    
-//    func convertCoordinatesToReadableLocation() {
-//       // let geoCoder = CLGeocoder()
-//        let latitude = CLLocationDegrees(controller.latitude)
-//        let longitude = CLLocationDegrees(controller.longitude)
-//        let location = CLLocation(latitude: latitude, longitude: longitude)
-//
-//        geoCoder.reverseGeocodeLocation(location) { (placemarks, error) in
-//             // Place details
-//            guard let placeMark = placemarks?.first else { return }
-//
-//            // Location name
-//            if let locationName = placeMark.location {
-//                print(locationName)
-//            }
-//            // City
-//            if var city = placeMark.subAdministrativeArea {
-//                print(city)
-//                self.readableLocation = city
-//            }
-//            // Zip code
-//            if let zip = placeMark.isoCountryCode {
-//                print(zip)
-//            }
-//            // Country
-//            if let country = placeMark.country {
-//                print(country)
-//            }
-//        }
-//    }
 
 }

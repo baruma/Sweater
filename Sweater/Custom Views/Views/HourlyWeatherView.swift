@@ -8,7 +8,6 @@
 import UIKit
 
 class HourlyWeatherView: UIView {
-
     let temperatureLabel = SweatDetailLabel()
     let timeLabel = SweatDetailLabel()
     let weatherImage = UIImageView()

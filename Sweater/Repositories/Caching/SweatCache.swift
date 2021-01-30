@@ -9,21 +9,24 @@ import Foundation
 
 /// MARK: - CONSIDER MAKING THIS ASYNC LATER ON AS FRAMES WILL SKIP WITH THE MORE CALLS YOUR APPS MAKES
 
-
 //JLI: Keep the latest OneCallResponse in memory (as a property) so we don't have to deserialize it every request
 class SweatCache {
     //JLI: Set visibiility modifier
     var lastUpdated: Date?
     let freshThresholdInSeconds = 60*60 // 1 hour
+    var latitude: Float? = nil
+    var longitude: Float? = nil
     
     private var fileURL: URL {
       let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
       return documents.appendingPathComponent("WeatherCache.txt")
     }
     
-    func writeResponseToCache(response: String) {
+    func writeResponseToCache(response: String, latitude: Float, longitude: Float) {
         lastUpdated = Date()
         let responseInBytes: Data? = response.data(using: .utf8)
+        self.latitude = latitude  // // we are doing this setting here because the lat/longs above are nil.
+        self.longitude = longitude  // we are doing this setting here because the lat/longs above are nil.
         if FileManager.default.fileExists(atPath: fileURL.path) {
             try? responseInBytes!.write(to: fileURL)
         } else {
@@ -40,7 +43,11 @@ class SweatCache {
         return oneCallResponse!
     }
 
-    func checkIsDataFresh() -> Bool {
+    func checkIsDataFresh(latitude: Float, longitude: Float) -> Bool {
+        if self.latitude != latitude || self.longitude != longitude {
+            return false
+        }
+        
         if (lastUpdated == nil) {
             return false
         }

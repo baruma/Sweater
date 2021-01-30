@@ -12,9 +12,3 @@ protocol MVPView {
         
     func getPresenter() -> Presenter
 }
-
-// Things that can be a MVPView
-// ViewController, UIView, UICollectionViewCell
-
-// Things that can be a MVPPresenter
-// -> ios SDK class

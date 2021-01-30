@@ -92,22 +92,22 @@ class SweatSupplementaryInformationCell: UICollectionViewCell, ConfigurableCell 
         /// Setting stackview specific attributes for child stackviews.
         uviStackView.translatesAutoresizingMaskIntoConstraints  = false
         uviStackView.axis                                       = .vertical
-        uviStackView.distribution                               = .fillEqually
+        uviStackView.distribution                               = .fillProportionally
         uviStackView.spacing                                    = 5.0
         
         cloudStackView.translatesAutoresizingMaskIntoConstraints = false
         cloudStackView.axis                                      = .vertical
-        cloudStackView.distribution                              = .fillEqually
+        cloudStackView.distribution                              = .fillProportionally
         cloudStackView.spacing                                   = 5.0
         
         windSpeedStackView.translatesAutoresizingMaskIntoConstraints = false
         windSpeedStackView.axis                                      = .vertical
-        windSpeedStackView.distribution                              = .fillEqually
+        windSpeedStackView.distribution                              = .fillProportionally
         windSpeedStackView.spacing                                   = 5.0
         
         pressureStackView.translatesAutoresizingMaskIntoConstraints = false
         pressureStackView.axis                                      = .vertical
-        pressureStackView.distribution                              = .fillEqually
+        pressureStackView.distribution                              = .fillProportionally 
         pressureStackView.spacing                                   = 5.0
         
         /// Colors on uvi, cloud, windspeed and pressure stackviews.

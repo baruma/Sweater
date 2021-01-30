@@ -14,7 +14,7 @@ class NestingHourlyWeatherCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureCollectionView()
-        configure()
+       
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -26,10 +26,7 @@ class NestingHourlyWeatherCell: UICollectionViewCell {
         collectionView.delegate = self
         collectionView.register(SweatHourlyWeatherCell.self, forCellWithReuseIdentifier: SweatHourlyWeatherCell.reuseID)
     }
-        
-    private func configure() {
-      //  collectionView.backgroundColor = .systemBackground
-    }
+
 }
 
 extension NestingHourlyWeatherCell: UICollectionViewDelegate {}

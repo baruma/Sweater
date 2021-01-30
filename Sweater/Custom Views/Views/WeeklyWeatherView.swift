@@ -8,7 +8,6 @@
 import UIKit
 
 class WeeklyWeatherView: UIView {
-
     let maxTemperatureLabel = SweatDetailLabel()
     let minTemperatureLabel = SweatDetailLabel()
     let weatherImage = UIImageView()

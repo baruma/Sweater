@@ -11,9 +11,6 @@ struct LocationSearchResult {
     let city: String
     let administrativeArea: String
     let country: String
-    let latitude: Float
-    let longitude: Float
+    let latitude: Double
+    let longitude: Double
 }
-
-
-// make notes about nil-ability with classes vs. properties

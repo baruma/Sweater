@@ -27,9 +27,9 @@ class WeatherResponseRepository {
     func fetchOneCallResponse(latitude: Float, longitude: Float) -> Promise<OneCallResponse> {
         return Promise { seal in
             let endpoint = ("https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longitude)&units=imperial&exclude=&appid=\(Constants.APIKEY)")
-            if cache.checkIsDataFresh() == false {
+            if cache.checkIsDataFresh(latitude: latitude, longitude: longitude) == false {
                 AF.request(endpoint).responseString { response in
-                    self.cache.writeResponseToCache(response: response.value!)
+                    self.cache.writeResponseToCache(response: response.value!, latitude: latitude, longitude: longitude)
                     let oneCallResponse = self.convertJSONToResponse(response: response.value!)
                     seal.fulfill(oneCallResponse)
                 }

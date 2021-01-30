@@ -7,9 +7,6 @@
 
 import Foundation
 
-/// Sweater's MVP will only be using the temperature hourly data for its current needs.
-/// This struct is populated with the rest of the corresponding hourly weather data in the event that any of it needs to be used for future versions.
-
 struct HourlyWeather {
     let dt: Int
     let temp: Float

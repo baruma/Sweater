@@ -9,25 +9,24 @@ import Foundation
 import CoreLocation
 import PromiseKit
 
-class WeatherDisplayPresenter : MVPPresenter<WeatherDisplayVC> {
+protocol LocationResultListener {
+    // doesn't need a return type because it is delivering
+    func onResultSelected(selectedPlacemark: LocationSearchResult)
+}
+
+class WeatherDisplayPresenter : MVPPresenter<WeatherDisplayVC>, LocationResultListener {
+    func onResultSelected(selectedPlacemark: LocationSearchResult) {
+        saveAndUpdateCoordinates(latitude: Float(selectedPlacemark.latitude), longitude: Float(selectedPlacemark.longitude))
+        // You need to trigger the flow of fetching new data and updating the view.  You will do it from here.  You need to make a function on the VC side and do tableview.reloaddata() here.
+        self.view!.refreshViewWithNewSearchData()  // This is where the usefulness of the attach feature comes from (Review that a second time).  You don't have to call the repository because the cells do this.
+    }
     
     //JLI: add visibility modifier to these properties 
-    let repository = WeatherResponseRepository()
-    /// These variables are declared here so that the lat and long coordinates from the VC can be passed here and used globally throughout the Controller.
-    /// The coordinates in this case are set to Boston.
-    var latitude: Float =  42.35843
-    var longitude: Float = -71.05977
-    
-    // takes in the listener so it can give the data back to the view.  the controller doesn't need the result, so it can hand it right off to the view.  you would need to route the result back to the controller  if it was ever going to do something with it(i.e. save it, manipulate it, etc.).  Because we're just displaying it, we can just shoot the data back to the view, which is alright since it is under the guise of the listener.
-    //print(latitude, longitude)
-   // repository.fetchCurrentTemperature(latitude: latitude, longitude: longitude, listener: listener)
-//    func getMainTemperature(listener: FetchTemperatureListener) {
-//        repository.fetchWeatherData(latitude: latitude, longitude: longitude)
-//            .done({ temperature  in
-//                listener.onDataReceived(temp: temperature)
-//            })
-//    }
-//
+    private let repository = WeatherResponseRepository()
+        
+    // Coordinates for default location: New York City
+    private var latitude: Float =  40.7128
+    private var longitude: Float = -74.0060
     
     func saveAndUpdateCoordinates(latitude: Float, longitude: Float) {
         self.latitude = latitude
@@ -71,14 +70,3 @@ class WeatherDisplayPresenter : MVPPresenter<WeatherDisplayVC> {
         return repository.fetchSupplementaryInformation(latitude: latitude, longitude: longitude)
     }
 }
-
-// the protocol is the structure, shape or rules of the transaction to take place.  tech support can't just throw something outo f the garbage out at you, the need to give you actual procedures and follow a company protocol.
-
-  
-/// make an object that conforms to this protocol.  make a new object in the middle of a function that extends a protocol.
-
-/*
- We are using the protocol is a vehicle that moves between the view controller and data layers.  The protocol contains the promise of a response (but not necessarily the data itself).  The Temperature is the result in thise caes.  It doesn't necessarily contain the Result but just the shape.  Shape in thise context is the structure of how th listener is going to get the data.  it just sets up the rules of as to what the user will receive.
- 
- The cell is saying I'll listen for the data.  Communicating to the controller as to whether or not it has received it.  Now we're in the controller layer.  When the controller gets the data (because the view asked the controller for data and now the controller is asking the repository for data).
- */

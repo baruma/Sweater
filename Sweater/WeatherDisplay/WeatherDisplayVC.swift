@@ -26,12 +26,14 @@ class WeatherDisplayVC: UIViewController,CLLocationManagerDelegate, UISearchCont
     private let locationManager = CLLocationManager()
 
     // JLI: Shouldn't need !
-    var collectionView: UICollectionView!
-    let gradientView = DarkTransparentGradientView()
+    private var collectionView: UICollectionView!
+    private let gradientView = DarkTransparentGradientView()
+    private var backgroundImageView = UIImageView()
+
     
     //JLI: might be moved if you refactor geocoding
-    var readableLocation: String = ""
-    let address: String = ""
+    private var readableLocation: String = ""
+    private let address: String = ""
         
     let locationResultVC = LocationResultTableViewVC()
 
@@ -49,6 +51,7 @@ class WeatherDisplayVC: UIViewController,CLLocationManagerDelegate, UISearchCont
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        #warning("You left off trying to figure out this whole background image ordeal.")
         locationResultVC.locationResultListener = controller
         configureCollectionView()
         gradientView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
@@ -63,9 +66,7 @@ class WeatherDisplayVC: UIViewController,CLLocationManagerDelegate, UISearchCont
         
         getPresenter().attach(view: self)
     }
-    
-    override func viewWillAppear(_ animated: Bool) { }
-    
+        
     func configureSearchController() {
         navigationItem.searchController = searchController
 
@@ -158,8 +159,8 @@ class WeatherDisplayVC: UIViewController,CLLocationManagerDelegate, UISearchCont
         collectionView.delegate = self
         collectionView.dataSource = self
         
-        let backgroundImageView = UIColor(patternImage: UIImage(named: "background1")!)
-        collectionView.backgroundColor = backgroundImageView
+//        let backgroundImageView = UIColor(patternImage: UIImage(named: "background1")!)
+//        collectionView.backgroundColor = backgroundImageView
     }
     
     func generateTemperatureSectionLayout() -> NSCollectionLayoutSection {

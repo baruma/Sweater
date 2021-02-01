@@ -13,8 +13,8 @@ import PromiseKit
 class WeatherResponseRepository {
     
     //JLI: update visibility modifier
-    let cache = SweatCache()
-    let mapper = WeatherMapper()
+    private let cache = SweatCache()
+    private let mapper = WeatherMapper()
     
     //JLI: You probably don't need convertJSONToResponse and fetchOneCallResponse
     func convertJSONToResponse(response: String) -> OneCallResponse {

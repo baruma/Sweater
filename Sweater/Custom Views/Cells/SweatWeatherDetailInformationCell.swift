@@ -7,8 +7,6 @@
 
 import UIKit
 
-#warning("Rename the main Temperature Label.")
-
 class SweatWeatherDetailInformationCell: UICollectionViewCell, ConfigurableCell {
     /// The weather data displays in order of :
     /// 1. FeelsLike
@@ -17,7 +15,7 @@ class SweatWeatherDetailInformationCell: UICollectionViewCell, ConfigurableCell 
     /// You will need to insert the labels as a stack view with each corresponding numreric value to display weather to viewer.
   
     static let reuseID = "TertiaryCell"
-    let mainTemperatureLabel = SweatMainLabel(textAlignment: .center, fontSize: 15)
+    let detailInfoLabel = SweatMainLabel(textAlignment: .center, fontSize: 15)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -29,19 +27,19 @@ class SweatWeatherDetailInformationCell: UICollectionViewCell, ConfigurableCell 
     }
     
     func configure(data: String) {
-        mainTemperatureLabel.text = data
+        detailInfoLabel.text = data
     }
     
     private func configure() {
-        contentView.addSubview(mainTemperatureLabel)
-        translatesAutoresizingMaskIntoConstraints = false
-        mainTemperatureLabel.text = ""
+        contentView.addSubview(detailInfoLabel)
+        translatesAutoresizingMaskIntoConstraints   = false
+        detailInfoLabel.text                        = ""
 
         NSLayoutConstraint.activate([
-            mainTemperatureLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            mainTemperatureLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            mainTemperatureLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            mainTemperatureLabel.heightAnchor.constraint(equalToConstant: 40)
+            detailInfoLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            detailInfoLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            detailInfoLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            detailInfoLabel.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
 }

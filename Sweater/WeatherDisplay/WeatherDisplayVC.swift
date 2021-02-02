@@ -12,11 +12,18 @@ import PromiseKit
 //JLI: General notes.  Removed unused code.  Have a path to display error cases
 //JLI: Make sure there is a valid flow to show weather data when the user selects don't allow for location permission (finish search bar stuff)
 
-class WeatherDisplayVC: UIViewController,CLLocationManagerDelegate, UISearchControllerDelegate, MVPView {
+class WeatherDisplayVC: UIViewController, CLLocationManagerDelegate, UISearchControllerDelegate, MVPView {
+    
+    func setCityLabel(locationResult: LocationSearchResult) {
+        
+        /*
+         tell city label cell to reload its data.
+         call reload row on specific cell that has city stuff
+         
+         */
+    }
     
     typealias Presenter = WeatherDisplayPresenter
-    
-    //JLI: Set visibilty on these properties.  Most of them should be private
     
     private let weatherResponseRepository = WeatherResponseRepository()
     private let controller = WeatherDisplayPresenter()
@@ -29,7 +36,6 @@ class WeatherDisplayVC: UIViewController,CLLocationManagerDelegate, UISearchCont
     private var collectionView: UICollectionView!
     private let gradientView = DarkTransparentGradientView()
     private var backgroundImageView = UIImageView()
-
     
     //JLI: might be moved if you refactor geocoding
     private var readableLocation: String = ""
@@ -40,28 +46,28 @@ class WeatherDisplayVC: UIViewController,CLLocationManagerDelegate, UISearchCont
     lazy var searchController = UISearchController(searchResultsController: locationResultVC)
 
     enum Section: Int, CaseIterable {
-        case currentTemp = 0
-        case currentDescription = 1
-        case forecast = 2
-        case duskDawn = 3
-        case supplementary = 4
+        case city = 0
+        case currentTemp = 1 //0
+        case currentDescription = 2 //1
+        case forecast = 3 //2
+        case duskDawn = 4 //3
+        case supplementary =  5 //4
     }
 
-    let SectionItemCount: [Int] = [4,1,2,1,1]
+    // add 1 up here for city label... remove 0 at left if things dont work with city label
+    let SectionItemCount: [Int] = [1,4,1,2,1,1]
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        #warning("You left off trying to figure out this whole background image ordeal.")
         locationResultVC.locationResultListener = controller
+        configureBackgroundImageViews()
         configureCollectionView()
         gradientView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
         //JLI: move the next 4 lines to a method called "configureNavigationController"
-        navigationController?.navigationBar.backgroundColor = .clear
-        navigationController?.navigationBar.isTranslucent = true
-        navigationController?.navigationBar.tintColor = .clear
-        navigationController?.navigationBar.barTintColor = .clear
+
         configureSearchController()
         configureLocationManagerServices()
+        // You need to understand this - do somee research.  You're saying this is the observer.  
         NotificationCenter.default.addObserver(self, selector: #selector(self.appResume), name: UIApplication.willEnterForegroundNotification, object: nil)
         
         getPresenter().attach(view: self)
@@ -69,7 +75,11 @@ class WeatherDisplayVC: UIViewController,CLLocationManagerDelegate, UISearchCont
         
     func configureSearchController() {
         navigationItem.searchController = searchController
-
+        navigationController?.navigationBar.backgroundColor         = .clear
+        navigationController?.navigationBar.isTranslucent           = true
+        navigationController?.navigationBar.tintColor               = .clear
+        navigationController?.navigationBar.barTintColor            = .clear
+        
         searchController.delegate                                   = self
         searchController.searchResultsUpdater                       = locationResultVC
         searchController.hidesNavigationBarDuringPresentation       = false
@@ -77,14 +87,13 @@ class WeatherDisplayVC: UIViewController,CLLocationManagerDelegate, UISearchCont
         searchController.obscuresBackgroundDuringPresentation       = true
         searchController.automaticallyShowsSearchResultsController  = true
         searchController.searchBar.placeholder                      = "City, Country"
+        searchController.searchBar.searchTextField.backgroundColor = .tertiaryLabel
         definesPresentationContext                                  = true
     }
     
     //JLI: move this out of a view controller
     func getCoordinateFrom(address: String, completion: @escaping(_ coordinate: CLLocationCoordinate2D?, _ error: Error?) -> () ) {
         CLGeocoder().geocodeAddressString(address) {
-            print("Entered address " + address)
-        
             completion($0?.first?.location?.coordinate, $1)
         }
     }
@@ -133,6 +142,7 @@ class WeatherDisplayVC: UIViewController,CLLocationManagerDelegate, UISearchCont
           let layout = UICollectionViewCompositionalLayout { (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
               let sectionLayoutKind = Section.allCases[sectionIndex]
               switch (sectionLayoutKind) {
+              case .city: return self.generateCityCellSectionLayout()
               case .currentTemp: return self.generateTemperatureSectionLayout()
               case .currentDescription: return self.generateCurrentWeatherDescriptionSectionLayout()
               case .forecast: return self.generateForecastSectionLayout()
@@ -142,11 +152,31 @@ class WeatherDisplayVC: UIViewController,CLLocationManagerDelegate, UISearchCont
           }
           return layout
       }
+    
+    func configureBackgroundImageViews() {
+        view.addSubview(backgroundImageView)
+
+        backgroundImageView.sizeToFit()
+        backgroundImageView.clipsToBounds                             = true
+        backgroundImageView.isOpaque                                  = true
+        backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
+        backgroundImageView.image                                     = UIImage(named: "background3")
+
+        NSLayoutConstraint.activate([
+            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backgroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        
+    }
 
     func configureCollectionView() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: generateLayout())
         view.addSubview(collectionView)
 
+        collectionView.backgroundColor = .clear
+        collectionView.register(CityGreetingCell.self, forCellWithReuseIdentifier: CityGreetingCell.reuseID)
         collectionView.register(SweatTemperatureCell.self, forCellWithReuseIdentifier: SweatTemperatureCell.reuseID)
         collectionView.register(SweatWeatherDetailInformationCell.self, forCellWithReuseIdentifier: SweatWeatherDetailInformationCell.reuseID)
         collectionView.register(SweatWeatherDescriptionCell.self, forCellWithReuseIdentifier: SweatWeatherDescriptionCell.reuseID)
@@ -159,8 +189,23 @@ class WeatherDisplayVC: UIViewController,CLLocationManagerDelegate, UISearchCont
         collectionView.delegate = self
         collectionView.dataSource = self
         
-//        let backgroundImageView = UIColor(patternImage: UIImage(named: "background1")!)
-//        collectionView.backgroundColor = backgroundImageView
+    }
+    
+    func generateCityCellSectionLayout() -> NSCollectionLayoutSection {
+        /// CityCell Item
+        let cityCellItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0)))
+        
+        /// CityCell Group
+        let cityCellGroup = NSCollectionLayoutGroup.horizontal(
+            layoutSize: NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(0.05)),
+            subitem: cityCellItem, count: 1)
+        
+        let section = NSCollectionLayoutSection(group: cityCellGroup)
+        return section
     }
     
     func generateTemperatureSectionLayout() -> NSCollectionLayoutSection {
@@ -169,7 +214,7 @@ class WeatherDisplayVC: UIViewController,CLLocationManagerDelegate, UISearchCont
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(0.70)))
 
-        /// The groups that will be holding the items declared earlier.
+        /// The groups that will be holding the items declared above.
         let temperatureGroup = NSCollectionLayoutGroup.vertical(
           layoutSize: NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(0.70),
@@ -196,7 +241,7 @@ class WeatherDisplayVC: UIViewController,CLLocationManagerDelegate, UISearchCont
         let section = NSCollectionLayoutSection(group: combinedGroup)
         return section
     }
-    
+
     func generateCurrentWeatherDescriptionSectionLayout() -> NSCollectionLayoutSection {
         let weatherDescriptionItem = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(
@@ -297,7 +342,6 @@ extension WeatherDisplayVC {
 
 extension WeatherDisplayVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // must update this number.  You may need to make a switch case
         return SectionItemCount[section]
     }
     
@@ -305,12 +349,26 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         print("Section \(indexPath.section) Row \(indexPath.row) Index \(indexPath.item)")
         
-        // indexpath has both the section and the item
+        
+        
         switch indexPath.section {
+        case Section.city.rawValue:            
+                let cityCell = collectionView.dequeueReusableCell(withReuseIdentifier: CityGreetingCell.reuseID, for: indexPath) as! CityGreetingCell
+//                let locationSearchResult =  controller.getCityName()
+//                cityCell.updateCityNameAfterSearch(selectedPlacemark: locationSearchResult!)
+//
+            guard let locationSearchResult = controller.getCityName() else {
+                print("oh snap")
+                return cityCell
+            }
+            cityCell.updateCityNameAfterSearch(selectedPlacemark: locationSearchResult)
+                return cityCell
+ 
         case Section.currentTemp.rawValue:
             switch indexPath.item {
             // represent these cases with something less hardcoded.  0 could be a constant like let  WeatherDescriptionCellIndex = 0
             //   and replace it with case WeatherDescriptionCellIndex
+
             case 0:
                 let primaryCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatTemperatureCell.reuseID, for: indexPath) as! SweatTemperatureCell
                 configure(cell: primaryCell, fetchPromise: controller.getMainTemp())
@@ -333,7 +391,7 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
                             }))
                 return tertiaryCell
                 
-            case 3:
+            case 3: 
                 let tertiaryCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeatherDetailInformationCell.reuseID, for: indexPath) as! SweatWeatherDetailInformationCell
                 configure(cell: tertiaryCell, fetchPromise: controller.getPrecipitationDetail().then({ weatherDetail -> Promise<String> in Promise.value(String(weatherDetail.precipitation))}))
                 return tertiaryCell
@@ -387,7 +445,7 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
         
         }
     }
-    
+        
     func configure<Cell : ConfigurableCell, ResultType>(cell: Cell, fetchPromise: Promise<ResultType>) {
         fetchPromise.done { result in
             cell.configure(data: result as! Cell.DataType)  //JLI: Ideally, we shouldnt need ! or casting
@@ -396,8 +454,6 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
         }
     }
 }
-
-// This protocol defines methods to update search results based on information the user enters into the search bar.
 
 extension WeatherDisplayVC: UICollectionViewDelegate {
     func numberOfSections(in collectionView: UICollectionView) -> Int {

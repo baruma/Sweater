@@ -12,12 +12,12 @@ import PromiseKit
 class LocationResultTableViewVC: UITableViewController, UISearchResultsUpdating {
     private let geoCoderManager = GeoCoderManager()
     private var geoCodedPlace = ""
+    var searchBarText: String = ""
+
     private var locationSearchResult: LocationSearchResult? = nil
-    
-    private var searchController: UISearchController? = nil
-        
     public var locationResultListener: LocationResultListener? = nil
-    
+    private var searchController: UISearchController? = nil
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configureTableView()
@@ -26,8 +26,6 @@ class LocationResultTableViewVC: UITableViewController, UISearchResultsUpdating 
     override func viewWillAppear(_ animated: Bool) {
         tableView.reloadData()
     }
-    
-    var searchBarText: String = ""
      
     func configureTableView() {
         tableView.dataSource = self
@@ -46,23 +44,18 @@ class LocationResultTableViewVC: UITableViewController, UISearchResultsUpdating 
         ])
     }
 
+    // The idea to pick out the locationSearchResult from here and pass it back to the VC is bad because it couples the ViewControllers together.
     func updateSearchResults(for searchController: UISearchController) {
-        print(searchController.searchBar.text)
         searchBarText = searchController.searchBar.text!
         self.searchController = searchController  
-        self.geoCoderManager.convertUserEntryToSearchableHumanReadableLocation(searchBarEntry: searchBarText).done { result  in
+        self.geoCoderManager.convertUserEntryToSearchableHumanReadableLocation(searchBarEntry: searchBarText).done { [self] result in
             let cityName = result.locality ?? ""
             let administrativeAreaName = result.administrativeArea ?? ""
             let countryName = result.country ?? ""
             let latitude = result.location?.coordinate.latitude ?? 0.0
             let longitude = result.location?.coordinate.longitude ?? 0.0
-            let searchableCityEntry = self.geoCoderManager.convertUserEntryToSearchableHumanReadableLocation(searchBarEntry: cityName)
-            let searchableAdministrativeArea = self.geoCoderManager.convertUserEntryToSearchableHumanReadableLocation(searchBarEntry: administrativeAreaName)
-            let searchableCountryEntry = self.geoCoderManager.convertUserEntryToSearchableHumanReadableLocation(searchBarEntry: countryName)
-          
             self.locationSearchResult = LocationSearchResult(city: cityName,administrativeArea: administrativeAreaName, country: countryName, latitude: latitude, longitude: longitude)
             self.tableView.reloadData()
-            
             
         }.catch { error  in
             print(error)

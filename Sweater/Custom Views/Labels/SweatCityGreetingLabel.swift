@@ -18,8 +18,9 @@ class SweatCityGreetingLabel: UILabel {
     private func configure() {
         translatesAutoresizingMaskIntoConstraints   = false
         textColor                                   = .white
-        numberOfLines                               = 0
-        font                                        = UIFont.preferredFont(forTextStyle: .largeTitle)
+        numberOfLines                               = 1
+       // font                                        = UIFont.preferredFont(forTextStyle: .largeTitle)
+        font                                        = .systemFont(ofSize: 40, weight: .heavy)
         adjustsFontForContentSizeCategory           = true
         adjustsFontSizeToFitWidth                   = true
         minimumScaleFactor                          = 0.75

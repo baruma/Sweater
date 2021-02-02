@@ -10,15 +10,21 @@ import CoreLocation
 import PromiseKit
 
 protocol LocationResultListener {
-    // doesn't need a return type because it is delivering
     func onResultSelected(selectedPlacemark: LocationSearchResult)
 }
+// when the cell needs something it talks to the controller and the controller pases it back
 
-class WeatherDisplayPresenter : MVPPresenter<WeatherDisplayVC>, LocationResultListener {
+class WeatherDisplayPresenter: MVPPresenter<WeatherDisplayVC>, LocationResultListener {
+    var locationSearchResult: LocationSearchResult? = nil
+    
     func onResultSelected(selectedPlacemark: LocationSearchResult) {
-        saveAndUpdateCoordinates(latitude: Float(selectedPlacemark.latitude), longitude: Float(selectedPlacemark.longitude))
         // You need to trigger the flow of fetching new data and updating the view.  You will do it from here.  You need to make a function on the VC side and do tableview.reloaddata() here.
-        self.view!.refreshViewWithNewSearchData()  // This is where the usefulness of the attach feature comes from (Review that a second time).  You don't have to call the repository because the cells do this.
+
+        saveAndUpdateCoordinates(latitude: Float(selectedPlacemark.latitude), longitude: Float(selectedPlacemark.longitude))
+        locationSearchResult = selectedPlacemark
+        // This is where the usefulness of the attach feature comes from (Review that a second time).  You don't have to call the repository because the cells do this.
+        self.view!.refreshViewWithNewSearchData()  // this recreates cells for new data
+        
     }
     
     //JLI: add visibility modifier to these properties 
@@ -33,6 +39,12 @@ class WeatherDisplayPresenter : MVPPresenter<WeatherDisplayVC>, LocationResultLi
         self.longitude = longitude
         print(latitude, longitude)
     }
+    
+    // This is called by the VC which then gets the current locationSearchResult that the user got.  The VC is the listener, and it got the data, and the cell is meant to be dumb - all it does is configures the label with the data it gets.  So this func gets called by the VC.  
+    func getCityName() -> LocationSearchResult? {
+        return locationSearchResult
+    }
+    
     
     func getMainTemp() -> Promise<Temperature> {
         return repository.fetchWeatherData(latitude: latitude, longitude: longitude)

@@ -12,11 +12,9 @@ import PromiseKit
 //JLI: General notes: Refactor so we don't use !
 class WeatherResponseRepository {
     
-    //JLI: update visibility modifier
     private let cache = SweatCache()
     private let mapper = WeatherMapper()
     
-    //JLI: You probably don't need convertJSONToResponse and fetchOneCallResponse
     func convertJSONToResponse(response: String) -> OneCallResponse {
         let responseInBytes: Data? = response.data(using: .utf8)
         let decoder = JSONDecoder()
@@ -25,21 +23,20 @@ class WeatherResponseRepository {
     }
 
     func fetchOneCallResponse(latitude: Float, longitude: Float) -> Promise<OneCallResponse> {
-        return Promise { seal in
-            let endpoint = ("https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longitude)&units=imperial&exclude=&appid=\(Constants.APIKEY)")
-            if cache.checkIsDataFresh(latitude: latitude, longitude: longitude) == false {
+        if cache.checkIsDataFresh(latitude: latitude, longitude: longitude) == false {
+            return Promise { seal in
+                let endpoint = ("https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longitude)&units=imperial&exclude=&appid=\(Constants.APIKEY)")
                 AF.request(endpoint).responseString { response in
                     self.cache.writeResponseToCache(response: response.value!, latitude: latitude, longitude: longitude)
                     let oneCallResponse = self.convertJSONToResponse(response: response.value!)
                     seal.fulfill(oneCallResponse)
                 }
             }
-            else {
-                let oneCallResponse = self.cache.readResponseFromCache()
-                seal.fulfill(oneCallResponse)
-            }
+        } else {
+            return self.cache.readResponseFromCache()
         }
     }
+    
     func fetchWeatherData(latitude: Float, longitude: Float) -> Promise<Temperature> {
         return fetchOneCallResponse(latitude: latitude, longitude: longitude)
             .then { oneCallResponse -> Promise<Temperature> in
@@ -49,7 +46,6 @@ class WeatherResponseRepository {
     }
 
     func fetchCurrentFeelsLike(latitude: Float, longitude: Float) -> Promise<Temperature> {
-        #warning("that closure syntax people keep talking about now you finally ran into it")
         return fetchOneCallResponse(latitude: latitude, longitude: longitude)
             .then { oneCallResponse -> Promise<Temperature> in
                 let mappedResults = self.mapper.mapToTemperatureModel(current: oneCallResponse.current, hourly: oneCallResponse.hourly)
@@ -123,3 +119,5 @@ class WeatherResponseRepository {
         }
     }
 }
+
+#warning("Tell john to look up how to reconsolidate network calls.  we will make a network call, no one else makes another network call till the first one's done.  the promises will observe the first network call and then proceed down the line from there.")

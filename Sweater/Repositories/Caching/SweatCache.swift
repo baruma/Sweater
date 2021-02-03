@@ -71,6 +71,7 @@ class SweatCache {
         if (lastUpdated == nil) {
             return false
         }
+        
         let currentDate = Date()
         let secondsDiff = currentDate.timeIntervalSince1970 - lastUpdated!.timeIntervalSince1970
         return Int(secondsDiff) < freshThresholdInSeconds

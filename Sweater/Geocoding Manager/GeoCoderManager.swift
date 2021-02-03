@@ -12,10 +12,6 @@ import PromiseKit
 class GeoCoderManager {
     let geoCoder = CLGeocoder()
 
-    //JLI: Move this to another class that does geocoding.  Make it more reusable.
-    // Use this function to do the work of the function below.
-    // This has human readable and the coordinate form of the location data.
-    // Consider renaming this as well.
     func convertReadableLocationToCoordinates(searchBarEntry: String) -> Promise<CLLocation> {
         return Promise { seal in
             geoCoder.geocodeAddressString(searchBarEntry) { (placemarks, error) in
@@ -35,6 +31,19 @@ class GeoCoderManager {
                 guard let placemarks = placemarks, let location = placemarks.first
                 else {
                     print("Could not retrieve coordinates.")
+                    return
+                }
+                seal.fulfill(location)
+            }
+        }
+    }
+    
+    func convertCoordinatesToHumanReadableLocation(location: CLLocation) -> Promise<CLPlacemark> {
+        return Promise { seal in
+            geoCoder.reverseGeocodeLocation(location) { (placemarks, error) in
+                guard let placemarks = placemarks, let location = placemarks.first
+                else {
+                    print("Could not retrieve human readable location from coordinates.")
                     return
                 }
                 seal.fulfill(location)

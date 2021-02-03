@@ -14,15 +14,6 @@ import PromiseKit
 
 class WeatherDisplayVC: UIViewController, CLLocationManagerDelegate, UISearchControllerDelegate, MVPView {
     
-    func setCityLabel(locationResult: LocationSearchResult) {
-        
-        /*
-         tell city label cell to reload its data.
-         call reload row on specific cell that has city stuff
-         
-         */
-    }
-    
     typealias Presenter = WeatherDisplayPresenter
     
     private let weatherResponseRepository = WeatherResponseRepository()
@@ -31,6 +22,7 @@ class WeatherDisplayVC: UIViewController, CLLocationManagerDelegate, UISearchCon
     //JLI: Can you make a class that does geocoding for better reuse
     // and can you have the presenter call that class
     private let locationManager = CLLocationManager()
+    private let geoCoderManager = GeoCoderManager()
 
     // JLI: Shouldn't need !
     private var collectionView: UICollectionView!
@@ -155,12 +147,17 @@ class WeatherDisplayVC: UIViewController, CLLocationManagerDelegate, UISearchCon
     
     func configureBackgroundImageViews() {
         view.addSubview(backgroundImageView)
+        
+        let numberOfImages: UInt32 = 12
+        let randomImage = arc4random_uniform(numberOfImages)
+        let imageName = "image_\(randomImage)"
+        backgroundImageView.image = UIImage(named: imageName)
 
         backgroundImageView.sizeToFit()
         backgroundImageView.clipsToBounds                             = true
         backgroundImageView.isOpaque                                  = true
         backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
-        backgroundImageView.image                                     = UIImage(named: "background3")
+        //backgroundImageView.image                                     = UIImage(named: )
 
         NSLayoutConstraint.activate([
             backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -324,13 +321,16 @@ class WeatherDisplayVC: UIViewController, CLLocationManagerDelegate, UISearchCon
 
 extension WeatherDisplayVC {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
         let currentLocation: CLLocation = locations[0]
         let lat = Float(currentLocation.coordinate.latitude)
         let lon = Float(currentLocation.coordinate.longitude)
         controller.saveAndUpdateCoordinates(latitude: lat, longitude: lon)
-
+        geoCoderManager.convertCoordinatesToHumanReadableLocation(location: currentLocation).done { placemark in
+           let locationSearchResult =  LocationSearchResult.convertPlacemarkToLocationSearchResult(placemark: placemark)
+            self.controller.onLocationResultUpdate(updatedLocation: locationSearchResult)
+        }
         configureNavigationBarDateAndLocation()
-        collectionView.reloadData()
     }
 
     /// Self explanatory, failing with error if user does not allow app to retrive location.
@@ -354,9 +354,7 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
         switch indexPath.section {
         case Section.city.rawValue:            
                 let cityCell = collectionView.dequeueReusableCell(withReuseIdentifier: CityGreetingCell.reuseID, for: indexPath) as! CityGreetingCell
-//                let locationSearchResult =  controller.getCityName()
-//                cityCell.updateCityNameAfterSearch(selectedPlacemark: locationSearchResult!)
-//
+
             guard let locationSearchResult = controller.getCityName() else {
                 print("oh snap")
                 return cityCell

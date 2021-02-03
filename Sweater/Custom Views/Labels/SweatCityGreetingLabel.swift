@@ -20,10 +20,10 @@ class SweatCityGreetingLabel: UILabel {
         textColor                                   = .white
         numberOfLines                               = 1
        // font                                        = UIFont.preferredFont(forTextStyle: .largeTitle)
-        font                                        = .systemFont(ofSize: 40, weight: .heavy)
+        font                                        = .systemFont(ofSize: 38, weight: .heavy)
         adjustsFontForContentSizeCategory           = true
         adjustsFontSizeToFitWidth                   = true
         minimumScaleFactor                          = 0.75
-        lineBreakMode                               = .byTruncatingTail
+        lineBreakMode                               = .byTruncatingMiddle
     }
 }

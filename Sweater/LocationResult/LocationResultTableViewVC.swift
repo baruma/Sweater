@@ -49,12 +49,7 @@ class LocationResultTableViewVC: UITableViewController, UISearchResultsUpdating 
         searchBarText = searchController.searchBar.text!
         self.searchController = searchController  
         self.geoCoderManager.convertUserEntryToSearchableHumanReadableLocation(searchBarEntry: searchBarText).done { [self] result in
-            let cityName = result.locality ?? ""
-            let administrativeAreaName = result.administrativeArea ?? ""
-            let countryName = result.country ?? ""
-            let latitude = result.location?.coordinate.latitude ?? 0.0
-            let longitude = result.location?.coordinate.longitude ?? 0.0
-            self.locationSearchResult = LocationSearchResult(city: cityName,administrativeArea: administrativeAreaName, country: countryName, latitude: latitude, longitude: longitude)
+            self.locationSearchResult = LocationSearchResult.convertPlacemarkToLocationSearchResult(placemark: result)
             self.tableView.reloadData()
             
         }.catch { error  in
@@ -82,7 +77,7 @@ class LocationResultTableViewVC: UITableViewController, UISearchResultsUpdating 
             print("locationSearchResult is nil.")
             return
         }
-        locationResultListener?.onResultSelected(selectedPlacemark: location)
+        locationResultListener?.onLocationResultUpdate(updatedLocation: location)
         searchController?.isActive = false
     }
     

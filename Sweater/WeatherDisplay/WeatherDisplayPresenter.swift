@@ -10,18 +10,18 @@ import CoreLocation
 import PromiseKit
 
 protocol LocationResultListener {
-    func onResultSelected(selectedPlacemark: LocationSearchResult)
+    func onLocationResultUpdate(updatedLocation: LocationSearchResult)
 }
 // when the cell needs something it talks to the controller and the controller pases it back
 
 class WeatherDisplayPresenter: MVPPresenter<WeatherDisplayVC>, LocationResultListener {
     var locationSearchResult: LocationSearchResult? = nil
     
-    func onResultSelected(selectedPlacemark: LocationSearchResult) {
+    func onLocationResultUpdate(updatedLocation: LocationSearchResult) {
         // You need to trigger the flow of fetching new data and updating the view.  You will do it from here.  You need to make a function on the VC side and do tableview.reloaddata() here.
 
-        saveAndUpdateCoordinates(latitude: Float(selectedPlacemark.latitude), longitude: Float(selectedPlacemark.longitude))
-        locationSearchResult = selectedPlacemark
+        saveAndUpdateCoordinates(latitude: Float(updatedLocation.latitude), longitude: Float(updatedLocation.longitude))
+        locationSearchResult = updatedLocation
         // This is where the usefulness of the attach feature comes from (Review that a second time).  You don't have to call the repository because the cells do this.
         self.view!.refreshViewWithNewSearchData()  // this recreates cells for new data
         

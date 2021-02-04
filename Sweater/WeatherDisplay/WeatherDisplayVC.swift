@@ -450,6 +450,10 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
             cell.configure(data: result as! Cell.DataType)  //JLI: Ideally, we shouldnt need ! or casting
         }.catch { error in
             let alertVC = UIAlertController(title: "Something went wrong!", message: "Try searching a place or restarting Sweater!", preferredStyle: .alert)
+            let confirmAction = UIAlertAction(title: "OK", style: .default) { action in
+                //
+            }
+            alertVC.addAction(confirmAction)
             //let errorMessage = presenter.parseError(error: error)
             //create ui controller with error message
             // create error alert vc here to present error.

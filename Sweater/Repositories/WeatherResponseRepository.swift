@@ -13,6 +13,7 @@ import PromiseKit
 class WeatherResponseRepository {
     private let cache = SweatCache()
     private let mapper = WeatherMapper()
+    private var fetchOneCallResponsePromise : Promise<OneCallResponse>? = nil
     
     func convertJSONToResponse(response: String) -> OneCallResponse {
         let responseInBytes: Data? = response.data(using: .utf8)
@@ -21,6 +22,17 @@ class WeatherResponseRepository {
         return oneCallResponse!
     }
 
+    func fetchOneCallResponse(latitude: Float, longitude: Float) -> Promise<OneCallResponse> {
+        guard let fetch = fetchOneCallResponsePromise else {
+            fetchOneCallResponsePromise = createBaseFetchPromise(latitude: latitude, longitude: longitude)
+            return fetchOneCallResponsePromise!
+        }
+        if (fetch.isResolved) {
+            fetchOneCallResponsePromise = createBaseFetchPromise(latitude: latitude, longitude: longitude)
+        }
+        return fetchOneCallResponsePromise!
+    }
+    
     /**
      Error Handling in FetchOneCallResponse
      ======================================
@@ -33,7 +45,7 @@ class WeatherResponseRepository {
     
      2. The flow follows the success case and continues onward to the WeatherMapper to map the JSON data to Sweater's Data Models and then pass it back to the Controller, then to the View.
      */
-    func fetchOneCallResponse(latitude: Float, longitude: Float) -> Promise<OneCallResponse> {
+    func createBaseFetchPromise(latitude: Float, longitude: Float) -> Promise<OneCallResponse> {
         if cache.checkIsDataFresh(latitude: latitude, longitude: longitude) == false {
             return Promise { seal in
                 let endpoint = ("https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longitude)&units=imperial&exclude=&appid=\(Constants.APIKEY)")
@@ -44,19 +56,11 @@ class WeatherResponseRepository {
                         let oneCallResponse = self.convertJSONToResponse(response: response.value!)
                         seal.fulfill(oneCallResponse)
                     case let .failure(error):
-//                        print(error)
-//                        switch response.response?.statusCode {
-//                        case 200:
-//                            //do something
-//                        default:
-//                            //do something
-//                        }
                         seal.reject(error)
                     }
                 }
             }
         } else {
-            #warning("Isn't being called unless the if check is completely commented out.")
             return self.cache.readResponseFromCache()
         }
     }

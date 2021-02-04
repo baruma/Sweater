@@ -23,6 +23,6 @@ class TransparentDarkFilter: UIView {
     private func configure() {
         translatesAutoresizingMaskIntoConstraints       = false
         clipsToBounds                                   = true
-        backgroundColor                                 = UIColor.black.withAlphaComponent(0.30)
+        backgroundColor                                 = UIColor.black.withAlphaComponent(0.40)
     }
 }

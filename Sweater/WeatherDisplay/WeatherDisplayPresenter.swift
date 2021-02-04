@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 import CoreLocation
 import PromiseKit
 
@@ -16,6 +17,11 @@ protocol LocationResultListener {
 
 class WeatherDisplayPresenter: MVPPresenter<WeatherDisplayVC>, LocationResultListener {
     var locationSearchResult: LocationSearchResult? = nil
+    private let repository = WeatherResponseRepository()
+        
+    /// Coordinates for default location: New York City
+    private var latitude: Float =  40.7128
+    private var longitude: Float = -74.0060
     
     func onLocationResultUpdate(updatedLocation: LocationSearchResult) {
         // You need to trigger the flow of fetching new data and updating the view.  You will do it from here.  You need to make a function on the VC side and do tableview.reloaddata() here.
@@ -24,15 +30,7 @@ class WeatherDisplayPresenter: MVPPresenter<WeatherDisplayVC>, LocationResultLis
         locationSearchResult = updatedLocation
         // This is where the usefulness of the attach feature comes from (Review that a second time).  You don't have to call the repository because the cells do this.
         self.view!.refreshViewWithNewSearchData()  // this recreates cells for new data
-        
     }
-    
-    //JLI: add visibility modifier to these properties 
-    private let repository = WeatherResponseRepository()
-        
-    // Coordinates for default location: New York City
-    private var latitude: Float =  40.7128
-    private var longitude: Float = -74.0060
     
     func saveAndUpdateCoordinates(latitude: Float, longitude: Float) {
         self.latitude = latitude
@@ -40,11 +38,20 @@ class WeatherDisplayPresenter: MVPPresenter<WeatherDisplayVC>, LocationResultLis
         print(latitude, longitude)
     }
     
-    // This is called by the VC which then gets the current locationSearchResult that the user got.  The VC is the listener, and it got the data, and the cell is meant to be dumb - all it does is configures the label with the data it gets.  So this func gets called by the VC.  
+    /// Parses through the rejected data and categorizes it so that the error can be communicated back to the user in the form of an AlertVC used by the View.
+    func parseNetworkErrors(error: Error) -> String {
+        #warning("Come back here and resolve various error types.")
+//        if AFError?.isInvalidURLError {
+//
+//        }
+
+        return "Sorry bud, something went wrong.  Try restarting!"
+    }
+    
+    // This is called by the VC which then gets the current locationSearchResult that the user got.  The VC is the listener, and it got the data, and the cell is meant to be dumb - all it does is configures the label with the data it gets.  So this func gets called by the VC.
     func getCityName() -> LocationSearchResult? {
         return locationSearchResult
     }
-    
     
     func getMainTemp() -> Promise<Temperature> {
         return repository.fetchWeatherData(latitude: latitude, longitude: longitude)
@@ -71,7 +78,7 @@ class WeatherDisplayPresenter: MVPPresenter<WeatherDisplayVC>, LocationResultLis
     }
     
     func getWeeklyWeather() -> Promise<[WeeklyWeather]> {
-       return repository.fetchWeeklyWeather(latitude: latitude, longitude: longitude)
+        return repository.fetchWeeklyWeather(latitude: latitude, longitude: longitude)
     }
     
     func getDuskDawn() -> Promise<DawnDusk> {

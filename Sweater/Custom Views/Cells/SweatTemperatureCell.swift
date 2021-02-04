@@ -8,10 +8,10 @@
 import UIKit
 
 class SweatTemperatureCell: UICollectionViewCell, ConfigurableCell {
-    func configure(data: Temperature) {
-        mainTemperatureLabel.text = String(data.main) + "°"
-        minTemperatureLabel.text = String(data.min) + "°"
-        maxtemperatureLabel.text = String(data.max) + "°"
+    func configure(data: Temperature) {    
+        mainTemperatureLabel.text = String(data.main.rounded(.up)) + "°"
+        minTemperatureLabel.text = String(data.min.rounded(.up)) + "°"
+        maxtemperatureLabel.text = String(data.max.rounded(.up)) + "°"
     }
     
     static let reuseID          = "PrimaryCell"

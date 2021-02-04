@@ -28,8 +28,8 @@ class SweatWeeklyWeatherCell: UICollectionViewCell, ConfigurableCell {
         dateFormatter.dateFormat = "EEE"
     
         for index in 0...data.count-1 {
-            weeklyViews[index].maxTemperatureLabel.text = String(data[index].temp.max)
-            weeklyViews[index].minTemperatureLabel.text = String(data[index].temp.min)
+            weeklyViews[index].maxTemperatureLabel.text = String(data[index].temp.max.rounded(.up))
+            weeklyViews[index].minTemperatureLabel.text = String(data[index].temp.min.rounded(.up))
             let date = Date(timeIntervalSince1970: TimeInterval(data[index].dt))
             let dayString = dateFormatter.string(from: date)
             weeklyViews[index].dayLabel.text = dayString

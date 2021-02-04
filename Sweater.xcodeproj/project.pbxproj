@@ -47,9 +47,9 @@
 		9690265D2588185300AB22F1 /* SweatTemperatureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9690265C2588185300AB22F1 /* SweatTemperatureCell.swift */; };
 		969026612588186F00AB22F1 /* SweatWeatherDescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969026602588186F00AB22F1 /* SweatWeatherDescriptionCell.swift */; };
 		969026642588188D00AB22F1 /* SweatWeatherDetailInformationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969026632588188D00AB22F1 /* SweatWeatherDetailInformationCell.swift */; };
-		969026692588484900AB22F1 /* ErrorCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969026682588484900AB22F1 /* ErrorCodes.swift */; };
+		969026692588484900AB22F1 /* StatusCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969026682588484900AB22F1 /* StatusCode.swift */; };
 		96A8776D259A83EC003F0B6B /* SweaterTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A8776C259A83EB003F0B6B /* SweaterTextView.swift */; };
-		96AEE2CC25BB0FB40001107C /* DarkTransparentGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96AEE2CB25BB0FB40001107C /* DarkTransparentGradientView.swift */; };
+		96B3B24325CAE3560020A71B /* TransparentDarkFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B3B24225CAE3560020A71B /* TransparentDarkFilter.swift */; };
 		96B828DF2589621D0014AF0B /* SweatSecondaryLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B828DE2589621D0014AF0B /* SweatSecondaryLabel.swift */; };
 		96B828E22589622F0014AF0B /* SweatDetailLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B828E12589622F0014AF0B /* SweatDetailLabel.swift */; };
 		96C12B0E25A3C5AD0028EB2B /* HourlyWeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C12B0D25A3C5AD0028EB2B /* HourlyWeatherView.swift */; };
@@ -107,9 +107,9 @@
 		9690265C2588185300AB22F1 /* SweatTemperatureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweatTemperatureCell.swift; sourceTree = "<group>"; };
 		969026602588186F00AB22F1 /* SweatWeatherDescriptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweatWeatherDescriptionCell.swift; sourceTree = "<group>"; };
 		969026632588188D00AB22F1 /* SweatWeatherDetailInformationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweatWeatherDetailInformationCell.swift; sourceTree = "<group>"; };
-		969026682588484900AB22F1 /* ErrorCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorCodes.swift; sourceTree = "<group>"; };
+		969026682588484900AB22F1 /* StatusCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusCode.swift; sourceTree = "<group>"; };
 		96A8776C259A83EB003F0B6B /* SweaterTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweaterTextView.swift; sourceTree = "<group>"; };
-		96AEE2CB25BB0FB40001107C /* DarkTransparentGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkTransparentGradientView.swift; sourceTree = "<group>"; };
+		96B3B24225CAE3560020A71B /* TransparentDarkFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentDarkFilter.swift; sourceTree = "<group>"; };
 		96B828DE2589621D0014AF0B /* SweatSecondaryLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweatSecondaryLabel.swift; sourceTree = "<group>"; };
 		96B828E12589622F0014AF0B /* SweatDetailLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweatDetailLabel.swift; sourceTree = "<group>"; };
 		96C12B0D25A3C5AD0028EB2B /* HourlyWeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherView.swift; sourceTree = "<group>"; };
@@ -171,6 +171,7 @@
 			isa = PBXGroup;
 			children = (
 				9645730925BF747E0088FD41 /* LocationResultTableViewVC.swift */,
+				96DCE07825C2524000122CF4 /* LocationSearchResult.swift */,
 			);
 			path = LocationResult;
 			sourceTree = "<group>";
@@ -196,14 +197,14 @@
 		9670D57E2578149C00CC638B /* Sweater */ = {
 			isa = PBXGroup;
 			children = (
-				9681E40A25C22394006BF5A3 /* Geocoding Manager */,
-				96C39D8225B24830002CB661 /* Architecture */,
-				969026672588483700AB22F1 /* Utilities */,
 				96B09A9B257AFB7700B2E053 /* WeatherDisplay */,
 				9645730C25BF748B0088FD41 /* LocationResult */,
+				96C39D8225B24830002CB661 /* Architecture */,
 				96B09A9E257AFBAF00B2E053 /* Open Weather API Models */,
 				9690263725804FCC00AB22F1 /* Sweater Data Models */,
+				9681E40A25C22394006BF5A3 /* Geocoding Manager */,
 				96B09A9C257AFB8A00B2E053 /* Repositories */,
+				969026672588483700AB22F1 /* Utilities */,
 				96B09A9D257AFBA100B2E053 /* Custom Views */,
 				9670D57F2578149C00CC638B /* AppDelegate.swift */,
 				9670D5812578149C00CC638B /* SceneDelegate.swift */,
@@ -218,7 +219,6 @@
 			isa = PBXGroup;
 			children = (
 				9681E40B25C223B0006BF5A3 /* GeoCoderManager.swift */,
-				96DCE07825C2524000122CF4 /* LocationSearchResult.swift */,
 			);
 			path = "Geocoding Manager";
 			sourceTree = "<group>";
@@ -226,7 +226,7 @@
 		96832CD725B9F6DF0030480B /* Filters */ = {
 			isa = PBXGroup;
 			children = (
-				96AEE2CB25BB0FB40001107C /* DarkTransparentGradientView.swift */,
+				96B3B24225CAE3560020A71B /* TransparentDarkFilter.swift */,
 			);
 			path = Filters;
 			sourceTree = "<group>";
@@ -285,7 +285,7 @@
 		969026672588483700AB22F1 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				969026682588484900AB22F1 /* ErrorCodes.swift */,
+				969026682588484900AB22F1 /* StatusCode.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -499,11 +499,10 @@
 				9690263025804C6600AB22F1 /* WeatherMapper.swift in Sources */,
 				9628B6EB257EAC2600FD761A /* Weather.swift in Sources */,
 				966709BF25B78C3A002ED0DA /* SupplementaryInformation.swift in Sources */,
-				969026692588484900AB22F1 /* ErrorCodes.swift in Sources */,
+				969026692588484900AB22F1 /* StatusCode.swift in Sources */,
 				9690263C258050BD00AB22F1 /* WeatherDescription.swift in Sources */,
 				9681E40C25C223B0006BF5A3 /* GeoCoderManager.swift in Sources */,
 				96CB753125A0E3A300E77828 /* SweatHourlyWeatherCell.swift in Sources */,
-				96AEE2CC25BB0FB40001107C /* DarkTransparentGradientView.swift in Sources */,
 				9645730A25BF747E0088FD41 /* LocationResultTableViewVC.swift in Sources */,
 				96C39D8425B248F5002CB661 /* MVPView.swift in Sources */,
 				969026612588186F00AB22F1 /* SweatWeatherDescriptionCell.swift in Sources */,
@@ -531,6 +530,7 @@
 				9670D5822578149C00CC638B /* SceneDelegate.swift in Sources */,
 				961B472A257ED2A500608BB6 /* Current.swift in Sources */,
 				960C68EF25A4CFAD004DBCB8 /* WeeklyWeatherView.swift in Sources */,
+				96B3B24325CAE3560020A71B /* TransparentDarkFilter.swift in Sources */,
 				9676D550258AC395002383C0 /* HourlyWeather.swift in Sources */,
 				9628B6F5257EAC9100FD761A /* Alert.swift in Sources */,
 				9690265D2588185300AB22F1 /* SweatTemperatureCell.swift in Sources */,

@@ -12,82 +12,65 @@ import PromiseKit
 //JLI: General notes.  Removed unused code.  Have a path to display error cases
 //JLI: Make sure there is a valid flow to show weather data when the user selects don't allow for location permission (finish search bar stuff)
 
+/// View heavy and responsible for presenting View and UI related code.
+/// Synthesizes custom cells declared in 'Custom Views' folder in order to generate a compositional layout.
+ 
 class WeatherDisplayVC: UIViewController, CLLocationManagerDelegate, UISearchControllerDelegate, MVPView {
     
-    typealias Presenter = WeatherDisplayPresenter
+    // Why was this typealias here?  It wasn't use anywhere else?
+    //typealias Presenter = WeatherDisplayPresenter
     
+    /// Gives the WeatherDisplayVC access to functions that will be used to call for data to the API.
+    /// Predominantly used in collectionview cell delegate functions.
     private let weatherResponseRepository = WeatherResponseRepository()
-    private let controller = WeatherDisplayPresenter()
+    
+    /// Synoymous with Controller in MVC. Renamed as Sweater uses MVP. Strips logic code from view and keeps functions in presenter to be called upon.
+    private let presenter = WeatherDisplayPresenter()
 
     //JLI: Can you make a class that does geocoding for better reuse
     // and can you have the presenter call that class
     private let locationManager = CLLocationManager()
     private let geoCoderManager = GeoCoderManager()
 
-    // JLI: Shouldn't need !
+    // JLI: Shouldn't need this
+    // remove bang, just make a new collecgionview object
     private var collectionView: UICollectionView!
-    private let gradientView = DarkTransparentGradientView()
     private var backgroundImageView = UIImageView()
     
-    //JLI: might be moved if you refactor geocoding
+    /// Overlays a transparent dark gradient over the backgroundimage applied.
+    private let transparentDarkFilter = TransparentDarkFilter(frame: .zero)
+    
     private var readableLocation: String = ""
-    private let address: String = ""
         
-    let locationResultVC = LocationResultTableViewVC()
+    /// This TableViewVC appears once the searchbar is hit.  These delegates then become active.
+    /// For more info, look at LocationSearchResultTableViewVC.
+    let locationResultTableVC = LocationResultTableViewVC()
+    lazy var searchController = UISearchController(searchResultsController: locationResultTableVC)
 
-    lazy var searchController = UISearchController(searchResultsController: locationResultVC)
-
+    /// These cases allow us to place and adjust the locations of the sections in the CompositionalLayout.
     enum Section: Int, CaseIterable {
         case city = 0
-        case currentTemp = 1 //0
-        case currentDescription = 2 //1
-        case forecast = 3 //2
-        case duskDawn = 4 //3
-        case supplementary =  5 //4
-    }
-
-    // add 1 up here for city label... remove 0 at left if things dont work with city label
-    let SectionItemCount: [Int] = [1,4,1,2,1,1]
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        locationResultVC.locationResultListener = controller
-        configureBackgroundImageViews()
-        configureCollectionView()
-        gradientView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-        //JLI: move the next 4 lines to a method called "configureNavigationController"
-
-        configureSearchController()
-        configureLocationManagerServices()
-        // You need to understand this - do somee research.  You're saying this is the observer.  
-        NotificationCenter.default.addObserver(self, selector: #selector(self.appResume), name: UIApplication.willEnterForegroundNotification, object: nil)
-        
-        getPresenter().attach(view: self)
-    }
-        
-    func configureSearchController() {
-        navigationItem.searchController = searchController
-        navigationController?.navigationBar.backgroundColor         = .clear
-        navigationController?.navigationBar.isTranslucent           = true
-        navigationController?.navigationBar.tintColor               = .clear
-        navigationController?.navigationBar.barTintColor            = .clear
-        
-        searchController.delegate                                   = self
-        searchController.searchResultsUpdater                       = locationResultVC
-        searchController.hidesNavigationBarDuringPresentation       = false
-        searchController.automaticallyShowsScopeBar                 = false
-        searchController.obscuresBackgroundDuringPresentation       = true
-        searchController.automaticallyShowsSearchResultsController  = true
-        searchController.searchBar.placeholder                      = "City, Country"
-        searchController.searchBar.searchTextField.backgroundColor = .tertiaryLabel
-        definesPresentationContext                                  = true
+        case currentTemp = 1
+        case currentDescription = 2
+        case forecast = 3
+        case duskDawn = 4
+        case supplementary =  5
     }
     
-    //JLI: move this out of a view controller
-    func getCoordinateFrom(address: String, completion: @escaping(_ coordinate: CLLocationCoordinate2D?, _ error: Error?) -> () ) {
-        CLGeocoder().geocodeAddressString(address) {
-            completion($0?.first?.location?.coordinate, $1)
-        }
+    /// Specifies the number of cells present in each section.
+    let SectionItemCount: [Int] = [1,4,1,2,1,1]
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        /**Accessing the LocationResultTableVC's locationResultListener to set the listener to the Presenter.*/
+        locationResultTableVC.locationResultListener = presenter
+        
+        configureBackgroundImageViews()
+        configureCollectionView()
+        configureSearchController()
+        configureLocationManagerServices()
+        getPresenter().attach(view: self)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -103,29 +86,37 @@ class WeatherDisplayVC: UIViewController, CLLocationManagerDelegate, UISearchCon
     }
     
     func getPresenter() -> WeatherDisplayPresenter {
-        return controller
+        return presenter
     }
-
-    func configureNavigationBarDateAndLocation() {
-        let date = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE, MMMM d"
-        let dateResult = formatter.string(from: date)
-        let dateAndLocation = dateResult + readableLocation
-        self.title = dateAndLocation
+        
+    func configureSearchController() {
+        navigationItem.searchController                             = searchController
+        navigationController?.navigationBar.backgroundColor         = .clear
+        navigationController?.navigationBar.tintColor               = .clear
+        navigationController?.navigationBar.barTintColor            = .clear
+        navigationController?.navigationBar.isTranslucent           = true
+        
+        searchController.delegate                                   = self
+        searchController.searchResultsUpdater                       = locationResultTableVC
+        searchController.hidesNavigationBarDuringPresentation       = true
+        searchController.automaticallyShowsScopeBar                 = false
+        searchController.obscuresBackgroundDuringPresentation       = true
+        searchController.automaticallyShowsSearchResultsController  = true
+        searchController.searchBar.placeholder                      = "City, Country"
+        searchController.searchBar.searchTextField.backgroundColor  = .tertiaryLabel
+        definesPresentationContext                                  = true
     }
     
     func configureLocationManagerServices() {
         locationManager.requestAlwaysAuthorization()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
-
+        
         // You are unable to use locationManager here due to a scoping issue. This is specific to Swift.
         if CLLocationManager.locationServicesEnabled() {
-            
+        
             /// There is a frequency to monitoring for location changes.  This is being used so locationManager isn't constantly being called.
             locationManager.startMonitoringSignificantLocationChanges()
-            print("Locationmanager has been hit")
         }
     }
     
@@ -145,29 +136,6 @@ class WeatherDisplayVC: UIViewController, CLLocationManagerDelegate, UISearchCon
           return layout
       }
     
-    func configureBackgroundImageViews() {
-        view.addSubview(backgroundImageView)
-        
-        let numberOfImages: UInt32 = 12
-        let randomImage = arc4random_uniform(numberOfImages)
-        let imageName = "image_\(randomImage)"
-        backgroundImageView.image = UIImage(named: imageName)
-
-        backgroundImageView.sizeToFit()
-        backgroundImageView.clipsToBounds                             = true
-        backgroundImageView.isOpaque                                  = true
-        backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
-        //backgroundImageView.image                                     = UIImage(named: )
-
-        NSLayoutConstraint.activate([
-            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
-            backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backgroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-        
-    }
-
     func configureCollectionView() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: generateLayout())
         view.addSubview(collectionView)
@@ -185,7 +153,6 @@ class WeatherDisplayVC: UIViewController, CLLocationManagerDelegate, UISearchCon
         collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         collectionView.delegate = self
         collectionView.dataSource = self
-        
     }
     
     func generateCityCellSectionLayout() -> NSCollectionLayoutSection {
@@ -317,6 +284,44 @@ class WeatherDisplayVC: UIViewController, CLLocationManagerDelegate, UISearchCon
         let section = NSCollectionLayoutSection(group: supplementaryInfoGroup)
         return section
     }
+    
+    func configureBackgroundImageViews() {
+        view.addSubview(backgroundImageView)
+        backgroundImageView.addSubview(transparentDarkFilter)
+        
+        NSLayoutConstraint.activate([
+            transparentDarkFilter.topAnchor.constraint(equalTo: view.topAnchor),
+            transparentDarkFilter.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            transparentDarkFilter.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            transparentDarkFilter.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        
+        let numberOfImages: UInt32 = 12
+        let randomImage = arc4random_uniform(numberOfImages)
+        let imageName = "image_\(randomImage)"
+        backgroundImageView.image = UIImage(named: imageName)
+
+        backgroundImageView.sizeToFit()
+        backgroundImageView.clipsToBounds                             = true
+        backgroundImageView.isOpaque                                  = true
+        backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backgroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+    
+    func configureNavigationBarWithDate() {
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE, MMMM d"
+        let dateResult = formatter.string(from: date)
+        let dateAndLocation = dateResult
+        self.title = dateAndLocation
+    }
 }
 
 extension WeatherDisplayVC {
@@ -325,15 +330,14 @@ extension WeatherDisplayVC {
         let currentLocation: CLLocation = locations[0]
         let lat = Float(currentLocation.coordinate.latitude)
         let lon = Float(currentLocation.coordinate.longitude)
-        controller.saveAndUpdateCoordinates(latitude: lat, longitude: lon)
+        presenter.saveAndUpdateCoordinates(latitude: lat, longitude: lon)
         geoCoderManager.convertCoordinatesToHumanReadableLocation(location: currentLocation).done { placemark in
            let locationSearchResult =  LocationSearchResult.convertPlacemarkToLocationSearchResult(placemark: placemark)
-            self.controller.onLocationResultUpdate(updatedLocation: locationSearchResult)
+            self.presenter.onLocationResultUpdate(updatedLocation: locationSearchResult)
         }
-        configureNavigationBarDateAndLocation()
+        configureNavigationBarWithDate()
     }
-
-    /// Self explanatory, failing with error if user does not allow app to retrive location.
+    
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         // - TODO: Create an alert VC for user if location is not able to be fetched.
         print("Unable to fetch location")
@@ -349,13 +353,11 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         print("Section \(indexPath.section) Row \(indexPath.row) Index \(indexPath.item)")
         
-        
-        
         switch indexPath.section {
         case Section.city.rawValue:            
                 let cityCell = collectionView.dequeueReusableCell(withReuseIdentifier: CityGreetingCell.reuseID, for: indexPath) as! CityGreetingCell
 
-            guard let locationSearchResult = controller.getCityName() else {
+            guard let locationSearchResult = presenter.getCityName() else {
                 print("oh snap")
                 return cityCell
             }
@@ -369,29 +371,29 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
 
             case 0:
                 let primaryCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatTemperatureCell.reuseID, for: indexPath) as! SweatTemperatureCell
-                configure(cell: primaryCell, fetchPromise: controller.getMainTemp())
+                configure(cell: primaryCell, fetchPromise: presenter.getMainTemp())
                 return primaryCell
                 
             case 1:
                 let tertiaryCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeatherDetailInformationCell.reuseID, for: indexPath) as! SweatWeatherDetailInformationCell
-                configure(cell: tertiaryCell, fetchPromise: controller.getFeelsLikeTemperatureDetail()
+                configure(cell: tertiaryCell, fetchPromise: presenter.getFeelsLikeTemperatureDetail()
                             .then{ temperature -> Promise<String> in
-                                Promise.value(String(temperature.feelsLike))
+                                Promise.value("Feels Like " + String(temperature.feelsLike.rounded(.up)))
                             }
                 )
                 return tertiaryCell
                 
             case 2:
                 let tertiaryCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeatherDetailInformationCell.reuseID, for: indexPath) as! SweatWeatherDetailInformationCell
-                configure(cell: tertiaryCell, fetchPromise: controller.getHumidityDetail()
+                configure(cell: tertiaryCell, fetchPromise: presenter.getHumidityDetail()
                             .then({ weatherDetail -> Promise<String> in
-                                Promise.value(String(weatherDetail.humidity))
+                                 Promise.value("Humidity      " + String(weatherDetail.humidity))
                             }))
                 return tertiaryCell
                 
             case 3: 
                 let tertiaryCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeatherDetailInformationCell.reuseID, for: indexPath) as! SweatWeatherDetailInformationCell
-                configure(cell: tertiaryCell, fetchPromise: controller.getPrecipitationDetail().then({ weatherDetail -> Promise<String> in Promise.value(String(weatherDetail.precipitation))}))
+                configure(cell: tertiaryCell, fetchPromise: presenter.getPrecipitationDetail().then({ weatherDetail -> Promise<String> in Promise.value("Preciptiation  " + String( weatherDetail.precipitation))}))
                 return tertiaryCell
                 
             default:
@@ -402,7 +404,7 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
         case Section.currentDescription.rawValue:
             let weatherDescriptionCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeatherDescriptionCell.reuseID, for: indexPath) as!
                 SweatWeatherDescriptionCell
-            configure(cell: weatherDescriptionCell, fetchPromise: controller.getWeatherDescription())
+            configure(cell: weatherDescriptionCell, fetchPromise: presenter.getWeatherDescription())
             return weatherDescriptionCell
             
         case Section.forecast.rawValue:
@@ -410,13 +412,13 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
             case 0:
                 let hourlyWeatherCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatHourlyWeatherCell.reuseID, for: indexPath) as!
                     SweatHourlyWeatherCell
-                configure(cell: hourlyWeatherCell, fetchPromise: controller.getHourlyWeather())
+                configure(cell: hourlyWeatherCell, fetchPromise: presenter.getHourlyWeather())
                 return hourlyWeatherCell
                 
             case 1:
                 let weeklyWeatherCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatWeeklyWeatherCell.reuseID, for: indexPath) as!
                     SweatWeeklyWeatherCell
-                configure(cell: weeklyWeatherCell, fetchPromise: controller.getWeeklyWeather())
+                configure(cell: weeklyWeatherCell, fetchPromise: presenter.getWeeklyWeather())
                 return weeklyWeatherCell
                 
             default:
@@ -427,20 +429,19 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
         case Section.duskDawn.rawValue:
             let duskAndDawnCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatDawnDuskCell.reuseID, for: indexPath) as!
                 SweatDawnDuskCell
-            configure(cell: duskAndDawnCell, fetchPromise: controller.getDuskDawn())
+            configure(cell: duskAndDawnCell, fetchPromise: presenter.getDuskDawn())
             return duskAndDawnCell
             
             
         case Section.supplementary.rawValue:
             let supplementaryCell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatSupplementaryInformationCell.reuseID, for: indexPath) as!
                 SweatSupplementaryInformationCell
-            configure(cell: supplementaryCell, fetchPromise: controller.getSupplementaryInformation())
+            configure(cell: supplementaryCell, fetchPromise: presenter.getSupplementaryInformation())
             return supplementaryCell
             
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SweatTemperatureCell.reuseID, for: indexPath) as! SweatTemperatureCell
             return cell
-        
         }
     }
         
@@ -448,7 +449,16 @@ extension WeatherDisplayVC: UICollectionViewDataSource {
         fetchPromise.done { result in
             cell.configure(data: result as! Cell.DataType)  //JLI: Ideally, we shouldnt need ! or casting
         }.catch { error in
+            let alertVC = UIAlertController(title: "Something went wrong!", message: "Try searching a place or restarting Sweater!", preferredStyle: .alert)
+            //let errorMessage = presenter.parseError(error: error)
+            //create ui controller with error message
+            // create error alert vc here to present error.
+            
+            // if there is an error you need to seal . reject in repository
+            // you have to reject and go out
             print(error)
+            self.presenter.parseNetworkErrors(error: error)
+            self.present(alertVC, animated: true, completion: nil)
         }
     }
 }

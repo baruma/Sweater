@@ -32,8 +32,8 @@ class SweatDawnDuskCell: UICollectionViewCell, ConfigurableCell {
         let dawnTimeString = dateFormatter.string(from: dawnTime)
         let duskTimeString = dateFormatter.string(from: duskTime)
 
-        dawnLabel.text = "Sunrise at : " + dawnTimeString
-        duskLabel.text = "Sunset at : " + duskTimeString
+        dawnLabel.text = "Sunrise at  " + dawnTimeString
+        duskLabel.text = "Sunset at  " + duskTimeString
     }
     
     private func configure() {

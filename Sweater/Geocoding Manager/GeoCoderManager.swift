@@ -17,7 +17,7 @@ class GeoCoderManager {
             geoCoder.geocodeAddressString(searchBarEntry) { (placemarks, error) in
                 guard let placemarks = placemarks, let location = placemarks.first?.location
                 else {
-                    print("Could not retrieve coordinates.")
+                    print("Could not retrieve coordinates in convertReadableLocationToCoordinates.")
                     return
                 }
                 seal.fulfill(location)
@@ -30,7 +30,7 @@ class GeoCoderManager {
             geoCoder.geocodeAddressString(searchBarEntry) { (placemarks, error) in
                 guard let placemarks = placemarks, let location = placemarks.first
                 else {
-                    print("Could not retrieve coordinates.")
+                    print("Could not retrieve coordinates in convertUserEntryToSearchableHumanReadableLocation.")
                     return
                 }
                 seal.fulfill(location)

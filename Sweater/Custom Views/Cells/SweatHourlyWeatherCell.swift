@@ -28,7 +28,7 @@ class SweatHourlyWeatherCell: UICollectionViewCell, ConfigurableCell {
         dateFormatter.dateFormat = "HH a"
 
         for index in 0...data.count-1 {
-            hourlyViews[index].temperatureLabel.text = String(data[index].temp)
+            hourlyViews[index].temperatureLabel.text = String(data[index].temp.rounded(.up))
 
             let date = Date(timeIntervalSince1970: TimeInterval(data[index].dt))
             let hourString = dateFormatter.string(from: date)

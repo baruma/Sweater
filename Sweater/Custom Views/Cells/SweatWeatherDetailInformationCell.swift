@@ -33,7 +33,6 @@ class SweatWeatherDetailInformationCell: UICollectionViewCell, ConfigurableCell 
     private func configure() {
         contentView.addSubview(detailInfoLabel)
         translatesAutoresizingMaskIntoConstraints   = false
-        detailInfoLabel.text                        = ""
 
         NSLayoutConstraint.activate([
             detailInfoLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),

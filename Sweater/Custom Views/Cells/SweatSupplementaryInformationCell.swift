@@ -49,7 +49,7 @@ class SweatSupplementaryInformationCell: UICollectionViewCell, ConfigurableCell 
     func configure(data: SupplementaryInformation) {
         uviDataLabel.text       = String(data.uvi)
         cloudDataLabel.text     = String(data.clouds)
-        windSpeedDataLabel.text = String(data.windSpeed)
+        windSpeedDataLabel.text = String(data.windSpeed.rounded(.up))
         pressureDataLabel.text  = String(data.pressure)
     }
     

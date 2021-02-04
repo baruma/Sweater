@@ -9,9 +9,8 @@ import Foundation
 import Alamofire
 import PromiseKit
 
-//JLI: General notes: Refactor so we don't use !
+//JLI: General notes: Refactor so we don't use
 class WeatherResponseRepository {
-    
     private let cache = SweatCache()
     private let mapper = WeatherMapper()
     
@@ -22,17 +21,42 @@ class WeatherResponseRepository {
         return oneCallResponse!
     }
 
+    /**
+     Error Handling in FetchOneCallResponse
+     ======================================
+     
+     There are two flows that diverge from this function when it is error handling:
+     
+     1. If an error is received, the flow proceeds backwards to the Controller and then to the View in order to communicate to the user that a network issue has occured and their data cannot be received.
+        
+        1.1 Upon rejection, PromiseKit must use the Reject call and ensure that the final call in the chain is Catch as it handles the error last.
+    
+     2. The flow follows the success case and continues onward to the WeatherMapper to map the JSON data to Sweater's Data Models and then pass it back to the Controller, then to the View.
+     */
     func fetchOneCallResponse(latitude: Float, longitude: Float) -> Promise<OneCallResponse> {
         if cache.checkIsDataFresh(latitude: latitude, longitude: longitude) == false {
             return Promise { seal in
                 let endpoint = ("https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longitude)&units=imperial&exclude=&appid=\(Constants.APIKEY)")
                 AF.request(endpoint).responseString { response in
-                    self.cache.writeResponseToCache(response: response.value!, latitude: latitude, longitude: longitude)
-                    let oneCallResponse = self.convertJSONToResponse(response: response.value!)
-                    seal.fulfill(oneCallResponse)
+                    switch response.result {
+                    case .success:
+                        self.cache.writeResponseToCache(response: response.value!, latitude: latitude, longitude: longitude)
+                        let oneCallResponse = self.convertJSONToResponse(response: response.value!)
+                        seal.fulfill(oneCallResponse)
+                    case let .failure(error):
+//                        print(error)
+//                        switch response.response?.statusCode {
+//                        case 200:
+//                            //do something
+//                        default:
+//                            //do something
+//                        }
+                        seal.reject(error)
+                    }
                 }
             }
         } else {
+            #warning("Isn't being called unless the if check is completely commented out.")
             return self.cache.readResponseFromCache()
         }
     }
@@ -44,7 +68,7 @@ class WeatherResponseRepository {
                 return Promise.value(mappedResults)
             }
     }
-
+    
     func fetchCurrentFeelsLike(latitude: Float, longitude: Float) -> Promise<Temperature> {
         return fetchOneCallResponse(latitude: latitude, longitude: longitude)
             .then { oneCallResponse -> Promise<Temperature> in
@@ -79,7 +103,7 @@ class WeatherResponseRepository {
     }
     
     func fetchHourlyWeather(latitude: Float, longitude: Float) -> Promise<[HourlyWeather]> {
-        var hourlyWeatherPayload = [HourlyWeather]()
+       // var hourlyWeatherPayload = [HourlyWeather]()
         return fetchOneCallResponse(latitude: latitude, longitude: longitude)
             .then { oneCallResponse -> Promise<[HourlyWeather]> in
                 var hourlyWeatherPayload = [HourlyWeather]()
@@ -90,7 +114,7 @@ class WeatherResponseRepository {
                 return Promise.value(hourlyWeatherPayload)
             }
     }
-
+    
     func fetchWeeklyWeather(latitude: Float, longitude: Float) -> Promise<[WeeklyWeather]> {
         return fetchOneCallResponse(latitude: latitude, longitude: longitude)
             .then { oneCallResponse -> Promise<[WeeklyWeather]> in
@@ -116,8 +140,7 @@ class WeatherResponseRepository {
             .then { oneCallResponse -> Promise<SupplementaryInformation> in
                 let mappedResult = self.mapper.mapToSupplementaryInformation(current: oneCallResponse.current)
                 return Promise.value(mappedResult)
-        }
+            }
     }
 }
-
-#warning("Tell john to look up how to reconsolidate network calls.  we will make a network call, no one else makes another network call till the first one's done.  the promises will observe the first network call and then proceed down the line from there.")
+// a better statement is that whatever datesource goes out of business you don't have to rewrite your view to get new data, you have this middle layer that represents your app's core model that a specific data source... i
